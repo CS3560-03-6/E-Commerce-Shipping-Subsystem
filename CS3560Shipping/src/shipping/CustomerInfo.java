@@ -1,11 +1,11 @@
 package shipping;
 
 public class CustomerInfo {
-	private int customer_information_id;
-	private String first_name;
-	private String last_name;
-	private String[] address;
-	private String phone_number;
+	private int customerInformationId;
+	private String firstName;
+	private String lastName;
+	private String address;
+	private String phoneNumber;
 	private String email;
 	
 	/* CustomerInfo(int customer_information_id, String first_name,
@@ -21,22 +21,22 @@ public class CustomerInfo {
 	
 	String[] getCustomerName() {
 		String[] full_name = new String[2];
-		full_name[0] = first_name;
-		full_name[1] = last_name;
+		full_name[0] = firstName;
+		full_name[1] = lastName;
 		
 		return full_name;
 	}
 	
 	int getCustomerID() {
-		return customer_information_id;
+		return customerInformationId;
 	}
 	
-	String[] getAddress() {
+	String getAddress() {
 		return address;
 	}
 	
 	String getPhoneNumber() {
-		return phone_number;
+		return phoneNumber;
 	}
 	
 	String getEmail() {

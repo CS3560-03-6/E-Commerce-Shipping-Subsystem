@@ -3,24 +3,24 @@ package shipping;
 import java.util.Date;
 
 public class OrderLineItem {
-	private int order_line_item_id;
-	private int product_id;
+	private int orderLineItemId;
+	private int productId;
 	private String sku;
-	private String product_name;
+	private String productName;
 	private double length;
 	private double width;
 	private double height;
 	private int quantity;
-	private Date deliver_by_date;
-	private double shipping_cost;
+	private Date deliverByDate;
+	private double shippingCost;
 	private double tax;
 	
 	int getOrderLineItemID() {
-		return order_line_item_id;
+		return orderLineItemId;
 	}
 	
 	int getProductID() {
-		return product_id;
+		return productId;
 	}
 	
 	String getSKU() {
@@ -28,7 +28,7 @@ public class OrderLineItem {
 	}
 	
 	String getProductName() {
-		return product_name;
+		return productName;
 	}
 	
 	double[] getDimensions() {
@@ -45,11 +45,11 @@ public class OrderLineItem {
 	}
 	
 	Date getDeliverByDate() {
-		return deliver_by_date;
+		return deliverByDate;
 	}
 	
 	double getShippingCost() {
-		return shipping_cost;
+		return shippingCost;
 	}
 	
 	double getTax() {

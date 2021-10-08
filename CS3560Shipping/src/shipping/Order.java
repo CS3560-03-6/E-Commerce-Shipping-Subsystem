@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Order {
-	private int order_id;
-	private CustomerInfo order_customer_information;
-	private ArrayList<OrderLineItem> order_line_item_list;
-	private double total_shipping_and_handling;
-	private double total_tax;
+	private int orderId;
+	private CustomerInfo orderCustomerInformation;
+	private ArrayList<OrderLineItem> orderLineItemList;
+	private double totalShippingAndHandling;
+	private double totalTax;
 	private int status;
 	
 	/* This does not necessarily include all order line items in the order */
@@ -18,7 +18,7 @@ public class Order {
 	 * }
 	 */
 	
-	void updateShippingStatus(int new_status) {
+	void updateOrderStatus(int new_status) {
 		/*
 		 * Also perform updates on the order_line_item_list accordingly 
 		 */
@@ -26,22 +26,22 @@ public class Order {
 	}
 	
 	int getOrderID() {
-		return order_id;
+		return orderId;
 	}
 	
 	CustomerInfo getCustomerInfo() {
-		return order_customer_information;
+		return orderCustomerInformation;
 	}
 	
 	ArrayList<OrderLineItem> getOrderLineItemList(){
-		return order_line_item_list;
+		return orderLineItemList;
 	}
 	
 	double getTotalShippingAndHandling() {
-		return total_shipping_and_handling;
+		return totalShippingAndHandling;
 	}
 	
 	double getTotalTax() {
-		return total_tax;
+		return totalTax;
 	}
 }
