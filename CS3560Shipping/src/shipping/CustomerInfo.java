@@ -1,4 +1,4 @@
-package business_logic;
+package shipping;
 
 public class CustomerInfo {
 	private int customer_information_id;

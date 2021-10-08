@@ -1,4 +1,4 @@
-package business_logic;
+package shipping;
 
 import java.util.ArrayList;
 import java.util.Date;
