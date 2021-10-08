@@ -31,7 +31,7 @@ public class OrderLineItem {
 		return product_name;
 	}
 	
-	double[] getDimensions() {
+	double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
 		double[] dimensions = new double[3];
 		dimensions[0] = length;
 		dimensions[1] = width;
