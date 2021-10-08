@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Order {
-	private int order_id;
-	private CustomerInfo order_customer_information;
-	private ArrayList<OrderLineItem> order_line_item_list;
-	private double total_shipping_and_handling;
-	private double total_tax;
+	private int orderId;
+	private CustomerInfo orderCustomerInformation;
+	private ArrayList<OrderLineItem> orderLineItemList;
+	private double totalShippingAndHandling;
+	private double totalTax;
 	private int status;
 	
 	/* This does not necessarily include all order line items in the order */
@@ -18,6 +18,7 @@ public class Order {
 	 * }
 	 */
 	
+
 	void updateShippingStatus(int new_status) { // doesn't have to be int data type for a status
 		/*
 		 * Also perform updates on the order_line_item_list accordingly 
@@ -26,13 +27,14 @@ public class Order {
 	}
 	
 	int getOrderID() {
-		return order_id;
+		return orderId;
 	}
 	
 	CustomerInfo getCustomerInfo() {
-		return order_customer_information;
+		return orderCustomerInformation;
 	}
 	
+
 	ArrayList<OrderLineItem> getOrderLineItemList(){ // return the list of order line items associated with the Order, not package
 		return order_line_item_list;
 	}
@@ -42,6 +44,6 @@ public class Order {
 	}
 	
 	double getTotalTax() {
-		return total_tax;
+		return totalTax;
 	}
 }

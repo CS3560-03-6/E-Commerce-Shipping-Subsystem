@@ -12,10 +12,6 @@ public class Shipments {
 	{
 		
 	}
-	public void updateShipment (int shipmentID, Package[] packagelist, Date dateshipped) //update a shipment
-	{
-		//maybe it would be easier to have updateDate and updatePackagelist? I'm not sure
-	}
 	public void addPackage(Package box) //add a package to the shipment
 	{
 		
