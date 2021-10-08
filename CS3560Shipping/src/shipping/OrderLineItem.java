@@ -15,7 +15,7 @@ public class OrderLineItem {
 	private double shipping_cost;
 	private double tax;
 	
-	int getOrderLineItemID() {
+	int getOrderLineItemID() { // this ID is a particular instance of a given product
 		return order_line_item_id;
 	}
 	
