@@ -19,7 +19,7 @@ public class CustomerInfo {
 		this.email = email;
 	}*/
 	
-	String[] getCustomerName() {
+	public String[] getCustomerName() {
 		String[] full_name = new String[2];
 		full_name[0] = firstName;
 		full_name[1] = lastName;
@@ -27,19 +27,19 @@ public class CustomerInfo {
 		return full_name;
 	}
 	
-	int getCustomerID() {
+	public int getCustomerID() {
 		return customerInformationId;
 	}
 	
-	String getAddress() {
+	public String getAddress() {
 		return address;
 	}
 	
-	String getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 	
-	String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 }

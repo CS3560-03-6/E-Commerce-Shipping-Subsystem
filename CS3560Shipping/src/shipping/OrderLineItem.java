@@ -16,23 +16,23 @@ public class OrderLineItem {
 	private double tax;
 	
 
-	int getOrderLineItemID() { // this ID is a particular instance of a given product
-		return order_line_item_id;
+	public int getOrderLineItemID() { // this ID is a particular instance of a given product
+		return orderLineItemId;
 	}
 	
-	int getProductID() {
+	public int getProductID() {
 		return productId;
 	}
 	
-	String getSKU() {
+	public String getSKU() {
 		return sku;
 	}
 	
-	String getProductName() {
+	public String getProductName() {
 		return productName;
 	}
 	
-	double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
+	public double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
 		double[] dimensions = new double[3];
 		dimensions[0] = length;
 		dimensions[1] = width;
@@ -41,19 +41,19 @@ public class OrderLineItem {
 		return dimensions;
 	}
 	
-	int getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 	
-	Date getDeliverByDate() {
+	public Date getDeliverByDate() {
 		return deliverByDate;
 	}
 	
-	double getShippingCost() {
+	public double getShippingCost() {
 		return shippingCost;
 	}
 	
-	double getTax() {
+	public double getTax() {
 		return tax;
 	}
 }
