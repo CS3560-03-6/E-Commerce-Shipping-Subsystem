@@ -15,8 +15,9 @@ public class OrderLineItem {
 	private double shippingCost;
 	private double tax;
 	
-	int getOrderLineItemID() {
-		return orderLineItemId;
+
+	int getOrderLineItemID() { // this ID is a particular instance of a given product
+		return order_line_item_id;
 	}
 	
 	int getProductID() {
@@ -31,7 +32,7 @@ public class OrderLineItem {
 		return productName;
 	}
 	
-	double[] getDimensions() {
+	double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
 		double[] dimensions = new double[3];
 		dimensions[0] = length;
 		dimensions[1] = width;

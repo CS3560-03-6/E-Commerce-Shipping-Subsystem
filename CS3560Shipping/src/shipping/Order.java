@@ -18,7 +18,8 @@ public class Order {
 	 * }
 	 */
 	
-	void updateOrderStatus(int new_status) {
+
+	void updateShippingStatus(int new_status) { // doesn't have to be int data type for a status
 		/*
 		 * Also perform updates on the order_line_item_list accordingly 
 		 */
@@ -33,12 +34,13 @@ public class Order {
 		return orderCustomerInformation;
 	}
 	
-	ArrayList<OrderLineItem> getOrderLineItemList(){
-		return orderLineItemList;
+
+	ArrayList<OrderLineItem> getOrderLineItemList(){ // return the list of order line items associated with the Order, not package
+		return order_line_item_list;
 	}
 	
-	double getTotalShippingAndHandling() {
-		return totalShippingAndHandling;
+	double getTotalShippingAndHandling() { // probably some calculation involving tax and shipping cost.
+		return total_shipping_and_handling;
 	}
 	
 	double getTotalTax() {
