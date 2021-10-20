@@ -5,7 +5,7 @@ public class ShippingLabel {
 	public String trackingNum;
 	public String barcode;
 	public String address;
-	public void printShippingLabel() //prints shipping label? Not sure if this goes here
+	public void printShippingLabel() 
 	{
 		
 	}

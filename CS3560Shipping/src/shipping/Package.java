@@ -5,9 +5,9 @@ public class Package {
 	public int orderID;
 	public int status;
 	public ShippingLabel label; 
-	public OrderLineItem[] orderLineItemList; //this returns an error because OrderLineItem is in a different project but it'll be fine
+	public OrderLineItem[] orderLineItemList; 
 	
-	public void createPackage( int packageID, int orderID, int status, ShippingLabel label, OrderLineItem[] orderLineItemList)
+	public void createPackage(int orderID, int status, ShippingLabel label, OrderLineItem[] orderLineItemList)
 	//creates a new package
 	{
 		
@@ -35,11 +35,6 @@ public class Package {
 	public OrderLineItem[] getOrderLineItemList() //return the orderlineitem list for this package
 	{
 		return orderLineItemList;
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
