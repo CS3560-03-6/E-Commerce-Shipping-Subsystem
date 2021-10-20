@@ -10,7 +10,10 @@ public class Package {
 	public void createPackage(int orderID, int status, ShippingLabel label, OrderLineItem[] orderLineItemList)
 	//creates a new package
 	{
-		
+		this.packageID = packageID;
+		this.orderID = orderID;
+		this.status = status;
+		// i'll do this later
 	}
 	public int getPackageID() //return the package ID of this package
 	{
@@ -26,7 +29,7 @@ public class Package {
 	}
 	public void updateStatus(int newStatus) //update the status of this package
 	{
-		
+		this.status = newStatus;
 	}
 	public ShippingLabel getLabel() //return the shipping label associated with this package
 	{
