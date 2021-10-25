@@ -24,16 +24,15 @@ public class FullPanel extends JPanel
 		// Setup the overall application layout
 		setLayout(new BorderLayout(10, 10));
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setResizeWeight(0.2);
 		add(splitPane, BorderLayout.CENTER);
 		
 		// Create extended info panel
 		infoPane = new ExtendedInfo();
-		// infoPane.setPreferredSize(new Dimension(300, 200));
 		splitPane.add(infoPane, JSplitPane.RIGHT, 0);
 		
 		// Create tabbed pane menu
 		JTabbedPane menuPanes = new JTabbedPane();
-		// menuPanes.setPreferredSize(new Dimension(300, 200));
 		
 		// Create orders tab
 		orderPane = new OrdersPane();
@@ -53,7 +52,7 @@ public class FullPanel extends JPanel
 		// Clear info pane when new tab is selected
 		menuPanes.addChangeListener(new ChangeListener() {
 	        public void stateChanged(ChangeEvent e) {
-	            System.out.println("Tab: " + menuPanes.getSelectedIndex());
+	            System.out.println("Tab: " + menuPanes.getSelectedIndex()); // delete later
 	            infoPane.deselect();
 	        }
 	    });
