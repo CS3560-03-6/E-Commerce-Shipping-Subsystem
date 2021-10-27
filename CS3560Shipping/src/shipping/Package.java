@@ -1,19 +1,21 @@
 package shipping;
+import java.util.ArrayList;
 
 public class Package {
 	public int packageID;
 	public int orderID;
 	public int status;
 	public ShippingLabel label; 
-	public OrderLineItem[] orderLineItemList; 
+	ArrayList<orderLineItem> orderLineItemList= new ArrayList<orderLineItem>(); 
 	
-	public void createPackage(int orderID, int status, ShippingLabel label, OrderLineItem[] orderLineItemList)
+	public void createPackage(int orderID, int status, ShippingLabel label, orderLineItemList)
 	//creates a new package
 	{
 		this.packageID = packageID;
 		this.orderID = orderID;
 		this.status = status;
-		// i'll do this later
+		this.label = label;
+		this.orderLineItemList = orderLineItemList;
 	}
 	public int getPackageID() //return the package ID of this package
 	{
@@ -35,7 +37,7 @@ public class Package {
 	{
 		return label;
 	}
-	public OrderLineItem[] getOrderLineItemList() //return the orderlineitem list for this package
+	public ArrayList<orderLineItem> getOrderLineItemList() //return the orderlineitem list for this package
 	{
 		return orderLineItemList;
 	}
