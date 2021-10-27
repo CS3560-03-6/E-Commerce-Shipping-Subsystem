@@ -15,24 +15,40 @@ public class OrderLineItem {
 	private double shippingCost;
 	private double tax;
 	
-
-	public int getOrderLineItemID() { // this ID is a particular instance of a given product
+	OrderLineItem(int orderLineItemId, int productId, String sku, String productName,
+				  double length, double width, double height, int quantity, Date deliverByDate,
+				  double shippingCost, double tax){
+		this.orderLineItemId = orderLineItemId;
+		this.productId = productId;
+		this.sku = sku;
+		this.productName = productName;
+		this.length = length;
+		this.width = width;
+		this.height = height;
+		this.quantity = quantity;
+		this.deliverByDate = deliverByDate;
+		this.shippingCost = shippingCost;
+		this.tax = tax;
+			
+	}
+	
+	int getOrderLineItemID() {
 		return orderLineItemId;
 	}
 	
-	public int getProductID() {
+	int getProductID() {
 		return productId;
 	}
 	
-	public String getSKU() {
+	String getSKU() {
 		return sku;
 	}
 	
-	public String getProductName() {
+	String getProductName() {
 		return productName;
 	}
 	
-	public double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
+	double[] getDimensions() {
 		double[] dimensions = new double[3];
 		dimensions[0] = length;
 		dimensions[1] = width;
@@ -41,19 +57,19 @@ public class OrderLineItem {
 		return dimensions;
 	}
 	
-	public int getQuantity() {
+	int getQuantity() {
 		return quantity;
 	}
 	
-	public Date getDeliverByDate() {
+	Date getDeliverByDate() {
 		return deliverByDate;
 	}
 	
-	public double getShippingCost() {
+	double getShippingCost() {
 		return shippingCost;
 	}
 	
-	public double getTax() {
+	double getTax() {
 		return tax;
 	}
 }
