@@ -3,98 +3,59 @@ package shipping;
 import java.util.ArrayList;
 
 public class Order {
-	private double dummyShippingAndHandling = 10.50;
 	
 	private int orderId;
 	private CustomerInfo customerInfo; 
 	private ArrayList<OrderLineItem> orderLineItemList;
-	private double totalShippingAndHandling;
-	private double totalTax;
 	private int status;
 	
-	Order(int orderId, CustomerInfo customerInfo , ArrayList<OrderLineItem> orderLineItemList, int status){
+	Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList){
 		this.orderId = orderId;
 		this.customerInfo = customerInfo;
-		this.orderLineItemList = orderLineItemList;
-		this.totalShippingAndHandling = calculateTotalShippingAndHandling(orderLineItemList);
-		this.totalTax = calculateTotalTax(orderLineItemList);
 		this.status = status;
+		this.orderLineItemList = orderLineItemList;
 	}
 	
-	void updateShippingStatus(int new_status) {
+	public void updateShippingStatus(int new_status) {
 		/*
 		 * Also perform updates on the order_line_item_list accordingly 
 		 */
 		status = new_status;
 	}
 	
-	int getOrderID() {
+	public int getOrderID() {
 		return orderId;
 	}
 	
-	CustomerInfo getCustomerInfo() {
+	public CustomerInfo getCustomerInfo() {
 		return customerInfo;
 	}
 	
-	ArrayList<OrderLineItem> getOrderLineItemList(){
+	public ArrayList<OrderLineItem> getOrderLineItemList(){
 		return orderLineItemList;
 	}
 	
-	double getTotalShippingAndHandling() {
-		return totalShippingAndHandling;
-	}
-	
-	double getTotalTax() {
-		return totalTax;
-	}
-	
-	int getStatus() {
+	public int getStatus() {
 		return status;
 	}
 	
-	double calculateShippingAndHandling(OrderLineItem item) {
-		double result = dummyShippingAndHandling;
-		/*
-		 * Some unspecified magic to calculate shipping and handling. 
-		 * Maybe it's done through considering item dimensions, weight and etc.
-		 */
-		
-		return result;
-	}
-	
-	double calculateTotalShippingAndHandling() {
+	public double calculateTotalShipping() {
 		double result = 0.0;
 		for (OrderLineItem item : orderLineItemList) {
-			result += calculateShippingAndHandling(item);
+			result += item.getShippingCost();
 		}
-		totalTax = result;
 		return result;
 	}
 	
-	double calculateTotalShippingAndHandling(ArrayList<OrderLineItem> anOrderLineItemList) {
-		double result = 0.0;
-		for (OrderLineItem item : anOrderLineItemList) {
-			result += calculateShippingAndHandling(item);
-		}
-		totalTax = result;
-		return result;
-	}
-	
-	double calculateTotalTax() {
+	public double calculateTotalTax() {
 		double result = 0.0;
 		for (OrderLineItem item : orderLineItemList) {
 			result += item.getTax();
 		}
-		totalTax = result;
 		return result;
 	}
 	
-	double calculateTotalTax(ArrayList<OrderLineItem> anOrderLineItemList) {
-		double result = 0.0;
-		for (OrderLineItem item : anOrderLineItemList) {
-			result += item.getTax();
-		}
-		totalTax = result;
-		return result;
+	public double calculateTotalShippingAndTax() {
+		return calculateTotalShipping() + calculateTotalTax();
 	}
 }

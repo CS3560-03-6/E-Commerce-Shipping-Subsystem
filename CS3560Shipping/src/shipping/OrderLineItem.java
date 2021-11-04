@@ -4,61 +4,41 @@ import java.util.Date;
 
 public class OrderLineItem {
 	private int orderLineItemId;
+	private int orderId;
 	private int productId;
-	private String sku;
-	private String productName;
-	private double length;
-	private double width;
-	private double height;
-	private int quantity;
+	private int packageId;
 	private Date deliverByDate;
 	private double shippingCost;
 	private double tax;
+	private int quantity;
 	
-	OrderLineItem(int orderLineItemId, int productId, String sku, String productName,
-				  double length, double width, double height, int quantity, Date deliverByDate,
-				  double shippingCost, double tax){
+	OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId,
+				  Date deliverByDate, double shippingCost, double tax, int quantity){
 		this.orderLineItemId = orderLineItemId;
+		this.orderId = orderId;
 		this.productId = productId;
-		this.sku = sku;
-		this.productName = productName;
-		this.length = length;
-		this.width = width;
-		this.height = height;
-		this.quantity = quantity;
+		this.packageId = packageId;
 		this.deliverByDate = deliverByDate;
 		this.shippingCost = shippingCost;
 		this.tax = tax;
+		this.quantity = quantity;
 			
 	}
 	
-	int getOrderLineItemID() {
+	int getOrderLineItemId() {
 		return orderLineItemId;
 	}
 	
-	int getProductID() {
+	int getOrderId() {
+		return orderId;
+	}
+	
+	int getProductId() {
 		return productId;
 	}
 	
-	String getSKU() {
-		return sku;
-	}
-	
-	String getProductName() {
-		return productName;
-	}
-	
-	double[] getDimensions() {
-		double[] dimensions = new double[3];
-		dimensions[0] = length;
-		dimensions[1] = width;
-		dimensions[2] = height;
-		
-		return dimensions;
-	}
-	
-	int getQuantity() {
-		return quantity;
+	int getPackageId() {
+		return packageId;
 	}
 	
 	Date getDeliverByDate() {
@@ -71,5 +51,9 @@ public class OrderLineItem {
 	
 	double getTax() {
 		return tax;
+	}
+	
+	int getQuantity() {
+		return quantity;
 	}
 }
