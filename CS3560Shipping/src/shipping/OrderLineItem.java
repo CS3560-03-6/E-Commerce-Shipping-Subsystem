@@ -25,35 +25,35 @@ public class OrderLineItem {
 			
 	}
 	
-	int getOrderLineItemId() {
+	public int getOrderLineItemId() {
 		return orderLineItemId;
 	}
 	
-	int getOrderId() {
+	public int getOrderId() {
 		return orderId;
 	}
 	
-	int getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 	
-	int getPackageId() {
+	public int getPackageId() {
 		return packageId;
 	}
 	
-	Date getDeliverByDate() {
+	public Date getDeliverByDate() {
 		return deliverByDate;
 	}
 	
-	double getShippingCost() {
+	public double getShippingCost() {
 		return shippingCost;
 	}
 	
-	double getTax() {
+	public double getTax() {
 		return tax;
 	}
 	
-	int getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 }
