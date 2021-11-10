@@ -3,16 +3,14 @@ import java.util.ArrayList;
 
 public class Package {
 	public int packageID;
-	public int orderID;
 	public int status;
 	public ShippingLabel label; 
-	ArrayList<orderLineItem> orderLineItemList= new ArrayList<orderLineItem>(); 
+	ArrayList<orderLineItem> orderLineItemList= new ArrayList<orderLineItem>(); //note: this is an arraylist because it makes it way easier to add and remove things but i can change it later
 	
-	public void createPackage(int orderID, int status, ShippingLabel label, orderLineItemList)
+	public void createPackage(int packageID, int status, ShippingLabel label, orderLineItemList)
 	//creates a new package
 	{
 		this.packageID = packageID;
-		this.orderID = orderID;
 		this.status = status;
 		this.label = label;
 		this.orderLineItemList = orderLineItemList;
@@ -20,10 +18,6 @@ public class Package {
 	public int getPackageID() //return the package ID of this package
 	{
 		return packageID;
-	}
-	public int getOrderID() //return the order ID associated with this package
-	{
-		return orderID;
 	}
 	public int getStatus() //return the current status of this package
 	{
