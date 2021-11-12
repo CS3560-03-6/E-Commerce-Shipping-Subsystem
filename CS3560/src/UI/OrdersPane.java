@@ -46,7 +46,6 @@ public class OrdersPane extends JPanel
 		orderPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         orderList.setFillsViewportHeight(true);
 		orderPane.setAutoscrolls(true);
-		orderPane.setPreferredSize(new Dimension(0, 0));
 
 		// Add ScrollPane to Jpanel
 		add(orderPane, BorderLayout.CENTER);

@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 /**
  * @author Gabriel Fok
+ * @author Gia Quach
  */
 
 public class ShipmentsPane extends JPanel
@@ -35,7 +36,6 @@ public class ShipmentsPane extends JPanel
 		JScrollPane shipPane = new JScrollPane(shipList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         shipList.setFillsViewportHeight(true);
 		shipPane.setAutoscrolls(true);
-		shipPane.setPreferredSize(new Dimension(0, 0));
 
 		//Add ScrollPane to Jpanel
 		add(shipPane, BorderLayout.CENTER);

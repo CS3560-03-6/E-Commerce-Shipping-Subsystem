@@ -33,7 +33,7 @@ public class FullPanel extends JPanel
 		// Create extended info panel
 		infoPane = new ExtendedInfo();
 		splitPane.add(infoPane, JSplitPane.RIGHT, 0);
-		
+        
 		// Create tabbed pane menu
 		JTabbedPane menuPanes = new JTabbedPane();
 		
@@ -55,7 +55,6 @@ public class FullPanel extends JPanel
 		// Clear info pane when new tab is selected
 		menuPanes.addChangeListener(new ChangeListener() {
 	        public void stateChanged(ChangeEvent e) {
-	            System.out.println("Tab: " + menuPanes.getSelectedIndex()); // delete later
 	            infoPane.deselect();
 	        }
 	    });
@@ -67,13 +66,11 @@ public class FullPanel extends JPanel
 					JTable target = (JTable)e.getSource();
 					int row = target.getSelectedRow();
 					int col = target.getSelectedColumn();
-					id = orderPane.getID(row, col);
+					id = orderPane.getID(row, 1); // this should always be 1 since it's the ID only right?
 					if (id != null) {
 						infoPane.selectedIdInfo(id);
 					}
 				}
-				else 
-					infoPane.update();
 			} 
 		});
 
