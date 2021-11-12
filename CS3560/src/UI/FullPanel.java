@@ -1,7 +1,9 @@
 package UI;
 
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -18,6 +20,7 @@ public class FullPanel extends JPanel
 	private PackagesPane packagePane;
 	private ShipmentsPane shipmentsPane;
 	private ExtendedInfo infoPane;
+	private String id;
 
 	public FullPanel()
 	{	
@@ -56,7 +59,24 @@ public class FullPanel extends JPanel
 	            infoPane.deselect();
 	        }
 	    });
-		
+
+		// Mouse Listener that activate an event if user double click
+		orderPane.getTable().addMouseListener(new MouseInputAdapter() {
+			public void mouseClicked(MouseEvent e){
+				if (e.getClickCount() == 2){
+					JTable target = (JTable)e.getSource();
+					int row = target.getSelectedRow();
+					int col = target.getSelectedColumn();
+					id = orderPane.getID(row, col);
+					if (id != null) {
+						infoPane.selectedIdInfo(id);
+					}
+				}
+				else 
+					infoPane.update();
+			} 
+		});
+
 		splitPane.add(menuPanes, JSplitPane.LEFT, 1);
 		
 	}
