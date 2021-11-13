@@ -39,7 +39,7 @@ public class ExtendedInfo extends JPanel
 
 	public void deselect()
 	{
-		remove(extInfoScrollable);
+		removeAll();
 		repaint();
 		add(backtext, BorderLayout.CENTER);
 		validate();
@@ -147,7 +147,7 @@ public class ExtendedInfo extends JPanel
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		extInfoScrollable.setAutoscrolls(true);
 
-		remove(backtext);
+		removeAll();
 		repaint();
 		add(extInfoScrollable, BorderLayout.CENTER); //This stop the labels and textfield from becoming too small when resize
 		validate();
