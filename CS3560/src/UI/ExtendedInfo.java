@@ -18,6 +18,7 @@ public class ExtendedInfo extends JPanel
 	private JTable orderList;
 	private JScrollPane orderItemPane;
 	private JPanel extInfoPanel;
+	private JScrollPane extInfoScrollable;
 
 	/**
 	 * contructor for a display
@@ -38,7 +39,8 @@ public class ExtendedInfo extends JPanel
 
 	public void deselect()
 	{
-		remove(extInfoPanel);
+		remove(extInfoScrollable);
+		repaint();
 		add(backtext, BorderLayout.CENTER);
 		validate();
 	}
@@ -75,6 +77,8 @@ public class ExtendedInfo extends JPanel
 		orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		orderItemPane.setAutoscrolls(true);
+		orderItemPane.setMinimumSize(new Dimension(300, 300));
+
 
 		// Initializing the labels and textfields to display info
 		for (int i = 0; i < 10; i++)
@@ -137,8 +141,15 @@ public class ExtendedInfo extends JPanel
 			gbc = createGbc(1, i);
 			extInfoPanel.add(texts[i - 2], gbc);
 		}
+
+		// Adding the extInfoPanel into JScrollPane 
+		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		extInfoScrollable.setAutoscrolls(true);
+
 		remove(backtext);
-		add(extInfoPanel, BorderLayout.CENTER);
+		repaint();
+		add(extInfoScrollable, BorderLayout.CENTER); //This stop the labels and textfield from becoming too small when resize
 		validate();
 	}
 

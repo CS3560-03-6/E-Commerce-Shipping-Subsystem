@@ -65,7 +65,6 @@ public class FullPanel extends JPanel
 				if (e.getClickCount() == 2){
 					JTable target = (JTable)e.getSource();
 					int row = target.getSelectedRow();
-					int col = target.getSelectedColumn();
 					id = orderPane.getID(row, 1); // this should always be 1 since it's the ID only right?
 					if (id != null) {
 						infoPane.selectedIdInfo(id);
