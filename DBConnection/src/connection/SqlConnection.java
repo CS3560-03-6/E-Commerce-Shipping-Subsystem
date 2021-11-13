@@ -2,9 +2,7 @@ package connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement; 
 
 public class SqlConnection 
 {
@@ -20,20 +18,24 @@ public class SqlConnection
 			System.out.println(e.getMessage());
 		}
 	}
-	public void GetCustomer()
+	public Connection getConnection()
 	{
-		try(Statement stmt = connection.createStatement();)
-		{
-			String query = "Select * from Customer;";
-			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next())
-			{
-				System.out.println(rs.getString("customerId")+"FirstName: "+rs.getString("firstName"));
-			}
-		}
-		catch(SQLException e)
-		{
-			System.out.println(e.getMessage());
-		}
+		return connection;
 	}
+//	public void GetCustomer()
+//	{
+//		try(Statement stmt = connection.createStatement();)
+//		{
+//			String query = "Select * from Customer;";
+//			ResultSet rs = stmt.executeQuery(query);
+//			while(rs.next())
+//			{
+//				System.out.println(rs.getString("customerId")+"FirstName: "+rs.getString("firstName"));
+//			}
+//		}
+//		catch(SQLException e)
+//		{
+//			System.out.println(e.getMessage());
+//		}
+//	}
 }
