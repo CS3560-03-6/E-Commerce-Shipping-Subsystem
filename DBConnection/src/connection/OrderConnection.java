@@ -44,16 +44,36 @@ public class OrderConnection
 		return null;
 	}
 	//Changes the Status of an Order
-	public void UpdateOrderStatus(int orderId, int status)
+	public boolean UpdateOrderStatus(int orderId, int status)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.\"Order\" set status = %d where orderId = %d;", status, orderId);
 			ResultSet rs = stmt.executeQuery(query);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+	//Returns the Complete Order with all OrderLineItems and CustomerInfo
+	public ResultSet getCompleteOrderInformation(int orderId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("Select * from wss.\"Order\" o "
+					+ "join wss.OrderLineItem l on o.orderId = l.orderId "
+					+ "join wss.CustomerInfo c on o.customerInfoId = c.customerInfoId "
+					+ "where o.orderId = %d", orderId);
+			ResultSet rs = stmt.executeQuery(query);
+			return rs;
 		}
 		catch(SQLException e)
 		{
 			System.out.println(e.getMessage());
 		}
+		return null;
 	}
 }

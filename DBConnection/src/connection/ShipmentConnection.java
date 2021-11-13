@@ -33,7 +33,7 @@ public class ShipmentConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("select * from wss.shipment s"
-					+ "join wss.package p on s.shipmentId p.shipmentId having s.shipmentId = %d", shipmentId);
+					+ "join wss.package p on s.shipmentId p.shipmentId where s.shipmentId = %d", shipmentId);
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
 		}

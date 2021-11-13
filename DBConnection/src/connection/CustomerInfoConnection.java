@@ -12,6 +12,7 @@ public class CustomerInfoConnection
 	{
 		_connection = connection.getConnection();
 	}
+	//Will get the specific CustomerInfo that is requested for
 	public ResultSet GetCustomerInfo(int customerInfoId)
 	{
 		try(Statement stmt = _connection.createStatement();)

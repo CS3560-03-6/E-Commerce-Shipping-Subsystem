@@ -10,15 +10,14 @@ import java.sql.Statement;
 public class ShippingLabelConnection 
 {
 	private Connection _connection;
+	//This class overall is kind of sketchy since we might just have everything done in package at once
+	//However, I will have all these method here for now in case we need them or if package will use them instead
 	public ShippingLabelConnection(SqlConnection connection)
 	{
 		_connection = connection.getConnection();
 	}
-	//create and get and delete when package is deleted do this via SQL or code?
-	//will interconnect the code in package based on how we are getting a shippingLabel
-	//we might be calling an actual api or we might make it manually in which case interconnecting the 
-	//code will be incorrect
 	
+	//will create a shipping label
 	public boolean CreateShippingLabel(int labelId, String trackingNum, InputStream actualLabel )
 	{
 		try(PreparedStatement pstmt = _connection.prepareStatement("insert into Wss.ShippingLabel values(?, ?, ?);");)
@@ -35,6 +34,7 @@ public class ShippingLabelConnection
 			return false;
 		}
 	}
+	//gets the specified shipping label
 	public ResultSet GetShippingLabel(int labelId)
 	{
 		try(PreparedStatement pstmt = _connection.prepareStatement("select * from Wss.ShippingLabel "
@@ -49,6 +49,7 @@ public class ShippingLabelConnection
 		}
 		return null;
 	}
+	//will remove the specified shipping label
 	public boolean deleteShippingLabel(int labelId)
 	{
 		try(Statement stmt = _connection.createStatement();)

@@ -43,6 +43,7 @@ public class PackageConnection
 		}
 		return null;
 	}
+	//will remove the specified package from the db
 	public boolean deletePackage(int packageId)
 	{
 		try(Statement stmt = _connection.createStatement();)
@@ -57,6 +58,7 @@ public class PackageConnection
 		}
 		return false;
 	}
+	//Makes it so that a package is no longer in a shipment
 	public boolean removeFromShipment(int packageId)
 	{
 		try(Statement stmt = _connection.createStatement();)
