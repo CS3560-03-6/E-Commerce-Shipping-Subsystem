@@ -62,7 +62,7 @@ public class Main
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			System.exit(0);
+			CreatePackagePopup PackagePopup = new CreatePackagePopup();
 		}
 	}
 
