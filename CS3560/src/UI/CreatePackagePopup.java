@@ -19,10 +19,10 @@ public class CreatePackagePopup
 		f = new JFrame("Create a package");
 		popup = new JPanel();
 		f.setContentPane(popup);
-		BoxLayout layout = new BoxLayout(popup, BoxLayout.Y_AXIS);
+		SpringLayout layout = new SpringLayout();
 		popup.setLayout(layout);
 
-		String[] labels = { "Order ID: ", "Line Item IDs: " };
+		String[] labels = { "Order ID: ", "Line Item IDs: ", "Finish: " };
 		int numPairs = labels.length;
 		orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -34,38 +34,42 @@ public class CreatePackagePopup
 		{
 			JLabel l = new JLabel(labels[i], JLabel.TRAILING);
 			popup.add(l);
-			if (i == 1)
-			{
-				// Allow JTable of order item list to be scrollale
-				String[] orderColNames = { "Order Item ID" };
-				String[][] orderCol = new String[100][100];
-				orderList = new JTable(orderCol, orderColNames);
-				orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-						ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				orderItemPane.setAutoscrolls(true);
-				orderItemPane.setMinimumSize(new Dimension(300, 300));
+			switch (i)
+				{
+				case 1:// Allow JTable of order item list to be scrollale
+					String[] orderColNames = { "Order Item ID" };
+					String[][] orderCol = new String[100][100];
+					orderList = new JTable(orderCol, orderColNames);
+					orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+							ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					orderItemPane.setAutoscrolls(true);
+					orderItemPane.setMinimumSize(new Dimension(300, 300));
 
-				popup.add(orderItemPane);
-			} else
-			{
-				JTextField textField = new JTextField(10);
-				l.setLabelFor(textField);
-				popup.add(textField);
-			}
+					popup.add(orderItemPane);
+					break;
+				case 2:
+					createButton = new JButton("Create Package");
+					createButton.addActionListener(new ActionListener()
+					{
+						public void actionPerformed(ActionEvent e)
+						{
+							f.dispose();
+						}
+					});
+					popup.add(createButton);
+					break;
+				default:
+
+					JTextField textField = new JTextField(10);
+					textField.setMaximumSize( textField.getPreferredSize() );
+					l.setLabelFor(textField);
+					popup.add(textField);
+					break;
+				}
 		}
-		//SpringUtilities.makeCompactGrid(popup, numPairs, 2, 6, 6, 6, 6);
 
-		createButton = new JButton("Create Package");
-		createButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				f.dispose();
-			}
-		});
-		popup.add(createButton);
 		f.setSize(300, 300);
 		f.setVisible(true);
-
+		SpringUtilities.makeCompactGrid(popup, numPairs, 2, 6, 6, 6, 6);
 	}
 }
