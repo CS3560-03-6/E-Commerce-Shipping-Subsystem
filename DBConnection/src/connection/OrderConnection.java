@@ -15,7 +15,7 @@ public class OrderConnection
 		_connection = connection.getConnection();
 	}
 	//Get all the orders in the table
-	public ArrayList<HashMap<String, Object>> GetOrderList()
+	public ArrayList<HashMap<String, Object>> getOrderList()
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -31,7 +31,7 @@ public class OrderConnection
 		return null;
 	}
 	//Gets a specific order based on orderId
-	public ArrayList<HashMap<String, Object>> GetOrder(int orderId)
+	public ArrayList<HashMap<String, Object>> getOrder(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -46,7 +46,7 @@ public class OrderConnection
 		return null;
 	}
 	//Changes the Status of an Order
-	public boolean UpdateOrderStatus(int orderId, int status)
+	public boolean updateOrderStatus(int orderId, int status)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{

@@ -3,10 +3,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import connection.CustomerInfoConnection;
-import connection.SqlConnection;
+import connection.*;
 public class SqlServerConnectionDemo 
 {
 
@@ -19,8 +19,13 @@ public class SqlServerConnectionDemo
 		String pass = "password";
 		SqlConnection connect = new SqlConnection(url,user,pass);
 		
-		CustomerInfoConnection customer = new CustomerInfoConnection(connect);
-		HashMap<String, Object> table = customer.GetCustomerInfo(1).get(0);
-		System.out.println(table);
+		OrderLineItemConnection temp = new OrderLineItemConnection(connect);
+//		ArrayList<HashMap<String, Object>> table = temp.getCompleteOrderInformation(633127);
+		ArrayList<HashMap<String, Object>> table = temp.getOrderId(200001);
+		for(int i = 0 ; i < table.size(); i++)
+		{
+			System.out.println(table.get(i));
+		}
+		
 	}
 }

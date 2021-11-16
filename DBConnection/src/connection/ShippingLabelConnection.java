@@ -20,7 +20,7 @@ public class ShippingLabelConnection
 	}
 	
 	//will create a shipping label
-	public boolean CreateShippingLabel(int labelId, String trackingNum, InputStream actualLabel )
+	public boolean createShippingLabel(int labelId, String trackingNum, InputStream actualLabel )
 	{
 		try(PreparedStatement pstmt = _connection.prepareStatement("insert into Wss.ShippingLabel values(?, ?, ?);");)
 		{
@@ -38,7 +38,7 @@ public class ShippingLabelConnection
 	}
 	
 	//gets the specified shipping label
-	public ArrayList<HashMap<String, Object>> GetShippingLabel(int labelId)
+	public ArrayList<HashMap<String, Object>> getShippingLabel(int labelId)
 	{
 		try(PreparedStatement pstmt = _connection.prepareStatement("select * from Wss.ShippingLabel "
 				+ "where labelId = " + labelId+";");)

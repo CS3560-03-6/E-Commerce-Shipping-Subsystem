@@ -17,7 +17,7 @@ public class ProductConnection
 	
 	//returns a specific product.
 	//might delete this whole class later since I'm not sure if we need to call product
-	public ArrayList<HashMap<String, Object>> GetProduct(int productId)
+	public ArrayList<HashMap<String, Object>> getProduct(int productId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{

@@ -16,11 +16,11 @@ public class OrderLineItemConnection
 	}
 	
 	//Determine what order the orderLineItem is from
-	public ArrayList<HashMap<String, Object>> GetOrderId(int orderLineItemId)
+	public ArrayList<HashMap<String, Object>> getOrderId(int orderLineItemId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = "Select * ";
+			String query = "Select l.orderId ";
 			query += "from wss.OrderLineItem l join wss.\"Order\" o on l.orderId = o.orderId ";
 			query += String.format("where l.orderLineItemId = %d;", orderLineItemId);
 			ResultSet rs = stmt.executeQuery(query);
@@ -34,13 +34,13 @@ public class OrderLineItemConnection
 	}
 
 	//Get all the orderLineItems associated with an order
-	public ArrayList<HashMap<String, Object>> GetOrderLineItemListBasedOnOrder(int orderId)
+	public ArrayList<HashMap<String, Object>> getOrderLineItemListBasedOnOrder(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = "Select * ";
 			query += String.format("from wss.OrderLineItem l "
-					+ "join wss.\"Order\" o on l.orderId = o.orderId having o.orderId = %d", orderId);
+					+ "join wss.\"Order\" o on l.orderId = o.orderId where o.orderId = %d", orderId);
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}

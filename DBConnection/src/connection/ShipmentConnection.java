@@ -18,7 +18,7 @@ public class ShipmentConnection
 	
 	//need to test how date will interact with sql.
 	//Will make a shipment
-	public void CreateShipment(int shipmentId, Date dateShipped)
+	public void createShipment(int shipmentId, Date dateShipped)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -32,7 +32,7 @@ public class ShipmentConnection
 		}
 	}
 	
-	public ArrayList<HashMap<String, Object>> GetShipment(int shipmentId)
+	public ArrayList<HashMap<String, Object>> getShipment(int shipmentId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{

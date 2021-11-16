@@ -16,7 +16,7 @@ public class PackageConnection
 	}
 	
 	//Makes a package according to the parameters you put in
-	public boolean CreatePackage(int packageId, int labelId, int shipmentId, int status)
+	public boolean createPackage(int packageId, int labelId, int shipmentId, int status)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -33,7 +33,7 @@ public class PackageConnection
 	}
 	
 	//Will give back the specific package you are looking for
-	public ArrayList<HashMap<String, Object>> GetPackage(int packageId)
+	public ArrayList<HashMap<String, Object>> getPackage(int packageId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
