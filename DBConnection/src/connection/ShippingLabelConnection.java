@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShippingLabelConnection 
 {
@@ -34,14 +36,15 @@ public class ShippingLabelConnection
 			return false;
 		}
 	}
+	
 	//gets the specified shipping label
-	public ResultSet GetShippingLabel(int labelId)
+	public ArrayList<HashMap<String, Object>> GetShippingLabel(int labelId)
 	{
 		try(PreparedStatement pstmt = _connection.prepareStatement("select * from Wss.ShippingLabel "
 				+ "where labelId = " + labelId+";");)
 		{
 			ResultSet rs = pstmt.executeQuery();
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
@@ -49,6 +52,7 @@ public class ShippingLabelConnection
 		}
 		return null;
 	}
+
 	//will remove the specified shipping label
 	public boolean deleteShippingLabel(int labelId)
 	{

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProductConnection 
 {
@@ -12,15 +14,16 @@ public class ProductConnection
 	{
 		_connection = connection.getConnection();
 	}
+	
 	//returns a specific product.
 	//might delete this whole class later since I'm not sure if we need to call product
-	public ResultSet GetProduct(int productId)
+	public ArrayList<HashMap<String, Object>> GetProduct(int productId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("Select * from wss.\"Product\" where productId = %d;", productId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{

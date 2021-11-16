@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PackageConnection 
 {
@@ -12,6 +14,7 @@ public class PackageConnection
 	{
 		_connection = connection.getConnection();
 	}
+	
 	//Makes a package according to the parameters you put in
 	public boolean CreatePackage(int packageId, int labelId, int shipmentId, int status)
 	{
@@ -28,14 +31,15 @@ public class PackageConnection
 			return false;
 		}
 	}
+	
 	//Will give back the specific package you are looking for
-	public ResultSet GetPackage(int packageId)
+	public ArrayList<HashMap<String, Object>> GetPackage(int packageId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("select * from wss.Package where packageId = %d;", packageId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
@@ -43,6 +47,7 @@ public class PackageConnection
 		}
 		return null;
 	}
+	
 	//will remove the specified package from the db
 	public boolean deletePackage(int packageId)
 	{
@@ -58,6 +63,7 @@ public class PackageConnection
 		}
 		return false;
 	}
+	
 	//Makes it so that a package is no longer in a shipment
 	public boolean removeFromShipment(int packageId)
 	{

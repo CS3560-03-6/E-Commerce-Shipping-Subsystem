@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OrderLineItemConnection 
 {
@@ -12,8 +14,9 @@ public class OrderLineItemConnection
 	{
 		_connection = connection.getConnection();
 	}
+	
 	//Determine what order the orderLineItem is from
-	public ResultSet GetOrderId(int orderLineItemId)
+	public ArrayList<HashMap<String, Object>> GetOrderId(int orderLineItemId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -21,7 +24,7 @@ public class OrderLineItemConnection
 			query += "from wss.OrderLineItem l join wss.\"Order\" o on l.orderId = o.orderId ";
 			query += String.format("where l.orderLineItemId = %d;", orderLineItemId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
@@ -29,8 +32,9 @@ public class OrderLineItemConnection
 		}
 		return null;
 	}
+
 	//Get all the orderLineItems associated with an order
-	public ResultSet GetOrderLineItemListBasedOnOrder(int orderId)
+	public ArrayList<HashMap<String, Object>> GetOrderLineItemListBasedOnOrder(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -38,7 +42,7 @@ public class OrderLineItemConnection
 			query += String.format("from wss.OrderLineItem l "
 					+ "join wss.\"Order\" o on l.orderId = o.orderId having o.orderId = %d", orderId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{

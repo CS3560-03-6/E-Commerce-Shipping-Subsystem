@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ShipmentConnection 
 {
@@ -13,6 +15,7 @@ public class ShipmentConnection
 	{
 		_connection = connection.getConnection();
 	}
+	
 	//need to test how date will interact with sql.
 	//Will make a shipment
 	public void CreateShipment(int shipmentId, Date dateShipped)
@@ -28,14 +31,15 @@ public class ShipmentConnection
 			System.out.println(e.getMessage());
 		}
 	}
-	public ResultSet GetShipment(int shipmentId)
+	
+	public ArrayList<HashMap<String, Object>> GetShipment(int shipmentId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("select * from wss.shipment s"
 					+ "join wss.package p on s.shipmentId p.shipmentId where s.shipmentId = %d", shipmentId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{

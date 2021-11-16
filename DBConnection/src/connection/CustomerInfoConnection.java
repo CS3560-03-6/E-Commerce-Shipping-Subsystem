@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class CustomerInfoConnection 
 {
@@ -13,13 +16,16 @@ public class CustomerInfoConnection
 		_connection = connection.getConnection();
 	}
 	//Will get the specific CustomerInfo that is requested for
-	public ResultSet GetCustomerInfo(int customerInfoId)
+	public ArrayList<HashMap<String, Object>> GetCustomerInfo(int customerInfoId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = "Select * from CustomerInfo;";
+			String query = "Select * from wss.CustomerInfo where customerInfoId = "
+					+customerInfoId+";";
+			
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{

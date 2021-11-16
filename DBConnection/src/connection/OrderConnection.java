@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OrderConnection 
 {
@@ -13,14 +15,14 @@ public class OrderConnection
 		_connection = connection.getConnection();
 	}
 	//Get all the orders in the table
-	public ResultSet GetOrderList()
+	public ArrayList<HashMap<String, Object>> GetOrderList()
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = "Select * from wss.\"Order\";";
 			//maybe join with OrderLineItems to determine what is the lowest date and order by that way
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
@@ -29,13 +31,13 @@ public class OrderConnection
 		return null;
 	}
 	//Gets a specific order based on orderId
-	public ResultSet GetOrder(int orderId)
+	public ArrayList<HashMap<String, Object>> GetOrder(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("Select * from wss.\"Order\" where orderId = %d;", orderId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
@@ -59,7 +61,7 @@ public class OrderConnection
 		}
 	}
 	//Returns the Complete Order with all OrderLineItems and CustomerInfo
-	public ResultSet getCompleteOrderInformation(int orderId)
+	public ArrayList<HashMap<String, Object>> getCompleteOrderInformation(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -68,7 +70,7 @@ public class OrderConnection
 					+ "join wss.CustomerInfo c on o.customerInfoId = c.customerInfoId "
 					+ "where o.orderId = %d", orderId);
 			ResultSet rs = stmt.executeQuery(query);
-			return rs;
+			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
 		{
