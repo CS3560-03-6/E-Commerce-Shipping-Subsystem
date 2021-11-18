@@ -9,6 +9,9 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
+	//TO-do make request that sends list of packages back
+	//only give un shipped packages
+	//get detailed package into
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{

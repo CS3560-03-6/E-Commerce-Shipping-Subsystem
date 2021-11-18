@@ -61,6 +61,8 @@ public class OrderConnection
 		}
 	}
 	//Returns the Complete Order with all OrderLineItems and CustomerInfo
+	
+	//To-Do make it so that OrderLineItems are not in a package
 	public ArrayList<HashMap<String, Object>> getCompleteOrderInformation(int orderId)
 	{
 		try(Statement stmt = _connection.createStatement();)

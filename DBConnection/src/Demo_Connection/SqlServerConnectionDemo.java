@@ -9,7 +9,9 @@ import java.util.HashMap;
 import connection.*;
 public class SqlServerConnectionDemo 
 {
-
+	//To-Do
+	//each type have own connection or individually each have one
+	
 	public static void main(String[] args) throws SQLException 
 	{
 		//this place is only a testing ground
@@ -19,9 +21,10 @@ public class SqlServerConnectionDemo
 		String pass = "password";
 		SqlConnection connect = new SqlConnection(url,user,pass);
 		
-		OrderLineItemConnection temp = new OrderLineItemConnection(connect);
-//		ArrayList<HashMap<String, Object>> table = temp.getCompleteOrderInformation(633127);
-		ArrayList<HashMap<String, Object>> table = temp.getOrderId(200001);
+		PackageConnection temp = new PackageConnection(connect);
+		//When testing create package, you must first create a label and then you may make a package.
+		//User may be able to delete a package when they realized they made it wrong
+		ArrayList<HashMap<String, Object>> table = temp.getPackage(1);
 		for(int i = 0 ; i < table.size(); i++)
 		{
 			System.out.println(table.get(i));
