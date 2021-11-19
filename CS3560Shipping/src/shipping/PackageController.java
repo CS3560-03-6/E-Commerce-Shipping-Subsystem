@@ -13,10 +13,7 @@ public class PackageController {
 	public void createPackage(int packageID, int status, ShippingLabel label, orderLineItemList)
 	//creates a new package
 	{
-		this.packageID = packageID;
-		this.status = status;
-		this.label = label;
-		this.orderLineItemList = orderLineItemList;
+		packagetest.createPackage(packageID, status, label, orderLineItemList);
 	}
 	public int getPackageID() //return the package ID of this package
 	{
