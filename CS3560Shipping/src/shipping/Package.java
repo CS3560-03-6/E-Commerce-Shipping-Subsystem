@@ -1,13 +1,13 @@
 package shipping;
-import java.util.ArrayList;
+import java.util.ArrayList;;
 
 public class Package {
 	public int packageID;
 	public int status;
 	public ShippingLabel label; 
-	ArrayList<orderLineItem> orderLineItemList= new ArrayList<orderLineItem>(); //note: this is an arraylist because it makes it way easier to add and remove things but i can change it later
+	ArrayList<OrderLineItem> orderLineItemList= new ArrayList<OrderLineItem>(); //note: this is an arraylist because it makes it way easier to add and remove things but i can change it later
 	
-	public void createPackage(int packageID, int status, ShippingLabel label, orderLineItemList)
+	public void createPackage(int packageID, int status, ShippingLabel label, ArrayList<OrderLineItem> orderLineItemList)
 	//creates a new package
 	{
 		this.packageID = packageID;
