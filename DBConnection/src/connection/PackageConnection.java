@@ -96,4 +96,18 @@ public class PackageConnection
 		}
 		return false;
 	}
+	public ArrayList<HashMap<String, Object>> getLatestPackageId()
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = "select top(1) packageId from wss.Package order by desc";
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 }
