@@ -9,15 +9,11 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
-	//TO-do make request that sends list of packages back
-	//only give un shipped packages
-	//get detailed package into
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{
 		_connection = connection.getConnection();
 	}
-	
 	//Makes a package according to the parameters you put in
 	public boolean createPackage(int packageId, int labelId, int shipmentId, int status)
 	{
@@ -34,7 +30,25 @@ public class PackageConnection
 			return false;
 		}
 	}
-	
+	/**
+	 * 
+	 * @return
+	 * Will return an ArrayList with a HashMap that only contains one column, packageId
+	 */
+	public ArrayList<HashMap<String, Object>> getPackageList()
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("select packageId from wss.Package where packageStatus = 0;");
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	//Will give back the specific package you are looking for
 	public ArrayList<HashMap<String, Object>> getPackage(int packageId)
 	{
