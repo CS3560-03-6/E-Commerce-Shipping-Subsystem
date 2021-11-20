@@ -8,11 +8,11 @@ public class Shipments {
 	public Date dateShipped;
 	
 	
-	public void createShipment(int shipmentID, packagelist, Date dateshipped) //create a new shipment?
+	public void createShipment(int shipmentID, ArrayList<Package> packagelist, Date dateshipped) //create a new shipment?
 	{
 		this.shipmentID = shipmentID;
 		this.packagelist = packagelist;
-		this.dateshipped = dateshipped;
+		this.dateShipped = dateshipped;
 	}
 	public void addPackage(Package box) //add a package to the shipment
 	{

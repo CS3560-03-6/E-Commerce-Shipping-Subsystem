@@ -31,7 +31,7 @@ public class Package {
 	{
 		return label;
 	}
-	public ArrayList<orderLineItem> getOrderLineItemList() //return the orderlineitem list for this package
+	public ArrayList<OrderLineItem> getOrderLineItemList() //return the orderlineitem list for this package
 	{
 		return orderLineItemList;
 	}
