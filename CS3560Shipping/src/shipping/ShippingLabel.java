@@ -3,23 +3,24 @@ package shipping;
 public class ShippingLabel {
 	public int labelID;
 	public String trackingNum;
-	public String barcode;
-	public String address;
+	public String label;
+
 	public void printShippingLabel() 
 	{
-		
+		//We don't actually need anything here to physically print the label, I think? I'll figure this out later.
 	}
-	public int getLabelID() {
+	public int getLabelID() 
+	{
 		return labelID;
 	}
-	public String getTrackingNum() {
+	public String getTrackingNum() 
+	{
 		return trackingNum;
 	}
-	public String getBarcode() {
-		return barcode;
+	public String getLabel() 
+	{
+		return label;
 	}
-	public String getAddress() {
-		return address;
-	}
+
 
 }
