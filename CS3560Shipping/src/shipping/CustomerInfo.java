@@ -8,21 +8,21 @@ public class CustomerInfo {
 	private String phoneNumber;
 	private String email;
 	
-	/* CustomerInfo(int customer_information_id, String first_name,
-				 String last_name, String[] address, String phone_number,
+	CustomerInfo(int customerInformationId, String firstName,
+				 String lastName, String address, String phoneNumber,
 				 String email){
-		this.customer_information_id = customer_information_id;
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.customerInformationId = customerInformationId;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.address = address;
-		this.phone_number = phone_number;
+		this.phoneNumber = phoneNumber;
 		this.email = email;
-	}*/
+	}
 	
 	public String[] getCustomerName() {
 		String[] full_name = new String[2];
-		full_name[0] = firstName;
-		full_name[1] = lastName;
+		full_name[0] = first_name;
+		full_name[1] = last_name;
 		
 		return full_name;
 	}

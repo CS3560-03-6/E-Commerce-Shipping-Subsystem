@@ -4,45 +4,41 @@ import java.util.Date;
 
 public class OrderLineItem {
 	private int orderLineItemId;
+	private int orderId;
 	private int productId;
-	private String sku;
-	private String productName;
-	private double length;
-	private double width;
-	private double height;
-	private int quantity;
+	private int packageId;
 	private Date deliverByDate;
 	private double shippingCost;
 	private double tax;
+	private int quantity;
 	
-
-	public int getOrderLineItemID() { // this ID is a particular instance of a given product
+	OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId,
+				  Date deliverByDate, double shippingCost, double tax, int quantity){
+		this.orderLineItemId = orderLineItemId;
+		this.orderId = orderId;
+		this.productId = productId;
+		this.packageId = packageId;
+		this.deliverByDate = deliverByDate;
+		this.shippingCost = shippingCost;
+		this.tax = tax;
+		this.quantity = quantity;
+			
+	}
+	
+	public int getOrderLineItemId() {
 		return orderLineItemId;
 	}
 	
-	public int getProductID() {
+	public int getOrderId() {
+		return orderId;
+	}
+	
+	public int getProductId() {
 		return productId;
 	}
 	
-	public String getSKU() {
-		return sku;
-	}
-	
-	public String getProductName() {
-		return productName;
-	}
-	
-	public double[] getDimensions() { // return all three dimensions at once. System is unlikely to only request anything besides all three values for dimensions.
-		double[] dimensions = new double[3];
-		dimensions[0] = length;
-		dimensions[1] = width;
-		dimensions[2] = height;
-		
-		return dimensions;
-	}
-	
-	public int getQuantity() {
-		return quantity;
+	public int getPackageId() {
+		return packageId;
 	}
 	
 	public Date getDeliverByDate() {
@@ -55,5 +51,9 @@ public class OrderLineItem {
 	
 	public double getTax() {
 		return tax;
+	}
+	
+	public int getQuantity() {
+		return quantity;
 	}
 }
