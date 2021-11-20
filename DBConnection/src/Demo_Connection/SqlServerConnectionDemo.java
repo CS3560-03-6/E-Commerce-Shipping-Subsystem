@@ -15,6 +15,7 @@ public class SqlServerConnectionDemo
 	public static void main(String[] args) throws SQLException 
 	{
 		//this place is only a testing ground
+		//testing if can push to individual branch and can still merge into test branch
 		String url = "jdbc:sqlserver://DESKTOP-S0HM9HP\\SQLEXPRESS:64784;databaseName="
 				+ "WarehouseShippingSubsystem";
 		String user = "conan";
