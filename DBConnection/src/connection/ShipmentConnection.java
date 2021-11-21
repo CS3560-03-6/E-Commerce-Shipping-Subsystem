@@ -10,6 +10,9 @@ import java.util.HashMap;
 
 public class ShipmentConnection 
 {
+	//ShipmentList should order by most recent date
+	//when update shipment should update all package's status
+	//add a shipment status
 	private Connection _connection;
 	public ShipmentConnection(SqlConnection connection)
 	{

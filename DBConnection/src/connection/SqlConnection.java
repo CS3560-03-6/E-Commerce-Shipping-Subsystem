@@ -16,6 +16,7 @@ public class SqlConnection
 		catch (SQLException e) 
 		{
 			System.out.println(e.getMessage());
+			System.exit(0);
 		}
 	}
 	public Connection getConnection()

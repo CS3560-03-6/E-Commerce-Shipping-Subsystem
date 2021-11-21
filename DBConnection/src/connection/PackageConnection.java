@@ -9,6 +9,10 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
+	//order package list by date
+	//package list only shows the ones without shipments
+	//shipment controller needs to get new packagelist every time shipment is
+	//updated
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{
