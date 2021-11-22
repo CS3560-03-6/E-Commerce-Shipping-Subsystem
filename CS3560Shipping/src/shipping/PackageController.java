@@ -20,9 +20,23 @@ public class PackageController
 		
 		
 		//actually create the package
-		return new Package(packageId, shippingLabel, orderLineItemList);
-		
-		//when making the package in sql need to update all of those orderLineItems
-		//also need to make package itself
+		if(connection.createPackage(packageId, shippingLabel.getLabelId(), 0))
+		{
+			//when making the package in sql need to update all of those orderLineItems
+			//also need to make package itself
+			Package shippingPackage =  new Package(packageId+1, shippingLabel, orderLineItemList);
+			
+			//Update OrderLineItems to show that they are in a package
+			for(int i = 0; i <= orderLineItemList.size(); i++)
+			{
+				connection.connectPackageToOrderLineItem(packageId, orderLineItemList.get(i).getOrderLineItemID());
+			}
+
+			return shippingPackage;
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

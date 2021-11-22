@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
-	//order package list by date
-	//package list only shows the ones without shipments
 	//shipment controller needs to get new packagelist every time shipment is
 	//updated
 	private Connection _connection;
@@ -19,12 +17,12 @@ public class PackageConnection
 		_connection = connection.getConnection();
 	}
 	//Makes a package according to the parameters you put in
-	public boolean createPackage(int packageId, int labelId, int shipmentId, int status)
+	public boolean createPackage(int packageId, int labelId, int status)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("insert into wss.Package(packageId, labelId, shipmentId, status) "
-					+ "values(%d, %d, %d, %d)", packageId, labelId, shipmentId, status);
+			String query = String.format("insert into wss.Package(packageId, labelId, status) "
+					+ "values(%d, %d, %d)", packageId, labelId, status);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
 		}
@@ -43,7 +41,10 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("select packageId from wss.Package where packageStatus = 0;");
+			//must check if this query is correct, otherwise it will only show packages not in a shipment
+			String query = String.format("select packageId from wss.Package "
+					+ "where packageStatus = 0 and shipmentId is null"
+					+ "order by packageId desc");
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}
@@ -113,5 +114,20 @@ public class PackageConnection
 			System.out.println(e.getMessage());
 		}
 		return null;
+	}
+	public boolean connectPackageToOrderLineItem(int packageId, int orderLineItemId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("update wss.OrderLineItem set packageId = %d where orderLineItemId = %d",
+					packageId, orderLineItemId);
+			ResultSet rs = stmt.executeQuery(query);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
 	}
 }
