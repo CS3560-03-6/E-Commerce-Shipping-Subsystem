@@ -21,8 +21,8 @@ public class CustomerInfo {
 	
 	public String[] getCustomerName() {
 		String[] full_name = new String[2];
-		full_name[0] = first_name;
-		full_name[1] = last_name;
+		full_name[0] = firstName;
+		full_name[1] = lastName;
 		
 		return full_name;
 	}

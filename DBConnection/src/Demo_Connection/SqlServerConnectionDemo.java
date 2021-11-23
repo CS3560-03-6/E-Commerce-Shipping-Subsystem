@@ -1,4 +1,6 @@
 package Demo_Connection;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -6,13 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
+
 import connection.*;
 public class SqlServerConnectionDemo 
 {
 	//To-Do
 	//each type have own connection or individually each have one
 	
-	public static void main(String[] args) throws SQLException 
+	//must test package
+	public static void main(String[] args) throws SQLException, IOException 
 	{
 		//this place is only a testing ground
 		//testing if can push to individual branch and can still merge into test branch
@@ -22,13 +27,23 @@ public class SqlServerConnectionDemo
 		String pass = "password";
 		SqlConnection connect = new SqlConnection(url,user,pass);
 		
+		String path = "C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test.png";
+		File file = new File(path);
+		BufferedImage bImage = ImageIO.read(file);
+		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
+		ImageIO.write(bImage, "png", baoStream);
+		byte[] byteArray = baoStream.toByteArray();
+		InputStream inStream = new ByteArrayInputStream(byteArray);
 		
-		CustomerInfoConnection connect2 = new CustomerInfoConnection(connect);
-		ArrayList<HashMap<String, Object>> table1 = connect2.GetCustomerInfo(0);
-		for(int i = 0 ; i < table1.size(); i++)
-		{
-			System.out.println(table1.get(i));
-		}
+		ShippingLabelConnection shipLabel = new ShippingLabelConnection(connect);
+//		ArrayList<HashMap<String, Object>> test2 = shipLabel.getShippingLabel(0);
+		
+//		byte[] byteStream = (byte[]) test2.get(0).get("label");
+//		FileOutputStream s = new FileOutputStream("C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test1.png");
+//		s.write(byteStream);
+//		s.close();
+		
+		connect.close();
 		
 		
 //		PackageConnection temp = new PackageConnection(connect);

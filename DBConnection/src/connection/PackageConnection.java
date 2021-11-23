@@ -11,6 +11,8 @@ public class PackageConnection
 {
 	//shipment controller needs to get new packagelist every time shipment is
 	//updated
+	
+	//package should be able to addShipment, might move to shipment connection
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{
@@ -86,21 +88,6 @@ public class PackageConnection
 		return false;
 	}
 	
-	//Makes it so that a package is no longer in a shipment
-	public boolean removeFromShipment(int packageId)
-	{
-		try(Statement stmt = _connection.createStatement();)
-		{
-			String query = String.format("update wss.Package set shipmentId = 'null' where packageId = %d", packageId);
-			ResultSet rs = stmt.executeQuery(query);
-			return true;
-		}
-		catch(SQLException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return false;
-	}
 	public ArrayList<HashMap<String, Object>> getLatestPackageId()
 	{
 		try(Statement stmt = _connection.createStatement();)

@@ -1,16 +1,19 @@
-package shipping;
+package Controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import Utility.ConnectionFactory;
 import connection.PackageConnection;
+import shipping.OrderLineItem;
+import shipping.Package;
+import shipping.ShippingLabel;
 
 public class PackageController 
 {
 	//Let User choose shippingLabel and OrderLineItemList
-	//get image into shippinglabel table
-	//upload png method
+	//when update shipment should update all package's status
+	
 	public static Package createPackage(ShippingLabel shippingLabel, ArrayList<OrderLineItem> orderLineItemList)
 	{	
 		//get latest packageId via sql
@@ -29,7 +32,7 @@ public class PackageController
 			//Update OrderLineItems to show that they are in a package
 			for(int i = 0; i <= orderLineItemList.size(); i++)
 			{
-				connection.connectPackageToOrderLineItem(packageId, orderLineItemList.get(i).getOrderLineItemID());
+				connection.connectPackageToOrderLineItem(packageId, orderLineItemList.get(i).getOrderLineItemId());
 			}
 
 			return shippingPackage;

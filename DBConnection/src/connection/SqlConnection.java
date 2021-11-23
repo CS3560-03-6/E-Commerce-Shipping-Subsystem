@@ -23,6 +23,10 @@ public class SqlConnection
 	{
 		return connection;
 	}
+	public void close() throws SQLException
+	{
+		connection.close();
+	}
 //	public void GetCustomer()
 //	{
 //		try(Statement stmt = connection.createStatement();)
