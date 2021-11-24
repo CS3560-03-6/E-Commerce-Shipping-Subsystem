@@ -16,11 +16,16 @@ public class SqlConnection
 		catch (SQLException e) 
 		{
 			System.out.println(e.getMessage());
+			System.exit(0);
 		}
 	}
 	public Connection getConnection()
 	{
 		return connection;
+	}
+	public void close() throws SQLException
+	{
+		connection.close();
 	}
 //	public void GetCustomer()
 //	{

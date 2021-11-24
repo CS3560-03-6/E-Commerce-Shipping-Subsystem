@@ -9,7 +9,7 @@ public class ShippingLabel {
 	{
 		//We don't actually need anything here to physically print the label, I think? I'll figure this out later.
 	}
-	public int getLabelID() 
+	public int getLabelId() 
 	{
 		return labelID;
 	}

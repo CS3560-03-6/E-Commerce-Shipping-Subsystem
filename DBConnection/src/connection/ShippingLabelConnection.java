@@ -25,7 +25,7 @@ public class ShippingLabelConnection
 		try(PreparedStatement pstmt = _connection.prepareStatement("insert into Wss.ShippingLabel values(?, ?, ?);");)
 		{
 			pstmt.setInt(1, labelId);
-			pstmt.setInt(2, labelId);
+			pstmt.setString(2, trackingNum);
 			pstmt.setBinaryStream(3, actualLabel);
 			pstmt.execute();
 			return true;
@@ -53,7 +53,7 @@ public class ShippingLabelConnection
 		return null;
 	}
 
-	//will remove the specified shipping label
+	//will remove the specified shipping label, works
 	public boolean deleteShippingLabel(int labelId)
 	{
 		try(Statement stmt = _connection.createStatement();)

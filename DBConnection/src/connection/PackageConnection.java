@@ -9,18 +9,22 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
+	//shipment controller needs to get new packagelist every time shipment is
+	//updated
+	
+	//package should be able to addShipment, might move to shipment connection
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{
 		_connection = connection.getConnection();
 	}
 	//Makes a package according to the parameters you put in
-	public boolean createPackage(int packageId, int labelId, int shipmentId, int status)
+	public boolean createPackage(int packageId, int labelId, int status)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("insert into wss.Package(packageId, labelId, shipmentId, status) "
-					+ "values(%d, %d, %d, %d)", packageId, labelId, shipmentId, status);
+			String query = String.format("insert into wss.Package(packageId, labelId, status) "
+					+ "values(%d, %d, %d)", packageId, labelId, status);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
 		}
@@ -39,7 +43,10 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("select packageId from wss.Package where packageStatus = 0;");
+			//must check if this query is correct, otherwise it will only show packages not in a shipment
+			String query = String.format("select packageId from wss.Package "
+					+ "where packageStatus = 0 and shipmentId is null"
+					+ "order by packageId desc");
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}
@@ -81,12 +88,26 @@ public class PackageConnection
 		return false;
 	}
 	
-	//Makes it so that a package is no longer in a shipment
-	public boolean removeFromShipment(int packageId)
+	public ArrayList<HashMap<String, Object>> getLatestPackageId()
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("update wss.Package set shipmentId = 'null' where packageId = %d", packageId);
+			String query = "select top(1) packageId from wss.Package order by desc";
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	public boolean connectPackageToOrderLineItem(int packageId, int orderLineItemId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("update wss.OrderLineItem set packageId = %d where orderLineItemId = %d",
+					packageId, orderLineItemId);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
 		}

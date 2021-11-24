@@ -7,7 +7,7 @@ public class Package {
 	public ShippingLabel label; 
 	ArrayList<OrderLineItem> orderLineItemList= new ArrayList<OrderLineItem>(); //note: this is an arraylist because it makes it way easier to add and remove things but i can change it later
 	
-	public void createPackage(int packageID, ShippingLabel label, ArrayList<OrderLineItem> orderLineItemList)
+	public Package(int packageID, ShippingLabel label, ArrayList<OrderLineItem> orderLineItemList)
 	//creates a new package
 	{
 		this.packageID = packageID;
