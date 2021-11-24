@@ -37,6 +37,26 @@ public class ShipmentConnection
 			System.out.println(e.getMessage());
 		}
 	}
+	/**
+	 * Will tell you if shipment has been updated or not via boolean
+	 * @param shipmentId
+	 * @param date
+	 * @return
+	 */
+	public boolean updateShipment(int shipmentId, Date date)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("update wss.Shipment set shipmentStatus = "+date.toString()+" where shipmentId = %d", shipmentId);
+			ResultSet rs = stmt.executeQuery(query);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
 	private ArrayList<HashMap<String, Object>> getLatestShipmentId()
 	{
 		try(Statement stmt = _connection.createStatement();)

@@ -9,9 +9,6 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
-	//shipment controller needs to get new packagelist every time shipment is
-	//updated
-	
 	//package should be able to addShipment, might move to shipment connection
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
