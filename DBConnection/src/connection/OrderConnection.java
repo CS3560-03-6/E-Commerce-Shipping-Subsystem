@@ -9,17 +9,27 @@ import java.util.HashMap;
 
 public class OrderConnection 
 {
+	//to do fix orderList to do what comment says
+	//also order by date
 	private Connection _connection;
 	public OrderConnection(SqlConnection connection)
 	{
 		_connection = connection.getConnection();
 	}
-	//Get all the orders in the table
+	/**
+	 * Only shows orders that have orderLineItems that aren't in a package. 
+	 * Will show oldest order first. 
+	 * 
+	 * @return
+	 */
 	public ArrayList<HashMap<String, Object>> getOrderList()
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = "Select * from wss.\"Order\";";
+			String query = "Select o.orderId, o.customerInfoId, o.status, count(l.orderLineItemId) as unpackagedCount "
+					+ "from wss.\"Order\" o "
+					+ "join wss.OrderLineItem l on o.orderId = l.orderId "
+					+ "where ;";
 			//maybe join with OrderLineItems to determine what is the lowest date and order by that way
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);

@@ -30,6 +30,10 @@ public class ConnectionFactory
 		{
 			customerInfoConnection = new CustomerInfoConnection(connection);
 		}
+		if(connection == null)
+		{
+			createConnection();
+		}
 		return customerInfoConnection;
 	}
 	public static OrderConnection createOrderConnection()
@@ -37,6 +41,10 @@ public class ConnectionFactory
 		if(orderConnection == null)
 		{
 			orderConnection = new OrderConnection(connection);
+		}
+		if(connection == null)
+		{
+			createConnection();
 		}
 		return orderConnection;
 	}
@@ -46,6 +54,10 @@ public class ConnectionFactory
 		{
 			orderLineItemConnection = new OrderLineItemConnection(connection);
 		}
+		if(connection == null)
+		{
+			createConnection();
+		}
 		return orderLineItemConnection;
 	}
 	public static PackageConnection createPackageConnection()
@@ -53,6 +65,10 @@ public class ConnectionFactory
 		if(packageConnection == null)
 		{
 			packageConnection = new PackageConnection(connection);
+		}
+		if(connection == null)
+		{
+			createConnection();
 		}
 		return packageConnection;
 	}
@@ -62,6 +78,10 @@ public class ConnectionFactory
 		{
 			productConnection = new ProductConnection(connection);
 		}
+		if(connection == null)
+		{
+			createConnection();
+		}
 		return productConnection;
 	}
 	public static ShipmentConnection createShipmentConnection()
@@ -70,6 +90,10 @@ public class ConnectionFactory
 		{
 			shipmentConnection = new ShipmentConnection(connection);
 		}
+		if(connection == null)
+		{
+			createConnection();
+		}
 		return shipmentConnection;
 	}
 	public static ShippingLabelConnection createShippingLabelConnection()
@@ -77,6 +101,10 @@ public class ConnectionFactory
 		if(shippingLabelConnection == null)
 		{
 			shippingLabelConnection = new ShippingLabelConnection(connection);
+		}
+		if(connection == null)
+		{
+			createConnection();
 		}
 		return shippingLabelConnection;
 	}
