@@ -9,13 +9,16 @@ public class SqlConnection
 	private Connection connection;
 	public SqlConnection(String url, String user, String pass)
 	{
+		System.out.println("Attempting to connect to database...");
 		try 
 		{
 			connection = DriverManager.getConnection(url, user, pass);
+			System.out.println("Connected.");
 		} 
 		catch (SQLException e) 
 		{
 			System.out.println(e.getMessage());
+			System.out.println("ERROR: Connection to database failed.");
 			System.exit(0);
 		}
 	}

@@ -21,6 +21,7 @@ public class FullPanel extends JPanel
 	private ShipmentsPane shipmentsPane;
 	private ExtendedInfo infoPane;
 	private String id;
+	private int row;
 
 	public FullPanel()
 	{	
@@ -64,11 +65,10 @@ public class FullPanel extends JPanel
 			public void mouseClicked(MouseEvent e){
 				if (e.getClickCount() == 2){
 					JTable target = (JTable)e.getSource();
-					int row = target.getSelectedRow();
-					id = orderPane.getID(row, 1); // this should always be 1 since it's the ID only right?
-					if (id != null) {
-						infoPane.selectedIdInfo(id);
-					}
+					row = target.getSelectedRow();
+					id = orderPane.getID(row); // this should always be 1 since it's the ID only right?
+					System.out.println("Showing order: "+id);
+					infoPane.selectedIdInfo(orderPane.getOrder(Integer.parseInt(id)));
 				}
 			} 
 		});

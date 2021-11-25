@@ -1,6 +1,11 @@
 package UI;
 
 import javax.swing.*;
+
+import Utility.ConnectionFactory;
+import shipping.Order;
+import shipping.OrderLineItem;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.security.cert.CertificateRevokedException;
@@ -13,7 +18,7 @@ import java.util.*;
 public class ExtendedInfo extends JPanel
 {
 	private JLabel backtext;
-	private JLabel[] labels = new JLabel[10];
+	private JLabel[] orderInfoLabels = new JLabel[10];
 	private JTextArea[] texts = new JTextArea[9];
 	private JTable orderList;
 	private JScrollPane orderItemPane;
@@ -31,10 +36,11 @@ public class ExtendedInfo extends JPanel
 		setLayout(new BorderLayout());
 		backtext = new JLabel("No item selected.", JLabel.CENTER);
 		add(backtext, BorderLayout.CENTER);
-		
+
 		// set up the information panel
 		extInfoPanel = new JPanel();
 		setupExtInfoPane(extInfoPanel);
+
 	}
 
 	public void deselect()
@@ -52,17 +58,28 @@ public class ExtendedInfo extends JPanel
 		panel.setLayout(new GridBagLayout());
 		validate();
 	}
-	
-	public void selectedIdInfo(String id)
-	{
-		// Temporary manual data
-		String[] orderColNames = { "Order Item ID", "Order Name" };
-		String[][] orderCol = new String[100][100];
 
-		orderCol[0][0] = "34501";
-		orderCol[0][1] = "Kirland Soap";
-		orderCol[1][0] = "36089";
-		orderCol[1][1] = "Desk Mouse";
+	public void clear()
+	{
+		removeAll();
+		extInfoPanel.removeAll();
+	}
+
+	public void selectedIdInfo(Order order)
+	{
+		clear();
+		// Temporary manual data
+		String[] orderColNames = { "Order Line Item ID", "Product Name" };
+		String[][] orderCol = new String[100][100];
+		ArrayList<OrderLineItem> items = order.getOrderLineItemList();
+		
+		for (int line_item = 0; line_item < items.size(); line_item++)
+		{
+			orderCol[line_item][0] = ""+items.get(line_item).getOrderLineItemId();
+			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection().getProduct(items.get(line_item).getProductId());
+			orderCol[line_item][1] = ""+products.get(0).get("productName");
+		}
+		
 
 		// Create new Jtable for the order item list
 		orderList = new JTable(orderCol, orderColNames)
@@ -79,12 +96,11 @@ public class ExtendedInfo extends JPanel
 		orderItemPane.setAutoscrolls(true);
 		orderItemPane.setMinimumSize(new Dimension(300, 300));
 
-
 		// Initializing the labels and textfields to display info
 		for (int i = 0; i < 10; i++)
 		{
-			labels[i] = new JLabel();
-			labels[i].setForeground(Color.BLACK);
+			orderInfoLabels[i] = new JLabel();
+			orderInfoLabels[i].setForeground(Color.BLACK);
 			if (i != 9)
 			{
 				texts[i] = new JTextArea();
@@ -93,27 +109,39 @@ public class ExtendedInfo extends JPanel
 		}
 
 		// Naming labels to display info
-		labels[0].setText("Order ID: ");
-		labels[1].setText("Customer ID: ");
-		labels[2].setText("Customer Name: ");
-		labels[3].setText("Customer Address: ");
-		labels[4].setText("Customer PhoneNumber: ");
-		labels[5].setText("Customer Email: ");
-		labels[6].setText("Order Item List: ");
-		labels[7].setText("Total Shipping Cost: ");
-		labels[8].setText("Total Tax: ");
-		labels[9].setText("Status: ");
+		orderInfoLabels[0].setText("Order ID: ");
+		orderInfoLabels[1].setText("Customer ID: ");
+		orderInfoLabels[2].setText("Customer Name: ");
+		orderInfoLabels[3].setText("Customer Address: ");
+		orderInfoLabels[4].setText("Customer Phone Number: ");
+		orderInfoLabels[5].setText("Customer Email: ");
+		orderInfoLabels[6].setText("Order Item List: ");
+		orderInfoLabels[7].setText("Total Shipping Cost: ");
+		orderInfoLabels[8].setText("Total Tax: ");
+		orderInfoLabels[9].setText("Status: ");
 
 		// Temporary manual input of display
-		texts[0].setText(id);
-		texts[1].setText("1111111");
-		texts[2].setText("Andrew Jackson");
-		texts[3].setText("126 Lakeview Drive\nFarmingdale, NY 11735");
-		texts[4].setText("(212) 200-1503");
-		texts[5].setText("AJackson1503@gmail.com");
+		texts[0].setText("" + order.getOrderID());
+		texts[1].setText("" + order.getCustomerInfo().getCustomerID());
+		texts[2].setText("" + order.getCustomerInfo().getCustomerName()[0] + " " + ""
+				+ order.getCustomerInfo().getCustomerName()[1]);
+		texts[3].setText("" + order.getCustomerInfo().getAddress());
+		texts[4].setText("" + order.getCustomerInfo().getPhoneNumber());
+		texts[5].setText("" + order.getCustomerInfo().getEmail());
 		texts[6].setText("$4.00");
 		texts[7].setText("$1.00");
-		texts[8].setText("Processing");
+		switch ((int) order.getStatus())
+			{
+			case 0:
+				texts[8].setText("Unprocessed");
+				break;
+			case 1:
+				texts[8].setText("Processing");
+				break;
+			default:
+				texts[8].setText("ERROR");
+				break;
+			}
 
 		// contraints for gridbaglayout
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -122,14 +150,14 @@ public class ExtendedInfo extends JPanel
 		for (int i = 0; i < 6; i++)
 		{
 			gbc = createGbc(0, i);
-			extInfoPanel.add(labels[i], gbc);
+			extInfoPanel.add(orderInfoLabels[i], gbc);
 			gbc = createGbc(1, i);
 			extInfoPanel.add(texts[i], gbc);
 		}
 
 		gbc.gridx = 0;
 		gbc.gridy = 6;
-		extInfoPanel.add(labels[6], gbc);
+		extInfoPanel.add(orderInfoLabels[6], gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 7;
 		extInfoPanel.add(orderItemPane, gbc);
@@ -137,19 +165,19 @@ public class ExtendedInfo extends JPanel
 		for (int i = 8; i < 11; i++)
 		{
 			gbc = createGbc(0, i);
-			extInfoPanel.add(labels[i - 1], gbc);
+			extInfoPanel.add(orderInfoLabels[i - 1], gbc);
 			gbc = createGbc(1, i);
 			extInfoPanel.add(texts[i - 2], gbc);
 		}
 
-		// Adding the extInfoPanel into JScrollPane 
+		// Adding the extInfoPanel into JScrollPane
 		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		extInfoScrollable.setAutoscrolls(true);
 
-		removeAll();
 		repaint();
-		add(extInfoScrollable, BorderLayout.CENTER); //This stop the labels and textfield from becoming too small when resize
+		add(extInfoScrollable, BorderLayout.CENTER); // This stop the labels and textfield from becoming too small when
+													 // resize
 		validate();
 	}
 

@@ -60,7 +60,7 @@ public class OrderConnection
 			return false;
 		}
 	}
-	//Returns the Complete Order with all OrderLineItems and CustomerInfo
+	//Returns the Complete Order with all OrderLineItems and CustomerInfo. Each entry in ArrayList is a different LineItem
 	
 	//To-Do make it so that OrderLineItems are not in a package
 	public ArrayList<HashMap<String, Object>> getCompleteOrderInformation(int orderId)

@@ -10,7 +10,7 @@ public class Product {
 	private double length;
 	private double height;
 	
-	Product (int productId, String sku, String productName, 
+	public Product (int productId, String sku, String productName, 
 			 double cost, double width, double length, double height){
 		this.productId = productId;
 		this.sku = sku;

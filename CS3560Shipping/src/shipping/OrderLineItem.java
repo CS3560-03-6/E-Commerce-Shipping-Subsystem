@@ -1,19 +1,26 @@
 package shipping;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
-public class OrderLineItem {
+import Utility.ConnectionFactory;
+
+public class OrderLineItem
+{
 	private int orderLineItemId;
 	private int orderId;
 	private int productId;
 	private int packageId;
 	private Date deliverByDate;
-	private double shippingCost;
-	private double tax;
+	private BigDecimal shippingCost;
+	private BigDecimal tax;
 	private int quantity;
-	
-	OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId,
-				  Date deliverByDate, double shippingCost, double tax, int quantity){
+
+	public OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId, Date deliverByDate,
+			BigDecimal shippingCost, BigDecimal tax, int quantity)
+	{
 		this.orderLineItemId = orderLineItemId;
 		this.orderId = orderId;
 		this.productId = productId;
@@ -22,38 +29,55 @@ public class OrderLineItem {
 		this.shippingCost = shippingCost;
 		this.tax = tax;
 		this.quantity = quantity;
-			
+
 	}
-	
-	public int getOrderLineItemId() {
+
+	@SuppressWarnings("unchecked")
+	public OrderLineItem(HashMap<String, Object> item)
+	{
+		this((int) item.get("orderLineItemId"), (int) item.get("orderId"),
+				(int) item.get("productId"), item.get("packageId")==null ? 0 : 0,
+				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
+				(BigDecimal) item.get("tax"), (int) item.get("qty"));
+	}
+
+	public int getOrderLineItemId()
+	{
 		return orderLineItemId;
 	}
-	
-	public int getOrderId() {
+
+	public int getOrderId()
+	{
 		return orderId;
 	}
-	
-	public int getProductId() {
+
+	public int getProductId()
+	{
 		return productId;
 	}
-	
-	public int getPackageId() {
+
+	public int getPackageId()
+	{
 		return packageId;
 	}
-	
-	public Date getDeliverByDate() {
+
+	public Date getDeliverByDate()
+	{
 		return deliverByDate;
 	}
-	
-	public double getShippingCost() {
-		return shippingCost;
+
+	public double getShippingCost()
+	{
+		return shippingCost.doubleValue();
 	}
-	
-	public double getTax() {
-		return tax;
+
+	public double getTax()
+	{
+		return tax.doubleValue();
 	}
-	
-	public int getQuantity() {
+
+	public int getQuantity()
+	{
 		return quantity;
 	}
 }
