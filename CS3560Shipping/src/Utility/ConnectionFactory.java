@@ -12,7 +12,7 @@ public class ConnectionFactory
 	private static ProductConnection productConnection;
 	private static ShipmentConnection shipmentConnection;
 	private static ShippingLabelConnection shippingLabelConnection;
-	private static SqlConnection createConnection()
+	private static void createConnection()
 	{
 		if(connection == null)
 		{
@@ -22,89 +22,67 @@ public class ConnectionFactory
 			String pass = "password";
 			connection = new SqlConnection(url,user,pass);
 		}
-		return connection;
 	}
 	public static CustomerInfoConnection createCustomerInfoConnection()
 	{
+		createConnection();
 		if(customerInfoConnection == null)
 		{
 			customerInfoConnection = new CustomerInfoConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return customerInfoConnection;
 	}
 	public static OrderConnection createOrderConnection()
 	{
+		createConnection();
 		if(orderConnection == null)
 		{
 			orderConnection = new OrderConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return orderConnection;
 	}
 	public static OrderLineItemConnection createOrderLineItemConnection()
 	{
+		createConnection();
 		if(orderLineItemConnection == null)
 		{
 			orderLineItemConnection = new OrderLineItemConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return orderLineItemConnection;
 	}
 	public static PackageConnection createPackageConnection()
 	{
+		createConnection();
 		if(packageConnection == null)
 		{
 			packageConnection = new PackageConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return packageConnection;
 	}
 	public static ProductConnection createProductConnection()
 	{
+		createConnection();
 		if(productConnection == null)
 		{
 			productConnection = new ProductConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return productConnection;
 	}
 	public static ShipmentConnection createShipmentConnection()
 	{
+		createConnection();
 		if(shipmentConnection == null)
 		{
 			shipmentConnection = new ShipmentConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return shipmentConnection;
 	}
 	public static ShippingLabelConnection createShippingLabelConnection()
 	{
+		createConnection();
 		if(shippingLabelConnection == null)
 		{
 			shippingLabelConnection = new ShippingLabelConnection(connection);
-		}
-		if(connection == null)
-		{
-			createConnection();
 		}
 		return shippingLabelConnection;
 	}
