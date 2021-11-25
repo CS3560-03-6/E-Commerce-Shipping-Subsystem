@@ -20,7 +20,7 @@ public class Main
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FullPanel fp = new FullPanel();
 		frame.setContentPane(fp);
-		frame.setVisible(true);
+		
 
 		// Create Menu bar
 		JMenuBar menuBar = new JMenuBar();
@@ -76,5 +76,7 @@ public class Main
 		menuBar.add(fileMenu);
 		menuBar.add(createMenu);
 		frame.setJMenuBar(menuBar);
+		
+		frame.setVisible(true);
 	}
 }

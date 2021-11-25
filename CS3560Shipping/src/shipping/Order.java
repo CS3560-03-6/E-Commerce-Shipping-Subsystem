@@ -1,5 +1,6 @@
 package shipping;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,22 +70,22 @@ public class Order
 
 	public double calculateTotalShipping()
 	{
-		double result = 0.0;
+		BigDecimal result = new BigDecimal(0.0);
 		for (OrderLineItem item : orderLineItemList)
 		{
-			result += item.getShippingCost();
+			result.add(item.getShippingCost()) ;
 		}
-		return result;
+		return result.doubleValue();
 	}
 
 	public double calculateTotalTax()
 	{
-		double result = 0.0;
+		BigDecimal result = new BigDecimal(0.0);
 		for (OrderLineItem item : orderLineItemList)
 		{
-			result += item.getTax();
+			result.add(item.getTax());
 		}
-		return result;
+		return result.doubleValue();
 	}
 
 	public double calculateTotalShippingAndTax()

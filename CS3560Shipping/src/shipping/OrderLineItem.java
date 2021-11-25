@@ -66,14 +66,14 @@ public class OrderLineItem
 		return deliverByDate;
 	}
 
-	public double getShippingCost()
+	public BigDecimal getShippingCost()
 	{
-		return shippingCost.doubleValue();
+		return shippingCost;
 	}
 
-	public double getTax()
+	public BigDecimal getTax()
 	{
-		return tax.doubleValue();
+		return tax;
 	}
 
 	public int getQuantity()

@@ -68,7 +68,7 @@ public class FullPanel extends JPanel
 					row = target.getSelectedRow();
 					id = orderPane.getID(row); // this should always be 1 since it's the ID only right?
 					System.out.println("Showing order: "+id);
-					infoPane.selectedIdInfo(orderPane.getOrder(Integer.parseInt(id)));
+					infoPane.showOrderExtInfo(orderPane.getOrder(Integer.parseInt(id)));
 				}
 			} 
 		});

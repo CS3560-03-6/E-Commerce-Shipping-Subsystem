@@ -39,7 +39,7 @@ public class ExtendedInfo extends JPanel
 
 		// set up the information panel
 		extInfoPanel = new JPanel();
-		setupExtInfoPane(extInfoPanel);
+		setupExtInfoPanel(extInfoPanel);
 
 	}
 
@@ -51,8 +51,8 @@ public class ExtendedInfo extends JPanel
 		validate();
 	}
 
-	// Display the order information from selected order ID
-	private void setupExtInfoPane(JPanel panel)
+	// Basic setup for extended info panel
+	private void setupExtInfoPanel(JPanel panel)
 	{
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(new GridBagLayout());
@@ -65,21 +65,20 @@ public class ExtendedInfo extends JPanel
 		extInfoPanel.removeAll();
 	}
 
-	public void selectedIdInfo(Order order)
+	public void showOrderExtInfo(Order order)
 	{
 		clear();
-		// Temporary manual data
 		String[] orderColNames = { "Order Line Item ID", "Product Name" };
 		String[][] orderCol = new String[100][100];
 		ArrayList<OrderLineItem> items = order.getOrderLineItemList();
-		
+
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
-			orderCol[line_item][0] = ""+items.get(line_item).getOrderLineItemId();
-			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection().getProduct(items.get(line_item).getProductId());
-			orderCol[line_item][1] = ""+products.get(0).get("productName");
+			orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
+			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection()
+					.getProduct(items.get(line_item).getProductId());
+			orderCol[line_item][1] = "" + products.get(0).get("productName");
 		}
-		
 
 		// Create new Jtable for the order item list
 		orderList = new JTable(orderCol, orderColNames)
@@ -120,7 +119,7 @@ public class ExtendedInfo extends JPanel
 		orderInfoLabels[8].setText("Total Tax: ");
 		orderInfoLabels[9].setText("Status: ");
 
-		// Temporary manual input of display
+		// Get information about order
 		texts[0].setText("" + order.getOrderID());
 		texts[1].setText("" + order.getCustomerInfo().getCustomerID());
 		texts[2].setText("" + order.getCustomerInfo().getCustomerName()[0] + " " + ""
@@ -128,8 +127,8 @@ public class ExtendedInfo extends JPanel
 		texts[3].setText("" + order.getCustomerInfo().getAddress());
 		texts[4].setText("" + order.getCustomerInfo().getPhoneNumber());
 		texts[5].setText("" + order.getCustomerInfo().getEmail());
-		texts[6].setText("$4.00");
-		texts[7].setText("$1.00");
+		texts[6].setText("$" + String.format("%.2f", order.calculateTotalShipping()));
+		texts[7].setText("$" + String.format("%.2f", order.calculateTotalTax()));
 		switch ((int) order.getStatus())
 			{
 			case 0:
@@ -139,7 +138,7 @@ public class ExtendedInfo extends JPanel
 				texts[8].setText("Processing");
 				break;
 			default:
-				texts[8].setText("ERROR");
+				texts[8].setText("ERROR: Status unknown");
 				break;
 			}
 
