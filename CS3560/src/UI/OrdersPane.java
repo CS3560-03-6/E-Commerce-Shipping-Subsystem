@@ -78,20 +78,11 @@ public class OrdersPane extends JPanel
 		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getOrderList();
 		for (int entry = 0; entry < orders_sql.size(); entry++)
 		{
-			// Create Order
+			// Create each Order
 			int order_id = (int) orders_sql.get(entry).get("orderId");
 			ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
 					.getCompleteOrderInformation(order_id);
 			orders.add(new Order(order));
-			
-			// Add line items to Order
-//			for (int lineitem = 0; lineitem < orderInfoList.size(); lineitem++)
-//			{
-//				OrderLineItem order_line_item = new OrderLineItem(orderInfoList.get(lineitem).get("orderLineItemId"),
-//						order_id, 0, 0, );
-//				orders.get(entry).getOrderLineItemList().add("");
-//			}
-			System.out.println("HIT: Found order " + orders.get(entry).getOrderID());
 		}
 		for (int entry = 0; entry < orders.size(); entry++)
 		{

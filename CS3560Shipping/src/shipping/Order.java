@@ -35,7 +35,6 @@ public class Order
 		for (int line_item_entry = 0; line_item_entry < line_items.size(); line_item_entry++)
 		{
 			line_item_list.add(new OrderLineItem(line_items.get(line_item_entry)));
-			System.out.println("Item: "+new OrderLineItem(line_items.get(line_item_entry)));
 		}
 		return line_item_list;
 	}

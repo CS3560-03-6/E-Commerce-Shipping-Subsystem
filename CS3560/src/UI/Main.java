@@ -18,7 +18,8 @@ public class Main
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setLocation(200, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(new FullPanel());
+		FullPanel fp = new FullPanel();
+		frame.setContentPane(fp);
 		frame.setVisible(true);
 
 		// Create Menu bar
@@ -32,46 +33,48 @@ public class Main
 		createMenu.setVerticalTextPosition(SwingConstants.BOTTOM);
 
 		JMenuItem exitItem = new JMenuItem("Exit");
-		exitItem.addActionListener(new exitListener());
+		JMenuItem refreshOrderItem = new JMenuItem("Refresh Orders");
+		refreshOrderItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fp.refreshOrders();
+			}
+		});
+		exitItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("Exiting...");
+				System.exit(0);
+			}
+		});
+
 		fileMenu.add(exitItem);
+		fileMenu.add(refreshOrderItem);
 
 		JMenuItem createPackageItem = new JMenuItem("Create Package");
 		JMenuItem createShipmentItem = new JMenuItem("Create Shipment");
-		createPackageItem.addActionListener(new createPackageListener());
-		createShipmentItem.addActionListener(new createShipmentListener());
+		createPackageItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				CreatePackagePopup PackagePopup = new CreatePackagePopup();
+			}
+		});
+		createShipmentItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+			}
+		});
+
 		createMenu.add(createPackageItem);
 		createMenu.add(createShipmentItem);
 
 		menuBar.add(fileMenu);
 		menuBar.add(createMenu);
 		frame.setJMenuBar(menuBar);
-	}
-
-	// menu item functionality
-	// File Menu: Exit
-	static class exitListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			System.exit(0);
-		}
-	}
-
-	// Create Menu: Create Package
-	static class createPackageListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			CreatePackagePopup PackagePopup = new CreatePackagePopup();
-		}
-	}
-
-	// Create Menu: Create Shipment
-	static class createShipmentListener implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			System.exit(0);
-		}
 	}
 }

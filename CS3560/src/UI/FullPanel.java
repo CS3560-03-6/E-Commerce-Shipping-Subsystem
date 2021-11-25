@@ -76,5 +76,8 @@ public class FullPanel extends JPanel
 		splitPane.add(menuPanes, JSplitPane.LEFT, 1);
 		
 	}
-
+	public void refreshOrders()
+	{
+		orderPane.getOrders();
+	}
 }
