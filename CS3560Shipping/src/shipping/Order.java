@@ -2,6 +2,7 @@ package shipping;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import Utility.ConnectionFactory;
@@ -13,19 +14,21 @@ public class Order
 	private CustomerInfo customerInfo;
 	private ArrayList<OrderLineItem> orderLineItemList;
 	private int status;
+	private Date dateEntered;
 
-	public Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList)
+	public Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList, Date dateEntered)
 	{
 		this.orderId = orderId;
 		this.customerInfo = customerInfo;
 		this.status = status;
 		this.orderLineItemList = orderLineItemList;
+		this.dateEntered = dateEntered;
 	}
 
 	public Order(ArrayList<HashMap<String, Object>> order)
 	{
 		this((int) order.get(0).get("orderId"), new CustomerInfo((int) order.get(0).get("customerInfoId")),
-				(int) order.get(0).get("status"), getLineItems(order));
+				(int) order.get(0).get("status"), getLineItems(order), (Date) order.get(0).get("dateEntered"));
 	}
 
 	public static ArrayList<OrderLineItem> getLineItems(ArrayList<HashMap<String, Object>> order)
@@ -66,6 +69,11 @@ public class Order
 	public int getStatus()
 	{
 		return status;
+	}
+	
+	public Date getDate()
+	{
+		return dateEntered;
 	}
 
 	public double calculateTotalShipping()

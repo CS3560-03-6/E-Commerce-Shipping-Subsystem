@@ -40,7 +40,6 @@ public class ExtendedInfo extends JPanel
 		// set up the information panel
 		extInfoPanel = new JPanel();
 		setupExtInfoPanel(extInfoPanel);
-
 	}
 
 	public void deselect()
@@ -88,7 +87,7 @@ public class ExtendedInfo extends JPanel
 				return false;
 			}
 		};
-
+		orderList.setRowHeight(30);
 		// Allow JTable of order item list to be scrollale
 		orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
