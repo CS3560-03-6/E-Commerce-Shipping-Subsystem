@@ -14,7 +14,7 @@ public class PackageController
 	//Let User choose shippingLabel and OrderLineItemList
 	//when update shipment should update all package's status
 	
-	public static Package createPackage(ShippingLabel shippingLabel, ArrayList<OrderLineItem> orderLineItemList)
+	public static boolean createPackage(ShippingLabel shippingLabel, ArrayList<OrderLineItem> orderLineItemList)
 	{	
 		//get latest packageId via sql
 		PackageConnection connection = ConnectionFactory.createPackageConnection();
@@ -35,11 +35,11 @@ public class PackageController
 				connection.connectPackageToOrderLineItem(packageId, orderLineItemList.get(i).getOrderLineItemId());
 			}
 
-			return shippingPackage;
+			return true;
 		}
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 }

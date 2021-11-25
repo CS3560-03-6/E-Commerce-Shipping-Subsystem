@@ -12,8 +12,7 @@ public class ConnectionFactory
 	private static ProductConnection productConnection;
 	private static ShipmentConnection shipmentConnection;
 	private static ShippingLabelConnection shippingLabelConnection;
-	
-	public static SqlConnection createConnection()
+	private static void createConnection()
 	{
 		if(connection == null)
 		{
@@ -23,10 +22,10 @@ public class ConnectionFactory
 			String pass = "password";
 			connection = new SqlConnection(url,user,pass);
 		}
-		return connection;
 	}
 	public static CustomerInfoConnection createCustomerInfoConnection()
 	{
+		createConnection();
 		if(customerInfoConnection == null)
 		{
 			customerInfoConnection = new CustomerInfoConnection(connection);
@@ -35,6 +34,7 @@ public class ConnectionFactory
 	}
 	public static OrderConnection createOrderConnection()
 	{
+		createConnection();
 		if(orderConnection == null)
 		{
 			orderConnection = new OrderConnection(connection);
@@ -43,6 +43,7 @@ public class ConnectionFactory
 	}
 	public static OrderLineItemConnection createOrderLineItemConnection()
 	{
+		createConnection();
 		if(orderLineItemConnection == null)
 		{
 			orderLineItemConnection = new OrderLineItemConnection(connection);
@@ -51,6 +52,7 @@ public class ConnectionFactory
 	}
 	public static PackageConnection createPackageConnection()
 	{
+		createConnection();
 		if(packageConnection == null)
 		{
 			packageConnection = new PackageConnection(connection);
@@ -59,6 +61,7 @@ public class ConnectionFactory
 	}
 	public static ProductConnection createProductConnection()
 	{
+		createConnection();
 		if(productConnection == null)
 		{
 			productConnection = new ProductConnection(connection);
@@ -67,6 +70,7 @@ public class ConnectionFactory
 	}
 	public static ShipmentConnection createShipmentConnection()
 	{
+		createConnection();
 		if(shipmentConnection == null)
 		{
 			shipmentConnection = new ShipmentConnection(connection);
@@ -75,6 +79,7 @@ public class ConnectionFactory
 	}
 	public static ShippingLabelConnection createShippingLabelConnection()
 	{
+		createConnection();
 		if(shippingLabelConnection == null)
 		{
 			shippingLabelConnection = new ShippingLabelConnection(connection);
