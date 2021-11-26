@@ -8,7 +8,7 @@ public class CustomerInfo {
 	private String phoneNumber;
 	private String email;
 	
-	CustomerInfo(int customerInformationId, String firstName,
+	public CustomerInfo(int customerInformationId, String firstName,
 				 String lastName, String address, String phoneNumber,
 				 String email){
 		this.customerInformationId = customerInformationId;

@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 public class OrderConnection 
 {
-	//Todo: Add date to orders
-	//also order by date
 	private Connection _connection;
 	public OrderConnection(SqlConnection connection)
 	{

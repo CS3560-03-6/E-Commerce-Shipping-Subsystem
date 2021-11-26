@@ -2,13 +2,13 @@ package shipping;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Shipments {
+public class Shipment {
 	public int shipmentID;
 	ArrayList<Package> packagelist= new ArrayList<Package>();
 	public Date dateShipped;
 	
 	
-	public void createShipment(int shipmentID, ArrayList<Package> packagelist, Date dateshipped) //create a new shipment?
+	public Shipment(int shipmentId, ArrayList<Package> packagelist, Date dateshipped) //create a new shipment?
 	{
 		this.shipmentID = shipmentID;
 		this.packagelist = packagelist;

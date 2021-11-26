@@ -1,17 +1,19 @@
 package shipping;
 
 public class ShippingLabel {
-	public int labelID;
+	public int labelId;
 	public String trackingNum;
 	public byte[] label;
 
-	public void printShippingLabel() 
+	public ShippingLabel(int labelId, String trackingNum, byte[] label)
 	{
-		//We don't actually need anything here to physically print the label, I think? I'll figure this out later.
+		this.labelId = labelId;
+		this.trackingNum = trackingNum;
+		this.label = label;
 	}
 	public int getLabelId() 
 	{
-		return labelID;
+		return labelId;
 	}
 	public String getTrackingNum() 
 	{

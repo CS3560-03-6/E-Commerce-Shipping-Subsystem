@@ -1,5 +1,6 @@
 package shipping;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Order {
@@ -9,7 +10,7 @@ public class Order {
 	private ArrayList<OrderLineItem> orderLineItemList;
 	private int status;
 	
-	Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList){
+	public Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList){
 		this.orderId = orderId;
 		this.customerInfo = customerInfo;
 		this.status = status;
@@ -23,7 +24,7 @@ public class Order {
 		status = new_status;
 	}
 	
-	public int getOrderID() {
+	public int getOrderId() {
 		return orderId;
 	}
 	
@@ -42,7 +43,7 @@ public class Order {
 	public double calculateTotalShipping() {
 		double result = 0.0;
 		for (OrderLineItem item : orderLineItemList) {
-			result += item.getShippingCost();
+			result += item.getShippingCost().doubleValue();
 		}
 		return result;
 	}
@@ -50,7 +51,7 @@ public class Order {
 	public double calculateTotalTax() {
 		double result = 0.0;
 		for (OrderLineItem item : orderLineItemList) {
-			result += item.getTax();
+			result += item.getTax().doubleValue();
 		}
 		return result;
 	}

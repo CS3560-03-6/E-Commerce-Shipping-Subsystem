@@ -1,23 +1,20 @@
 package shipping;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderLineItem {
 	private int orderLineItemId;
-	private int orderId;
-	private int productId;
-	private int packageId;
+	private Product product;
 	private Date deliverByDate;
-	private double shippingCost;
-	private double tax;
-	private int quantity;
+	private BigDecimal shippingCost;
+	private BigDecimal tax;
+	private Integer quantity;
 	
-	OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId,
-				  Date deliverByDate, double shippingCost, double tax, int quantity){
+	public OrderLineItem(int orderLineItemId, Product product,
+				  Date deliverByDate, BigDecimal shippingCost, BigDecimal tax, Integer quantity){
 		this.orderLineItemId = orderLineItemId;
-		this.orderId = orderId;
-		this.productId = productId;
-		this.packageId = packageId;
+		this.product = product;
 		this.deliverByDate = deliverByDate;
 		this.shippingCost = shippingCost;
 		this.tax = tax;
@@ -25,35 +22,28 @@ public class OrderLineItem {
 			
 	}
 	
-	public int getOrderLineItemId() {
+	public Integer getOrderLineItemId() {
 		return orderLineItemId;
 	}
 	
-	public int getOrderId() {
-		return orderId;
+	public Product getProductId() {
+		return product;
 	}
-	
-	public int getProductId() {
-		return productId;
-	}
-	
-	public int getPackageId() {
-		return packageId;
-	}
+
 	
 	public Date getDeliverByDate() {
 		return deliverByDate;
 	}
 	
-	public double getShippingCost() {
+	public BigDecimal getShippingCost() {
 		return shippingCost;
 	}
 	
-	public double getTax() {
+	public BigDecimal getTax() {
 		return tax;
 	}
 	
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 }

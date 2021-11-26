@@ -1,52 +1,71 @@
 package Controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import Utility.ConnectionFactory;
 import connection.ShipmentConnection;
 import shipping.OrderLineItem;
-import shipping.Shipments;
+import shipping.Shipment;
 import shipping.ShippingLabel;
 import shipping.Package;
 
-public class ShipmentController {
-	public static Shipment createShipment(ArrayList<Package> packagelist, Date dateshipped)
+public class ShipmentController
+{
+	public static boolean createShipment(Date dateshipped)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		ArrayList<HashMap<String,Object>> resultSet = connection.getLatestShipmentId();
-		int shipmentId = (Integer)resultSet.get(0).get("shipmentId");
-		if(connection.createShipment(shipmentId, dateshipped))
+		if(connection.createShipment(dateshipped))
 		{
-			Shipment newShipment =  new Shipment(shipmentId+1, packagelist, dateshipped);
-			return newshipment;
+			return true;
 		}
-		else
-		{
-			return null;
-		}
+		return false;
 	}
-	public void addPackage(int shipmentId, int packageId)
+	public boolean addPackage(int shipmentId, int packageId)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		if (connection.addPackageToShipment(shipmentId, packageId)) == false)
+		if (connection.addPackageToShipment(shipmentId, packageId))
 		{
-			System.exit(0); //shuts down if it doesn't work
+			return true;
 		}
+		return false;
 	}
-	public void removePackage(int packageId)
+	public boolean removePackage(int packageId)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		if (connection.removePackageFromShipment(packageId)) == false)
+		if (connection.removePackageFromShipment(packageId))
 		{
-			System.exit(0); //shuts down if it doesn't work
+			return true;
 		}
+		return false;
 	
 	}
-	public void updateShipment(Date newdate)
+	public boolean updateShipment(int shipmentId, Date newdate)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		//there's no ShipmentConnection function to update the date from what I'm seeing?
+		if(connection.updateShipment(shipmentId, newdate))
+		{
+			return true;
+		}
+		return false;
 	}
-
+	public Shipment getShipment(int shipmentId)
+	{
+		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
+		ArrayList<HashMap<String, Object>> shipmentData = connection.getCompleteShipmentList(shipmentId);
+		if(shipmentData == null)
+			return null;
+		//Making an ArrayList of Packages
+		
+		Date dateShipped = (Date)shipmentData.get(0).get("dateShipped");
+		
+		ArrayList<Package> packageList = new ArrayList<Package>();
+		for(int i = 0; i< shipmentData.size(); i++)
+		{
+			int packageId = (int)shipmentData.get(i).get("shipmentId");
+			packageList.add(PackageController.getPackage(packageId));
+		}
+		return new Shipment(shipmentId, packageList, dateShipped);
+	}
 }

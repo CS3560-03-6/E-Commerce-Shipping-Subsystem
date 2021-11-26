@@ -1,17 +1,19 @@
 package shipping;
 
+import java.math.BigDecimal;
+
 public class Product {
 	
 	private int productId;
 	private String sku;
 	private String productName;
-	private double cost;
-	private double width;
-	private double length;
-	private double height;
+	private BigDecimal cost;
+	private BigDecimal width;
+	private BigDecimal length;
+	private BigDecimal height;
 	
-	Product (int productId, String sku, String productName, 
-			 double cost, double width, double length, double height){
+	public Product (int productId, String sku, String productName, 
+			BigDecimal cost, BigDecimal width, BigDecimal length, BigDecimal height){
 		this.productId = productId;
 		this.sku = sku;
 		this.productName = productName;
@@ -33,12 +35,12 @@ public class Product {
 		return productName;
 	}
 	
-	public double getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
 	
-	public double[] getDimensions() {
-		double[] dimensions = new double[3];
+	public BigDecimal[] getDimensions() {
+		BigDecimal[] dimensions = new BigDecimal[3];
 		dimensions[0] = width;
 		dimensions[1] = length;
 		dimensions[2] = height;
