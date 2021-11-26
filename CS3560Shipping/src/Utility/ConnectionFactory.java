@@ -12,13 +12,14 @@ public class ConnectionFactory
 	private static ProductConnection productConnection;
 	private static ShipmentConnection shipmentConnection;
 	private static ShippingLabelConnection shippingLabelConnection;
-	private static void createConnection()
+	
+	public static void createConnection()
 	{
 		if(connection == null)
 		{
-			String url = "jdbc:sqlserver://DESKTOP-S0HM9HP\\SQLEXPRESS:64784;databaseName="
+			String url = "jdbc:sqlserver://DESKTOP-JT0PRT3\\SQLEXPRESS:1433;databaseName="
 					+ "WarehouseShippingSubsystem";
-			String user = "conan";
+			String user = "gabe";
 			String pass = "password";
 			connection = new SqlConnection(url,user,pass);
 		}

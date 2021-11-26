@@ -2,8 +2,12 @@ package shipping;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
-public class OrderLineItem {
+import Utility.ConnectionFactory;
+
+public class OrderLineItem
+{
 	private int orderLineItemId;
 	private Product product;
 	private Date deliverByDate;
@@ -19,7 +23,16 @@ public class OrderLineItem {
 		this.shippingCost = shippingCost;
 		this.tax = tax;
 		this.quantity = quantity;
-			
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public OrderLineItem(HashMap<String, Object> item)
+	{
+		this((int) item.get("orderLineItemId"), (int) item.get("orderId"),
+				(int) item.get("productId"), item.get("packageId")==null ? -1 : (int)item.get("packageId"),
+				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
+				(BigDecimal) item.get("tax"), (int) item.get("qty"));
 	}
 	
 	public Integer getOrderLineItemId() {
