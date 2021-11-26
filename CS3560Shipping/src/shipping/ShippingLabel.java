@@ -3,7 +3,7 @@ package shipping;
 public class ShippingLabel {
 	public int labelID;
 	public String trackingNum;
-	public String label;
+	public byte[] label;
 
 	public void printShippingLabel() 
 	{
@@ -17,7 +17,7 @@ public class ShippingLabel {
 	{
 		return trackingNum;
 	}
-	public String getLabel() 
+	public byte[] getLabel() 
 	{
 		return label;
 	}
