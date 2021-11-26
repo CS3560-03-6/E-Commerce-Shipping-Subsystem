@@ -7,6 +7,9 @@ import java.security.cert.CertificateRevokedException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.util.*;
+import Utility.ConnectionFactory;
+import shipping.Order;
+import shipping.OrderLineItem;
 
 public class CreatePackagePopup
 {
@@ -19,6 +22,7 @@ public class CreatePackagePopup
 	private JButton createButton;
 	private ActionListener action;
 	private JTextField orderIdField;
+	private ArrayList<Order> orders;
 
 	CreatePackagePopup()
 	{
@@ -34,7 +38,11 @@ public class CreatePackagePopup
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		orderItemPane.setAutoscrolls(true);
 		orderItemPane.setMinimumSize(new Dimension(600, 100));
-		
+
+		String[] orderColNames = { "Order Item ID" };
+		String[][] orderCol = new String[100][100];
+		orders = new ArrayList<Order>();
+
 		// A search for user ID after user click enter after typing into textfield
 		// We will change this once we can populate the order list onto the JTable from
 		// the database
@@ -42,9 +50,24 @@ public class CreatePackagePopup
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(f, "User has inputted order ID");
+				JOptionPane.showMessageDialog(f, "Search for Order ID: Complete");
+
+				//Clear all elements of the arrays
+				for( int i = 0; i < orderCol.length; i++ ) {
+   					Arrays.fill( orderCol[i], null );
+				}
+
+				orderItemPane.repaint();
+
+				//Display order ID line items if valid
 				if (validOrderId(Integer.parseInt(orderIdField.getText())))
 				{
+					ArrayList<OrderLineItem> items = getOrder(Integer.parseInt(orderIdField.getText())).getOrderLineItemList();
+
+					for (int line_item = 0; line_item < items.size(); line_item++)
+					{
+						orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
+					}
 					createButton.setEnabled(true);
 				}
 			}
@@ -58,8 +81,6 @@ public class CreatePackagePopup
 			switch (i)
 				{
 				case 1:// Allow JTable of order item list to be scrollale
-					String[] orderColNames = { "Order Item ID" };
-					String[][] orderCol = new String[100][100];
 					orderList = new JTable(orderCol, orderColNames);
 					orderList.getSelectionModel().addListSelectionListener(new RowListSelectionListener());
 					orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -132,11 +153,33 @@ public class CreatePackagePopup
 	}
 	private boolean validOrderId(int orderId)
 	{
-		return true;
+		ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
+				.getCompleteOrderInformation(orderId);
+
+		orders.add(new Order(order));
+
+		for (int id = 0; id < order.size(); id++)
+		{
+			if (orderId == orders.get(id).getOrderID())
+				return true;
+		}
+
+		return false;
 	}
+
 	// A function that will return selectedOrderList
 	public String[] packageOrderList()
 	{
 		return selectedOrderList;
+	}
+
+	public Order getOrder(int order_id)
+	{
+		for (int entry = 0; entry < orders.size(); entry++)
+		{
+			if (orders.get(entry).getOrderID() == order_id)
+				return orders.get(entry);
+		}
+		return null;
 	}
 }
