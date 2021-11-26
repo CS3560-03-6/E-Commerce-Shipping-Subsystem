@@ -13,10 +13,10 @@ public class CustomerInfo
 	private String address;
 	private String phoneNumber;
 	private String email;
-
-	public CustomerInfo(int customerInformationId, String firstName, String lastName, String address,
-			String phoneNumber, String email)
-	{
+	
+	public CustomerInfo(int customerInformationId, String firstName,
+				 String lastName, String address, String phoneNumber,
+				 String email){
 		this.customerInformationId = customerInformationId;
 		this.firstName = firstName;
 		this.lastName = lastName;

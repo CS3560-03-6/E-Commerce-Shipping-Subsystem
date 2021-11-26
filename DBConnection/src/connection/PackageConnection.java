@@ -53,6 +53,23 @@ public class PackageConnection
 		}
 		return null;
 	}
+	public ArrayList<HashMap<String, Object>> getCompletePackage(int packageId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("select * "
+					+ "from wss.Package p"
+					+ "join wss.OrderLineItem l on p.packageId = l.packageId "
+					+ "where p.packageId = %d;", packageId);
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	//Will give back the specific package you are looking for
 	public ArrayList<HashMap<String, Object>> getPackage(int packageId)
 	{

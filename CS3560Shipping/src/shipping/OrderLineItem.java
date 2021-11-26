@@ -1,7 +1,6 @@
 package shipping;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -10,21 +9,16 @@ import Utility.ConnectionFactory;
 public class OrderLineItem
 {
 	private int orderLineItemId;
-	private int orderId;
-	private int productId;
-	private int packageId;
+	private Product product;
 	private Date deliverByDate;
 	private BigDecimal shippingCost;
 	private BigDecimal tax;
-	private int quantity;
-
-	public OrderLineItem(int orderLineItemId, int orderId, int productId, int packageId, Date deliverByDate,
-			BigDecimal shippingCost, BigDecimal tax, int quantity)
-	{
+	private Integer quantity;
+	
+	public OrderLineItem(int orderLineItemId, Product product,
+				  Date deliverByDate, BigDecimal shippingCost, BigDecimal tax, Integer quantity){
 		this.orderLineItemId = orderLineItemId;
-		this.orderId = orderId;
-		this.productId = productId;
-		this.packageId = packageId;
+		this.product = product;
 		this.deliverByDate = deliverByDate;
 		this.shippingCost = shippingCost;
 		this.tax = tax;
@@ -40,44 +34,29 @@ public class OrderLineItem
 				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
 				(BigDecimal) item.get("tax"), (int) item.get("qty"));
 	}
-
-	public int getOrderLineItemId()
-	{
+	
+	public Integer getOrderLineItemId() {
 		return orderLineItemId;
 	}
-
-	public int getOrderId()
-	{
-		return orderId;
+	
+	public Product getProductId() {
+		return product;
 	}
 
-	public int getProductId()
-	{
-		return productId;
-	}
-
-	public int getPackageId()
-	{
-		return packageId;
-	}
-
-	public Date getDeliverByDate()
-	{
+	
+	public Date getDeliverByDate() {
 		return deliverByDate;
 	}
-
-	public BigDecimal getShippingCost()
-	{
+	
+	public BigDecimal getShippingCost() {
 		return shippingCost;
 	}
-
-	public BigDecimal getTax()
-	{
+	
+	public BigDecimal getTax() {
 		return tax;
 	}
-
-	public int getQuantity()
-	{
+	
+	public Integer getQuantity() {
 		return quantity;
 	}
 }

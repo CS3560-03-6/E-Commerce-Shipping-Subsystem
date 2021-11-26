@@ -14,10 +14,8 @@ public class Order
 	private CustomerInfo customerInfo;
 	private ArrayList<OrderLineItem> orderLineItemList;
 	private int status;
-	private Date dateEntered;
-
-	public Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList, Date dateEntered)
-	{
+	
+	public Order(int orderId, CustomerInfo customerInfo, int status, ArrayList<OrderLineItem> orderLineItemList){
 		this.orderId = orderId;
 		this.customerInfo = customerInfo;
 		this.status = status;
@@ -50,9 +48,8 @@ public class Order
 		 */
 		status = new_status;
 	}
-
-	public int getOrderID()
-	{
+	
+	public int getOrderId() {
 		return orderId;
 	}
 
@@ -71,27 +68,18 @@ public class Order
 		return status;
 	}
 	
-	public Date getDate()
-	{
-		return dateEntered;
-	}
-
-	public double calculateTotalShipping()
-	{
-		BigDecimal result = new BigDecimal(0.0);
-		for (OrderLineItem item : orderLineItemList)
-		{
-			result.add(item.getShippingCost()) ;
+	public double calculateTotalShipping() {
+		double result = 0.0;
+		for (OrderLineItem item : orderLineItemList) {
+			result += item.getShippingCost().doubleValue();
 		}
 		return result.doubleValue();
 	}
-
-	public double calculateTotalTax()
-	{
-		BigDecimal result = new BigDecimal(0.0);
-		for (OrderLineItem item : orderLineItemList)
-		{
-			result.add(item.getTax());
+	
+	public double calculateTotalTax() {
+		double result = 0.0;
+		for (OrderLineItem item : orderLineItemList) {
+			result += item.getTax().doubleValue();
 		}
 		return result.doubleValue();
 	}

@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class ShipmentConnection 
 {
+	//todo make it so that I can see all packages connected to a shipment
 	private Connection _connection;
 	public ShipmentConnection(SqlConnection connection)
 	{
@@ -23,7 +24,7 @@ public class ShipmentConnection
 	 * @param shipmentId
 	 * @param dateShipped
 	 */
-	public void createShipment(Date dateShipped)
+	public boolean createShipment(Date dateShipped)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
@@ -31,11 +32,13 @@ public class ShipmentConnection
 			String query = String.format("insert into wss.Shipment(shipmentId, dateShipped) "
 					+ "values(%d, %s)", shipmentId, dateShipped.toString());
 			ResultSet rs = stmt.executeQuery(query);
+			return true;
 		}
 		catch(SQLException e)
 		{
 			System.out.println(e.getMessage());
 		}
+		return false;
 	}
 	/**
 	 * Will tell you if shipment has been updated or not via boolean
@@ -101,6 +104,23 @@ public class ShipmentConnection
 			System.out.println(e.getMessage());
 		}
 		return false;
+	}
+	public ArrayList<HashMap<String, Object>> getCompleteShipmentList(int shipmentId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("select * "
+					+ "from wss.shipment s "
+					+ "join wss.Package p on s.shipmentId = p.shipmentId "
+					+ "where s.shipmentId = "+shipmentId+";");
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 	public ArrayList<HashMap<String, Object>> getShipmentList()
 	{
