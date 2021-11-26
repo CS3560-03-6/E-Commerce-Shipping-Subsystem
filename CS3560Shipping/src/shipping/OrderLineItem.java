@@ -36,7 +36,7 @@ public class OrderLineItem
 	public OrderLineItem(HashMap<String, Object> item)
 	{
 		this((int) item.get("orderLineItemId"), (int) item.get("orderId"),
-				(int) item.get("productId"), item.get("packageId")==null ? 0 : 0,
+				(int) item.get("productId"), item.get("packageId")==null ? -1 : (int)item.get("packageId"),
 				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
 				(BigDecimal) item.get("tax"), (int) item.get("qty"));
 	}

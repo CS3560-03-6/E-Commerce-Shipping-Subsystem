@@ -42,8 +42,8 @@ public class PackageConnection
 		{
 			//must check if this query is correct, otherwise it will only show packages not in a shipment
 			String query = String.format("select packageId from wss.Package "
-					+ "where packageStatus = 0 and shipmentId is null"
-					+ "order by packageId desc");
+					+ "where status = 0 and shipmentId is null "
+					+ "order by packageId desc;");
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}

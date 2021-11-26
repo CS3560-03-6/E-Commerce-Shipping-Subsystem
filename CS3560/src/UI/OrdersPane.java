@@ -20,7 +20,7 @@ public class OrdersPane extends JPanel
 	private String[][] orderCol;
 	private JTable orderList;
 	private JScrollPane orderPane;
-	private ArrayList<Order> orders;
+	private static ArrayList<Order> orders;
 
 	/**
 	 * contructor for a display
@@ -76,25 +76,30 @@ public class OrdersPane extends JPanel
 		ConnectionFactory.createConnection();
 		orders.clear();
 		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getOrderList();
-		for (int entry = 0; entry < orders_sql.size(); entry++)
+		if(orders_sql != null)
 		{
-			// Create each Order
-			int order_id = (int) orders_sql.get(entry).get("orderId");
-			ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
-					.getCompleteOrderInformation(order_id);
-			orders.add(new Order(order));
+			for (int entry = 0; entry < orders_sql.size(); entry++)
+			{
+				// Create each Order
+				int order_id = (int) orders_sql.get(entry).get("orderId");
+				ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
+						.getCompleteOrderInformation(order_id);
+				orders.add(new Order(order));
+			}
+			for (int entry = 0; entry < orders.size(); entry++)
+			{
+				orderCol[entry][0] = "" + orders.get(entry).getDate().toString();
+				orderCol[entry][1] = "" + orders.get(entry).getOrderID();
+				orderCol[entry][2] = "" + orders.get(entry).getCustomerInfo().getCustomerName()[0] + " "
+				+ orders.get(entry).getCustomerInfo().getCustomerName()[1];
+			}
+			return orders;
 		}
-		for (int entry = 0; entry < orders.size(); entry++)
-		{
-			orderCol[entry][0] = "" + orders.get(entry).getDate().toString();
-			orderCol[entry][1] = "" + orders.get(entry).getOrderID();
-			orderCol[entry][2] = "" + orders.get(entry).getCustomerInfo().getCustomerName()[0] + " "
-			+ orders.get(entry).getCustomerInfo().getCustomerName()[1];
-		}
-		return orders;
+		System.out.println("No orders found.");
+		return null;
 	}
 
-	public Order getOrder(int order_id)
+	public static Order getOrder(int order_id)
 	{
 		for (int entry = 0; entry < orders.size(); entry++)
 		{

@@ -27,7 +27,7 @@ public class PackageController
 		{
 			//when making the package in sql need to update all of those orderLineItems
 			//also need to make package itself
-			Package shippingPackage =  new Package(packageId+1, shippingLabel, orderLineItemList);
+			Package shippingPackage =  new Package(packageId+1, shippingLabel, 0, orderLineItemList);
 			
 			//Update OrderLineItems to show that they are in a package
 			for(int i = 0; i <= orderLineItemList.size(); i++)

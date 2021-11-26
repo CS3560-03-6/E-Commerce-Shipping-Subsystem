@@ -12,7 +12,8 @@ public class ConnectionFactory
 	private static ProductConnection productConnection;
 	private static ShipmentConnection shipmentConnection;
 	private static ShippingLabelConnection shippingLabelConnection;
-	private static void createConnection()
+	
+	public static void createConnection()
 	{
 		if(connection == null)
 		{
