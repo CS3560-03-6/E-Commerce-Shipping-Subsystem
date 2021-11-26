@@ -52,23 +52,32 @@ public class CreatePackagePopup
 			{
 				JOptionPane.showMessageDialog(f, "Search for Order ID: Complete");
 
-				//Clear all elements of the arrays
-				for( int i = 0; i < orderCol.length; i++ ) {
-   					Arrays.fill( orderCol[i], null );
+				// Clear all elements of the arrays
+				for (int i = 0; i < orderCol.length; i++)
+				{
+					Arrays.fill(orderCol[i], null);
 				}
 
 				orderItemPane.repaint();
 
-				//Display order ID line items if valid
-				if (validOrderId(Integer.parseInt(orderIdField.getText())))
+				// Display order ID line items if valid
+				try
 				{
-					ArrayList<OrderLineItem> items = getOrder(Integer.parseInt(orderIdField.getText())).getOrderLineItemList();
-
-					for (int line_item = 0; line_item < items.size(); line_item++)
+					if (validOrderId(Integer.parseInt(orderIdField.getText())))
 					{
-						orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
+						ArrayList<OrderLineItem> items = getOrder(Integer.parseInt(orderIdField.getText()))
+								.getOrderLineItemList();
+
+						for (int line_item = 0; line_item < items.size(); line_item++)
+						{
+							orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
+						}
+						createButton.setEnabled(true);
 					}
-					createButton.setEnabled(true);
+
+				} catch (Exception ex)
+				{
+					JOptionPane.showMessageDialog(f, "Invalid Order ID");
 				}
 			}
 		};
@@ -81,7 +90,13 @@ public class CreatePackagePopup
 			switch (i)
 				{
 				case 1:// Allow JTable of order item list to be scrollale
-					orderList = new JTable(orderCol, orderColNames);
+					orderList = new JTable(orderCol, orderColNames)
+					{
+						public boolean editCellAt(int row, int column, EventObject e)
+						{
+							return false;
+						}
+					};
 					orderList.getSelectionModel().addListSelectionListener(new RowListSelectionListener());
 					orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 							ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -98,19 +113,25 @@ public class CreatePackagePopup
 						public void actionPerformed(ActionEvent e)
 						{
 							// Get selected order item into a list when package is created
-							selectedOrderList = new String[selectedOrderRow.length];
-							if (selectedOrderRow != null)
+							if (selectedOrderRow == null)
 							{
-								for (int i = 0; i < selectedOrderRow.length; i++)
+								JOptionPane.showMessageDialog(f, "Cannot create package: No items selected.");
+							} else
+							{
+								selectedOrderList = new String[selectedOrderRow.length];
+								if (selectedOrderRow != null)
 								{
-									if (selectedOrderRow[i] != null)
+									for (int i = 0; i < selectedOrderRow.length; i++)
 									{
-										selectedOrderList[i] = (String) orderList.getValueAt(i, 0);
+										if (selectedOrderRow[i] != null)
+										{
+											selectedOrderList[i] = (String) orderList.getValueAt(i, 0);
+										}
 									}
 								}
+								/* send database object of package */
+								f.dispose();
 							}
-							/* send database object of package */
-							f.dispose();
 						}
 					});
 					popup.add(createButton);
@@ -151,6 +172,7 @@ public class CreatePackagePopup
 			}
 		}
 	}
+
 	private boolean validOrderId(int orderId)
 	{
 		ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
@@ -160,7 +182,7 @@ public class CreatePackagePopup
 
 		for (int id = 0; id < order.size(); id++)
 		{
-			if (orderId == orders.get(id).getOrderID())
+			if (orderId == orders.get(id).getOrderId())
 				return true;
 		}
 
@@ -177,9 +199,10 @@ public class CreatePackagePopup
 	{
 		for (int entry = 0; entry < orders.size(); entry++)
 		{
-			if (orders.get(entry).getOrderID() == order_id)
+			if (orders.get(entry).getOrderId() == order_id)
 				return orders.get(entry);
 		}
 		return null;
 	}
+
 }

@@ -89,7 +89,7 @@ public class OrdersPane extends JPanel
 			for (int entry = 0; entry < orders.size(); entry++)
 			{
 				orderCol[entry][0] = "" + orders.get(entry).getDate().toString();
-				orderCol[entry][1] = "" + orders.get(entry).getOrderID();
+				orderCol[entry][1] = "" + orders.get(entry).getOrderId();
 				orderCol[entry][2] = "" + orders.get(entry).getCustomerInfo().getCustomerName()[0] + " "
 				+ orders.get(entry).getCustomerInfo().getCustomerName()[1];
 			}
@@ -103,7 +103,7 @@ public class OrdersPane extends JPanel
 	{
 		for (int entry = 0; entry < orders.size(); entry++)
 		{
-			if (orders.get(entry).getOrderID() == order_id)
+			if (orders.get(entry).getOrderId() == order_id)
 				return orders.get(entry);
 		}
 		return null;

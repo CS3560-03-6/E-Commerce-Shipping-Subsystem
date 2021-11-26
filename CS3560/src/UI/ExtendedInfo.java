@@ -75,7 +75,7 @@ public class ExtendedInfo extends JPanel
 		{
 			orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
 			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection()
-					.getProduct(items.get(line_item).getProductId());
+					.getProduct(items.get(line_item).getProduct().getProductId());
 			orderCol[line_item][1] = "" + products.get(0).get("productName");
 		}
 
@@ -119,7 +119,7 @@ public class ExtendedInfo extends JPanel
 		orderInfoLabels[9].setText("Status: ");
 
 		// Get information about order
-		texts[0].setText("" + order.getOrderID());
+		texts[0].setText("" + order.getOrderId());
 		texts[1].setText("" + order.getCustomerInfo().getCustomerID());
 		texts[2].setText("" + order.getCustomerInfo().getCustomerName()[0] + " " + ""
 				+ order.getCustomerInfo().getCustomerName()[1]);

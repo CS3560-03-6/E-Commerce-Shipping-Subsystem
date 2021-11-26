@@ -77,7 +77,7 @@ public class Order
 		for (OrderLineItem item : orderLineItemList) {
 			result += item.getShippingCost().doubleValue();
 		}
-		return result.doubleValue();
+		return result;
 	}
 	
 	public double calculateTotalTax() {
@@ -85,11 +85,16 @@ public class Order
 		for (OrderLineItem item : orderLineItemList) {
 			result += item.getTax().doubleValue();
 		}
-		return result.doubleValue();
+		return result;
 	}
 
 	public double calculateTotalShippingAndTax()
 	{
 		return calculateTotalShipping() + calculateTotalTax();
+	}
+
+	public Date getDate()
+	{
+		return dateEntered;
 	}
 }
