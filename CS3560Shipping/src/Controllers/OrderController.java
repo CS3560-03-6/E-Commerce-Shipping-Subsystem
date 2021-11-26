@@ -25,7 +25,9 @@ public class OrderController
 		if(orderData == null)
 			return null;
 		int customerInfoId = (int)orderData.get(0).get("customerInfoId");
-		return new Order(orderId, getCustomerInfo(customerInfoId), (int)orderData.get(0).get("status"), getOrderLineItemList(orderData));
+		Date dateEntered = (Date)orderData.get(0).get("dateEntered");
+		return new Order(orderId, getCustomerInfo(customerInfoId), (int)orderData.get(0).get("status"), getOrderLineItemList(orderData),
+				dateEntered);
 	}
 	private static CustomerInfo getCustomerInfo(int customerInfoId)
 	{
