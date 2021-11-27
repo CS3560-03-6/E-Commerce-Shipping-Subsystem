@@ -27,19 +27,23 @@ public class SqlServerConnectionDemo
 		String pass = "password";
 		SqlConnection connect = new SqlConnection(url,user,pass);
 		
-		String path = "C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test.png";
-		File file = new File(path);
-		BufferedImage bImage = ImageIO.read(file);
-		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
-		ImageIO.write(bImage, "png", baoStream);
-		byte[] byteArray = baoStream.toByteArray();
-		InputStream inStream = new ByteArrayInputStream(byteArray);
+		PackageConnection p = new PackageConnection(connect);
+		p.createPackage(1, 1, 0);
 		
-		ShippingLabelConnection shipLabel = new ShippingLabelConnection(connect);
-//		ArrayList<HashMap<String, Object>> test2 = shipLabel.getShippingLabel(0);
 		
+//		String path = "C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test.png";
+//		File file = new File(path);
+//		BufferedImage bImage = ImageIO.read(file);
+//		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
+//		ImageIO.write(bImage, "png", baoStream);
+//		byte[] byteArray = baoStream.toByteArray();
+//		InputStream inStream = new ByteArrayInputStream(byteArray);
+//		
+//		ShippingLabelConnection shipLabel = new ShippingLabelConnection(connect);
+//		ArrayList<HashMap<String, Object>> test2 = shipLabel.getShippingLabel(2);
+//		
 //		byte[] byteStream = (byte[]) test2.get(0).get("label");
-//		FileOutputStream s = new FileOutputStream("C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test1.png");
+//		FileOutputStream s = new FileOutputStream("C:\\Users\\conan\\Desktop\\Label2.png");
 //		s.write(byteStream);
 //		s.close();
 		

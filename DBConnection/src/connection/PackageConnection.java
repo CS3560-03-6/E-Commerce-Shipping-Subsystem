@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class PackageConnection 
 {
-	//package should be able to addShipment, might move to shipment connection
 	private Connection _connection;
 	public PackageConnection(SqlConnection connection)
 	{
@@ -91,7 +90,7 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("delete from wss.Package where labelId = %d", packageId);
+			String query = String.format("delete from wss.Package where packageId = %d", packageId);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
 		}
@@ -106,7 +105,7 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = "select top(1) packageId from wss.Package order by desc";
+			String query = "select top(1) packageId from wss.Package order by packageId desc";
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}
@@ -121,6 +120,22 @@ public class PackageConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.OrderLineItem set packageId = %d where orderLineItemId = %d",
+					packageId, orderLineItemId);
+			ResultSet rs = stmt.executeQuery(query);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	public boolean removePackageFromOrderLineItem(int packageId, int orderLineItemId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("update wss.OrderLineItem set packageId = null "
+					+ "where packageId = %d and orderLineItemId = %d",
 					packageId, orderLineItemId);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
