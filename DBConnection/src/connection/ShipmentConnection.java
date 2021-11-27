@@ -46,11 +46,11 @@ public class ShipmentConnection
 	 * @param date
 	 * @return
 	 */
-	public boolean updateShipment(int shipmentId, Date date)
+	public boolean updateShipmentDate(int shipmentId, Date date)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("update wss.Shipment set shipmentStatus = "+date.toString()+" where shipmentId = %d", shipmentId);
+			String query = String.format("update wss.Shipment set dateShipped = "+date.toString()+" where shipmentId = %d", shipmentId);
 			ResultSet rs = stmt.executeQuery(query);
 			return true;
 		}
@@ -142,7 +142,8 @@ public class ShipmentConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("select * from wss.shipment s"
-					+ "join wss.package p on s.shipmentId p.shipmentId where s.shipmentId = %d", shipmentId);
+					+ "join wss.package p on s.shipmentId = p.shipmentId "
+					+ "where s.shipmentId = %d", shipmentId);
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}
