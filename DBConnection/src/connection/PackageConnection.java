@@ -171,7 +171,7 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("update wss.OrderLineItem set status = %d "
+			String query = String.format("update wss.Package set status = %d "
 					+ "where packageId = %d ",
 					status, packageId);
 			int rs = stmt.executeUpdate(query);
