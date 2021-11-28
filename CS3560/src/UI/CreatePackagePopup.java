@@ -173,6 +173,7 @@ public class CreatePackagePopup
 									}
 								}
 								int shippingLabelId = (int) ConnectionFactory.createPackageConnection()
+										.getLatestPackageId().size() == 0 ? 1 : (int) ConnectionFactory.createPackageConnection()
 										.getLatestPackageId().get(0).get("packageId") + 1;
 								if (PackageController.createPackage(shippingLabelId, selectedOrderLineItems))
 								{

@@ -129,7 +129,7 @@ public class FullPanel extends JPanel
 					System.out.println("Showing shipment: " + id);
 					try
 					{
-						ShipmentsPane.getShipment(Integer.parseInt(id));
+						infoPane.showShipmentsExtInfo(ShipmentsPane.getShipment(Integer.parseInt(id)));;
 					} catch (NumberFormatException ex)
 					{
 						System.out.println("ERROR: That shipment does not exist!");

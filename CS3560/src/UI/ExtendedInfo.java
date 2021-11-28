@@ -1,10 +1,16 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import Controllers.OrderController;
 import Controllers.PackageController;
+import Controllers.ShipmentController;
 import Utility.ConnectionFactory;
 import shipping.Order;
 import shipping.OrderLineItem;
@@ -12,6 +18,8 @@ import shipping.OrderLineItem;
 import java.awt.*;
 import java.awt.event.*;
 import java.security.cert.CertificateRevokedException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import shipping.Package;
 import shipping.Shipment;
@@ -32,12 +40,14 @@ public class ExtendedInfo extends JPanel
 	private JScrollPane orderItemPane;
 
 	private JLabel[] packageInfoLabels = new JLabel[11];
-	private JTextArea[] packageTexts = new JTextArea[8];
+	private JTextArea[] packageTexts = new JTextArea[7];
 	private JTable packageList;
 	private JScrollPane packageItemPane;
+	private final String[] packageStatuses = { "In house", "Shipped to carrier", "Delivered to customer", "Delayed" };
+	private JComboBox<String> packageStatusComboBox;
 
-	private JLabel[] shipmentInfoLabels = new JLabel[2];
-	private JTextArea[] shipmentTexts = new JTextArea[1];
+	private JLabel[] shipmentInfoLabels = new JLabel[3];
+	private JTextArea[] shipmentTexts = new JTextArea[2];
 	private JTable shipmentList;
 	private JScrollPane shipmentItemPane;
 
@@ -257,7 +267,7 @@ public class ExtendedInfo extends JPanel
 		{
 			packageInfoLabels[i] = new JLabel();
 			packageInfoLabels[i].setForeground(Color.BLACK);
-			if (i < 8)
+			if (i < 7)
 			{
 				packageTexts[i] = new JTextArea();
 				packageTexts[i].setEditable(false);
@@ -293,24 +303,6 @@ public class ExtendedInfo extends JPanel
 				.getCustomerInfo().getPhoneNumber());
 		packageTexts[6].setText("" + OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
 				.getCustomerInfo().getEmail());
-		switch ((int) pkg.getStatus())
-			{
-			case 0:
-				packageTexts[7].setText("In house");
-				break;
-			case 1:
-				packageTexts[7].setText("Shipped to carrier");
-				break;
-			case 2:
-				packageTexts[7].setText("Delivered to customer");
-				break;
-			case 3:
-				packageTexts[7].setText("Delayed");
-				break;
-			default:
-				packageTexts[7].setText("ERROR: Status unknown");
-				break;
-			}
 
 		// contraints for gridbaglayout
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -332,6 +324,27 @@ public class ExtendedInfo extends JPanel
 		extInfoPanel.add(packageItemPane, gbc);
 
 		gbc.gridx = 0;
+		gbc.gridy = 9;
+		extInfoPanel.add(packageInfoLabels[8], gbc);
+		packageStatusComboBox = new JComboBox<String>(packageStatuses);
+		packageStatusComboBox.setSelectedIndex(pkg.getStatus());
+		packageStatusComboBox.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JComboBox<String> cb = (JComboBox<String>) e.getSource();
+				int status = cb.getSelectedIndex();
+				ConnectionFactory.createPackageConnection().updatePackageStatus(pkg.getPackageID(), status);
+				JOptionPane.showMessageDialog(null,
+						String.format("The status for Package %d has been updated.", pkg.getPackageID()));
+				FullPanel.refreshPackages(false);
+			}
+		});
+		gbc.gridx = 1;
+		gbc.gridy = 9;
+		extInfoPanel.add(packageStatusComboBox, gbc);
+
+		gbc.gridx = 0;
 		gbc.gridy = 10;
 		extInfoPanel.add(packageInfoLabels[9], gbc);
 		gbc.gridx = 1;
@@ -347,7 +360,8 @@ public class ExtendedInfo extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				PackageController.deletePackage(pkg.getPackageID());
-				JOptionPane.showMessageDialog(null, String.format("Package %d has been deleted. The order items have been freed.", pkg.getPackageID()));
+				JOptionPane.showMessageDialog(null, String
+						.format("Package %d has been deleted. The order items have been freed.", pkg.getPackageID()));
 				FullPanel.refresh();
 				deselect();
 			}
@@ -355,14 +369,6 @@ public class ExtendedInfo extends JPanel
 		gbc.gridx = 1;
 		gbc.gridy = 11;
 		extInfoPanel.add(removeButton, gbc);
-
-		for (int i = 9; i < 10; i++)
-		{
-			gbc = createGbc(0, i);
-			extInfoPanel.add(packageInfoLabels[i - 1], gbc);
-			gbc = createGbc(1, i);
-			extInfoPanel.add(packageTexts[i - 2], gbc);
-		}
 
 		// Adding the extInfoPanel into JScrollPane
 		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -379,13 +385,15 @@ public class ExtendedInfo extends JPanel
 	{
 		clear();
 		ArrayList<Package> items = shipment.getPackageList();
-		String[] shipmentColNames = { "Package ID", "Product Name" };
+		String[] shipmentColNames = { "Package ID", "Address" };
 		String[][] shipmentCol = new String[items.size()][100];
 
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
 			shipmentCol[line_item][0] = "" + items.get(line_item).getPackageID();
-			shipmentCol[line_item][1] = "";
+			shipmentCol[line_item][1] = ""
+					+ OrderController.getOrder(items.get(line_item).getOrderLineItemList().get(0).getOrderId())
+							.getCustomerInfo().getAddress();
 		}
 
 		// Create new Jtable for the order item list
@@ -404,11 +412,11 @@ public class ExtendedInfo extends JPanel
 		shipmentItemPane.setMinimumSize(new Dimension(300, 300));
 
 		// Initializing the labels and textfields to display info
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			shipmentInfoLabels[i] = new JLabel();
 			shipmentInfoLabels[i].setForeground(Color.BLACK);
-			if (i != 9)
+			if (i < 2)
 			{
 				shipmentTexts[i] = new JTextArea();
 				shipmentTexts[i].setEditable(false);
@@ -417,50 +425,62 @@ public class ExtendedInfo extends JPanel
 
 		// Naming labels to display info
 		shipmentInfoLabels[0].setText("Shipment ID: ");
-		shipmentInfoLabels[1].setText("Status: ");
+		shipmentInfoLabels[1].setText("Date: ");
+		shipmentInfoLabels[2].setText("Packages: ");
 
 		// Get information about order
 		shipmentTexts[0].setText("" + shipment.getShipmentID());
 		shipmentTexts[1].setText("" + shipment.getDateShipped().toString());
-//		switch ((int) shipment.getStatus())
-//			{
-//			case 0:
-//				shipmentTexts[8].setText("Unprocessed");
-//				break;
-//			case 1:
-//				shipmentTexts[8].setText("Processing");
-//				break;
-//			default:
-//				shipmentTexts[8].setText("ERROR: Status unknown");
-//				break;
-//			}
 
 		// contraints for gridbaglayout
 		GridBagConstraints gbc = new GridBagConstraints();
 
 		// adding the labels and textfield into the panel
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			gbc = createGbc(0, i);
 			extInfoPanel.add(shipmentInfoLabels[i], gbc);
 			gbc = createGbc(1, i);
 			extInfoPanel.add(shipmentTexts[i], gbc);
 		}
-
-		gbc.gridx = 0;
-		gbc.gridy = 6;
-		extInfoPanel.add(shipmentInfoLabels[6], gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 7;
-		extInfoPanel.add(shipmentItemPane, gbc);
-
-		for (int i = 8; i < 11; i++)
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		UtilDateModel model = new UtilDateModel();
+		model.setDate(shipment.getDateShipped().getYear()+1900, shipment.getDateShipped().getMonth(), shipment.getDateShipped().getDay());
+		model.setSelected(true);
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		extInfoPanel.add(datePicker, gbc);
+		
+		JButton updateButton = new JButton("Update");
+		updateButton.addActionListener(new ActionListener()
 		{
-			gbc = createGbc(0, i);
-			extInfoPanel.add(shipmentInfoLabels[i - 1], gbc);
-			gbc = createGbc(1, i);
-			extInfoPanel.add(shipmentTexts[i - 2], gbc);
-		}
+			public void actionPerformed(ActionEvent e)
+			{
+				Calendar selectedValue = Calendar.getInstance();
+				selectedValue.setTime((Date)datePicker.getModel().getValue());
+				Date selectedDate = selectedValue.getTime();
+				ShipmentController.updateShipment(shipment.getShipmentID(), selectedDate);
+				JOptionPane.showMessageDialog(null, String
+						.format("Shipment %d has new shipment date.", shipment.getShipmentID()));
+				FullPanel.refresh();
+				deselect();
+			}
+		});
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		extInfoPanel.add(updateButton, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		extInfoPanel.add(shipmentInfoLabels[2], gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		extInfoPanel.add(shipmentItemPane, gbc);
 
 		// Adding the extInfoPanel into JScrollPane
 		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -483,5 +503,25 @@ public class ExtendedInfo extends JPanel
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		return gbc;
 	}
+	public class DateLabelFormatter extends AbstractFormatter {
 
+	    private String datePattern = "yyyy-MM-dd";
+	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	    @Override
+	    public Object stringToValue(String text) throws ParseException {
+	        return dateFormatter.parseObject(text);
+	    }
+
+	    @Override
+	    public String valueToString(Object value) throws ParseException {
+	        if (value != null) {
+	            Calendar cal = (Calendar) value;
+	            return dateFormatter.format(cal.getTime());
+	        }
+
+	        return "";
+	    }
+
+	}
 }
