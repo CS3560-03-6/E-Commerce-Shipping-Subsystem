@@ -78,7 +78,7 @@ public class ShipmentsPane extends JPanel
 			for (int entry = 0; entry < shipments_sql.size(); entry++)
 			{
 				// Create each Shipment
-				int shipmentId = (int) shipments_sql.get(entry).get("orderId");
+				int shipmentId = (int) shipments_sql.get(entry).get("shipmentId");
 				shipments.add(ShipmentController.getShipment(shipmentId));
 			}
 			return shipments;

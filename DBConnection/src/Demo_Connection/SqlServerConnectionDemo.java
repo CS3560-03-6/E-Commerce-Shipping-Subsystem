@@ -21,21 +21,22 @@ public class SqlServerConnectionDemo
 	{
 		//this place is only a testing ground
 		//testing if can push to individual branch and can still merge into test branch
-		String url = "jdbc:sqlserver://DESKTOP-S0HM9HP\\SQLEXPRESS:64784;databaseName="
+		String url = "jdbc:sqlserver://DESKTOP-JT0PRT3\\SQLEXPRESS:1433;databaseName="
 				+ "WarehouseShippingSubsystem";
-		String user = "conan";
+		String user = "gabe";
 		String pass = "password";
 		SqlConnection connect = new SqlConnection(url,user,pass);
 		
-		String path = "C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test.png";
-		File file = new File(path);
-		BufferedImage bImage = ImageIO.read(file);
-		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
-		ImageIO.write(bImage, "png", baoStream);
-		byte[] byteArray = baoStream.toByteArray();
-		InputStream inStream = new ByteArrayInputStream(byteArray);
-		
-		ShippingLabelConnection shipLabel = new ShippingLabelConnection(connect);
+//		String path = "C:\\Users\\conan\\Desktop\\Cpp Fall 2021\\CS 3110 Formal\\Module 14\\Test.png";
+//		File file = new File(path);
+//		BufferedImage bImage = ImageIO.read(file);
+//		ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
+//		ImageIO.write(bImage, "png", baoStream);
+//		byte[] byteArray = baoStream.toByteArray();
+//		InputStream inStream = new ByteArrayInputStream(byteArray);
+		PackageConnection pkg = new PackageConnection(connect);
+		pkg.connectPackageToOrderLineItem(1, 300001);
+		//ShippingLabelConnection shipLabel = new ShippingLabelConnection(connect);
 //		ArrayList<HashMap<String, Object>> test2 = shipLabel.getShippingLabel(0);
 		
 //		byte[] byteStream = (byte[]) test2.get(0).get("label");

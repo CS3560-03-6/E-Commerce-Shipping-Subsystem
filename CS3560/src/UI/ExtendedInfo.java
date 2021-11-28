@@ -1,7 +1,9 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
+import Controllers.OrderController;
 import Utility.ConnectionFactory;
 import shipping.Order;
 import shipping.OrderLineItem;
@@ -83,13 +85,17 @@ public class ExtendedInfo extends JPanel
 		ArrayList<OrderLineItem> items = order.getOrderLineItemList();
 		String[] orderColNames = { "Order Line Item ID", "Product Name" };
 		String[][] orderCol = new String[items.size()][100];
-
+		ArrayList<Integer> taken_rows = new ArrayList<Integer>();
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
 			orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
 			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection()
 					.getProduct(items.get(line_item).getProduct().getProductId());
 			orderCol[line_item][1] = "" + products.get(0).get("productName");
+			if(items.get(line_item).getPackageId() != -1)
+			{
+				taken_rows.add(line_item);
+			}
 		}
 
 		// Create new Jtable for the order item list
@@ -100,6 +106,20 @@ public class ExtendedInfo extends JPanel
 				return false;
 			}
 		};
+		orderList.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+		{
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		    {
+		        final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        for(int entry = 0; entry < taken_rows.size(); entry++)
+		        {
+		        	c.setBackground(row == taken_rows.get(entry) ? Color.LIGHT_GRAY : Color.WHITE);
+		        }
+		        
+		        return c;
+		    }
+		});
 		orderList.setRowHeight(30);
 		// Allow JTable of order item list to be scrollale
 		orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -249,19 +269,19 @@ public class ExtendedInfo extends JPanel
 		// Get information about order
 		packageTexts[0].setText("" + pkg.getPackageID());
 		packageTexts[1].setText("" + pkg.getOrderLineItemList().get(0).getOrderId());
-		packageTexts[2].setText("" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
+		packageTexts[2].setText("" + OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
 				.getCustomerInfo().getCustomerID());
 		packageTexts[3].setText(""
-				+ OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
+				+ OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
 						.getCustomerName()[0]
-				+ " " + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
+				+ " " + OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
 						.getCustomerName()[1]);
 		packageTexts[4].setText(""
-				+ OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getAddress());
-		packageTexts[5].setText("" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
+				+ OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getAddress());
+		packageTexts[5].setText("" + OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
 				.getCustomerInfo().getPhoneNumber());
 		packageTexts[6].setText(
-				"" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getEmail());
+				"" + OrderController.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getEmail());
 		switch ((int) pkg.getStatus())
 			{
 			case 0:

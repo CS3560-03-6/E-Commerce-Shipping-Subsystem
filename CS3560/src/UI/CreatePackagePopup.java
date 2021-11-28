@@ -160,9 +160,11 @@ public class CreatePackagePopup
 										.getLatestPackageId().get(0).get("packageId") + 1;
 								if (PackageController.createPackage(shippingLabelId, selectedOrderLineItems))
 								{
-									System.out.println("New package created!");
+									JOptionPane.showMessageDialog(f, "New package created!");
+								} else
+								{
+									JOptionPane.showMessageDialog(f, "Failed to create package.");
 								}
-								;
 								f.dispose();
 							}
 						}

@@ -28,13 +28,13 @@ public class PackageConnection
 		catch(SQLException e)
 		{
 			System.out.println(e.getMessage());
-			return false;
+			return true;
 		}
 	}
 	/**
 	 * 
 	 * @return
-	 * Will return an ArrayList with a HashMap that only contains one column, packageId
+	 * Will return an ArrayList with a HashMap that only contains one column, packageId of all packages without a shipment
 	 */
 	public ArrayList<HashMap<String, Object>> getPackageList()
 	{
@@ -53,6 +53,30 @@ public class PackageConnection
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * Will return an ArrayList with a HashMap that only contains one column, packageId of all packages
+	 */
+	public ArrayList<HashMap<String, Object>> getAllPackageList()
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			//must check if this query is correct, otherwise it will only show packages not in a shipment
+			String query = String.format("select packageId from wss.Package "
+					+ "where status = 0 "
+					+ "order by packageId desc;");
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 	public ArrayList<HashMap<String, Object>> getCompletePackage(int packageId)
 	{
 		try(Statement stmt = _connection.createStatement();)

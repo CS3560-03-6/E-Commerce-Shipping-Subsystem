@@ -60,7 +60,6 @@ public class ShipmentController
 		if (shipmentData == null)
 			return null;
 		// Making an ArrayList of Packages
-
 		Date dateShipped = (Date) shipmentData.get(0).get("dateShipped");
 
 		ArrayList<Package> packageList = new ArrayList<Package>();
