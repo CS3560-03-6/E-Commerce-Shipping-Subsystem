@@ -15,6 +15,7 @@ import shipping.ShippingLabel;
 
 public class PackageController
 {
+	//todo delete package removes it from OrderLineItemList
 	private static PackageConnection connection = ConnectionFactory.createPackageConnection();
 	// Let User choose shippingLabel and OrderLineItemList
 	// when update shipment should update all package's status
@@ -38,7 +39,8 @@ public class PackageController
 			}
 
 			return true;
-		} else
+		} 
+		else
 		{
 			return false;
 		}
@@ -65,6 +67,49 @@ public class PackageController
 		return new Package(packageId, label, status, getOrderLineItemList(packageData), shipmentId);
 	}
 
+	/**
+	 * Will try to delete a package. If unsuccessful it will try to roll back all changes. 
+	 * If it cannot roll back then a console message will be printed stating it was unable to roll back.
+	 * @param packageId
+	 * @return
+	 */
+	public static boolean deletePackage(int packageId)
+	{
+		PackageConnection packageConnection = ConnectionFactory.createPackageConnection();
+		ArrayList<HashMap<String, Object>> packageData = packageConnection.getCompletePackage(packageId);
+		for(int i = 0; i < packageData.size(); i++)
+		{
+			boolean passed = packageConnection.removePackageFromOrderLineItem(packageId, (int)packageData.get(i).get("orderLineItemId"));
+			if(!passed)
+			{
+				//roll back changes
+				for(int j = 0; j < i; j++)
+				{
+					packageConnection.connectPackageToOrderLineItem(packageId, (int)packageData.get(j).get("orderLineItemId"));
+				}
+				return false;
+			}
+		}
+		if(packageConnection.deletePackage(packageId))
+		{
+			return true;
+		}
+		else
+		{
+			for(int i = 0; i < packageData.size(); i++)
+			{
+				int orderLineItemId = (int)packageData.get(i).get("orderLineItemId");
+				boolean rollBackSuccess = packageConnection.connectPackageToOrderLineItem(packageId, orderLineItemId);
+				if(!rollBackSuccess)
+				{
+					System.out.println("Cannot roll back changes to OrderLineItemId in Wss.Package\n"
+							+ "Failed to change this row:\n-PackageId: "+packageId
+							+"\n-OrderLineItemId: "+ orderLineItemId);
+				}
+			}
+			return false;
+		}
+	}
 	private static ArrayList<OrderLineItem> getOrderLineItemList(ArrayList<HashMap<String, Object>> packageData)
 	{
 		ArrayList<OrderLineItem> orderLineItemList = new ArrayList<OrderLineItem>();

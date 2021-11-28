@@ -59,7 +59,12 @@ public class ShippingLabelConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("delete from wss.ShippingLabel where labelId = %d", labelId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)

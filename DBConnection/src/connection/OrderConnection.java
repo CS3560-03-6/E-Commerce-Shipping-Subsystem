@@ -60,7 +60,12 @@ public class OrderConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.\"Order\" set status = %d where orderId = %d;", status, orderId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows updated");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
