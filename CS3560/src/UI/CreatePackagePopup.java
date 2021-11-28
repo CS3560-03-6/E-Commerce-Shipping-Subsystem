@@ -123,15 +123,13 @@ public class CreatePackagePopup
 								JOptionPane.showMessageDialog(f, "Cannot create package: No items selected.");
 							} else
 							{
+								/* Get orderLineItem IDs from selected rows */
 								selectedOrderItemList = new String[selectedOrderRow.length];
-								if (selectedOrderRow != null)
+								for (int i = 0; i < selectedOrderRow.length; i++)
 								{
-									for (int i = 0; i < selectedOrderRow.length; i++)
+									if (selectedOrderRow[i].equals((String) orderItemTable.getValueAt(i, 0)))
 									{
-										if (selectedOrderRow[i] != null)
-										{
-											selectedOrderItemList[i] = (String) orderItemTable.getValueAt(i, 0);
-										}
+										selectedOrderItemList[i] = (String) orderItemTable.getValueAt(i, 0);
 									}
 								}
 								/* send database object of package */
@@ -143,11 +141,11 @@ public class CreatePackagePopup
 										for (int line_item = 0; line_item < orders.get(entry).getOrderLineItemList()
 												.size(); line_item++)
 										{
-											for (int selected = 0; selected < getPackageOrderList().length; selected++)
+											for (int selected = 0; selected < selectedOrderItemList.length; selected++)
 											{
 												if (orders.get(entry).getOrderLineItemList().get(line_item)
 														.getOrderLineItemId() == Integer
-																.parseInt(getPackageOrderList()[selected]))
+																.parseInt(selectedOrderItemList[selected]))
 												{
 													selectedOrderLineItems.add(
 															orders.get(entry).getOrderLineItemList().get(line_item));
@@ -161,6 +159,8 @@ public class CreatePackagePopup
 								if (PackageController.createPackage(shippingLabelId, selectedOrderLineItems))
 								{
 									JOptionPane.showMessageDialog(f, "New package created!");
+									FullPanel.refreshOrders(false);
+									FullPanel.refreshPackages(false);
 								} else
 								{
 									JOptionPane.showMessageDialog(f, "Failed to create package.");

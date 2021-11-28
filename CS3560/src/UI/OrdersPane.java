@@ -77,7 +77,7 @@ public class OrdersPane extends JPanel
 	{
 		ConnectionFactory.createConnection();
 		orders.clear();
-		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getOrderList();
+		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getAllOrderList();
 		if(orders_sql != null)
 		{
 			for (int entry = 0; entry < orders_sql.size(); entry++)

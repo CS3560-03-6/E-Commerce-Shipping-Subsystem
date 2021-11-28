@@ -39,6 +39,31 @@ public class OrderConnection
 		}
 		return null;
 	}
+	
+	/**
+	 * Gets all orders. 
+	 * Will show oldest order first. 
+	 * @return
+	 */
+	public ArrayList<HashMap<String, Object>> getAllOrderList()
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = "Select o.orderId, o.customerInfoId, o.[status], o.dateEntered, count(l.orderLineItemId) as unpackagedCount "
+					+ "from wss.\"Order\" o "
+					+ "join wss.OrderLineItem l on o.orderId = l.orderId "
+					+ "group by o.orderId, o.customerInfoId, o.[status], o.dateEntered;";
+			//maybe join with OrderLineItems to determine what is the lowest date and order by that way
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 	//Gets a specific order based on orderId
 	public ArrayList<HashMap<String, Object>> getOrder(int orderId)
 	{

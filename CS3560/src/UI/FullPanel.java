@@ -16,10 +16,10 @@ import java.util.Timer;
 public class FullPanel extends JPanel
 {
 	private JSplitPane splitPane;
-	private OrdersPane orderPane;
-	private PackagesPane packagePane;
-	private ShipmentsPane shipmentsPane;
-	private ExtendedInfo infoPane;
+	private static OrdersPane orderPane;
+	private static PackagesPane packagePane;
+	private static ShipmentsPane shipmentsPane;
+	private static ExtendedInfo infoPane;
 	private String id;
 	private int row;
 	private Timer timer;
@@ -143,24 +143,27 @@ public class FullPanel extends JPanel
 		timer.scheduleAtFixedRate(refresh, 0L, 1800000L);
 	}
 
-	public void refreshOrders(boolean showNotification)
+	public static void refreshOrders(boolean showNotification)
 	{
 		orderPane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed orders.");
+			JOptionPane.showMessageDialog(null, "Refreshed orders.");
+		infoPane.deselect();
 	}
 
-	public void refreshPackages(boolean showNotification)
+	public static void refreshPackages(boolean showNotification)
 	{
 		packagePane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed packages.");
+			JOptionPane.showMessageDialog(null, "Refreshed packages.");
+		infoPane.deselect();
 	}
 
-	public void refreshShipments(boolean showNotification)
+	public static void refreshShipments(boolean showNotification)
 	{
 		shipmentsPane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed shipments.");
+			JOptionPane.showMessageDialog(null, "Refreshed shipments.");
+		infoPane.deselect();
 	}
 }

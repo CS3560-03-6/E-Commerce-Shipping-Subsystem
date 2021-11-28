@@ -66,10 +66,11 @@ public class Main
 			}
 		});
 
-		fileMenu.add(exitItem);
+		
 		fileMenu.add(refreshOrderItem);
 		fileMenu.add(refreshPackageItem);
 		fileMenu.add(refreshShipmentItem);
+		fileMenu.add(exitItem);
 
 		JMenuItem createPackageItem = new JMenuItem("Create Package");
 		JMenuItem createShipmentItem = new JMenuItem("Create Shipment");
