@@ -38,7 +38,23 @@ public class Main
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				fp.refreshOrders();
+				fp.refreshOrders(true);
+			}
+		});
+		JMenuItem refreshPackageItem = new JMenuItem("Refresh Packages");
+		refreshPackageItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fp.refreshPackages(true);
+			}
+		});
+		JMenuItem refreshShipmentItem = new JMenuItem("Refresh Shipments");
+		refreshShipmentItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fp.refreshShipments(true);
 			}
 		});
 		exitItem.addActionListener(new ActionListener()
@@ -52,6 +68,8 @@ public class Main
 
 		fileMenu.add(exitItem);
 		fileMenu.add(refreshOrderItem);
+		fileMenu.add(refreshPackageItem);
+		fileMenu.add(refreshShipmentItem);
 
 		JMenuItem createPackageItem = new JMenuItem("Create Package");
 		JMenuItem createShipmentItem = new JMenuItem("Create Shipment");

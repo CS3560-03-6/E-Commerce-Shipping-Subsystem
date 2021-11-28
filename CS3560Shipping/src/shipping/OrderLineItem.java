@@ -27,13 +27,17 @@ public class OrderLineItem
 		this.orderId = orderId;
 	}
 
-	@SuppressWarnings("unchecked")
 	public OrderLineItem(HashMap<String, Object> item)
 	{
 		this((int) item.get("orderLineItemId"),
 				createProduct((int)item.get("productId")),
 				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
 				(BigDecimal) item.get("tax"), (int) item.get("qty"), (int) item.get("orderId"));
+	}
+	
+	public OrderLineItem(int orderLineItemId)
+	{
+		this(ConnectionFactory.createOrderLineItemConnection().getOrderId(orderLineItemId).get(0));
 	}
 	
 	private static Product createProduct(int productId)

@@ -1,18 +1,20 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
+import Controllers.OrderController;
 import Utility.ConnectionFactory;
 import shipping.*;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 
 /**
  * @author Gabriel Fok
  */
 
+@SuppressWarnings("serial")
 public class OrdersPane extends JPanel
 {
 	private String id;
@@ -33,7 +35,7 @@ public class OrdersPane extends JPanel
 		setLayout(new BorderLayout());
 
 		// Temporary array for order list
-		orderCol = new String[100][100];
+		orderCol = new String[0][100];
 
 		// Create JTable for order list
 		orderList = new JTable(orderCol, orderColNames)
@@ -53,7 +55,7 @@ public class OrdersPane extends JPanel
 		// Add ScrollPane to Jpanel
 		add(orderPane, BorderLayout.CENTER);
 		orders = new ArrayList<Order>();
-		getOrders();
+		updateTable();
 	}
 
 	// The method that return the selected order id
@@ -71,7 +73,7 @@ public class OrdersPane extends JPanel
 
 	// Refreshes order list, updates this OrdersPane's display, and returns the
 	// ArrayList of orders
-	public ArrayList<Order> getOrders()
+	public static ArrayList<Order> getOrders()
 	{
 		ConnectionFactory.createConnection();
 		orders.clear();
@@ -82,23 +84,26 @@ public class OrdersPane extends JPanel
 			{
 				// Create each Order
 				int order_id = (int) orders_sql.get(entry).get("orderId");
-				ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
-						.getCompleteOrderInformation(order_id);
-				orders.add(new Order(order));
-			}
-			for (int entry = 0; entry < orders.size(); entry++)
-			{
-				orderCol[entry][0] = "" + orders.get(entry).getDate().toString();
-				orderCol[entry][1] = "" + orders.get(entry).getOrderId();
-				orderCol[entry][2] = "" + orders.get(entry).getCustomerInfo().getCustomerName()[0] + " "
-				+ orders.get(entry).getCustomerInfo().getCustomerName()[1];
+				orders.add(OrderController.getOrder(order_id));
 			}
 			return orders;
 		}
 		System.out.println("No orders found.");
 		return null;
 	}
-
+	public void updateTable()
+	{
+		getOrders();
+		orderCol = new String[orders.size()][100];
+		for (int entry = 0; entry < orders.size(); entry++)
+		{
+			orderCol[entry][0] = "" + orders.get(entry).getDate().toString();
+			orderCol[entry][1] = "" + orders.get(entry).getOrderId();
+			orderCol[entry][2] = "" + orders.get(entry).getCustomerInfo().getCustomerName()[0] + " "
+			+ orders.get(entry).getCustomerInfo().getCustomerName()[1];
+		}
+		orderList.setModel(new DefaultTableModel(orderCol, orderColNames));
+	}
 	public static Order getOrder(int order_id)
 	{
 		for (int entry = 0; entry < orders.size(); entry++)

@@ -6,6 +6,10 @@ import java.awt.event.*;
 import java.security.cert.CertificateRevokedException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+import Controllers.PackageController;
+
 import java.util.*;
 import Utility.ConnectionFactory;
 import shipping.Order;
@@ -15,14 +19,15 @@ public class CreatePackagePopup
 {
 	private final JFrame f;
 	private JPanel popup;
-	private JTable orderList;
+	private JTable orderItemTable;
 	private String[] selectedOrderRow;
-	private String[] selectedOrderList;
-	private JScrollPane orderItemPane;;
+	private String[] selectedOrderItemList;
+	private JScrollPane orderItemTableScrollPane;
 	private JButton createButton;
 	private ActionListener action;
 	private JTextField orderIdField;
 	private ArrayList<Order> orders;
+	private String[][] orderCol;
 
 	CreatePackagePopup()
 	{
@@ -34,14 +39,14 @@ public class CreatePackagePopup
 
 		String[] labels = { "Order ID: ", "Select Line Items: ", "Finish: " };
 		int numPairs = labels.length;
-		orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+		orderItemTableScrollPane = new JScrollPane(orderItemTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		orderItemPane.setAutoscrolls(true);
-		orderItemPane.setMinimumSize(new Dimension(600, 100));
+		orderItemTableScrollPane.setAutoscrolls(true);
+		orderItemTableScrollPane.setMinimumSize(new Dimension(600, 100));
 
+		orders = OrdersPane.getOrders();
 		String[] orderColNames = { "Order Item ID" };
-		String[][] orderCol = new String[100][100];
-		orders = new ArrayList<Order>();
+		orderCol = new String[0][100];
 
 		// A search for user ID after user click enter after typing into textfield
 		// We will change this once we can populate the order list onto the JTable from
@@ -52,30 +57,29 @@ public class CreatePackagePopup
 			{
 				JOptionPane.showMessageDialog(f, "Search for Order ID: Complete");
 
-				// Clear all elements of the arrays
-				for (int i = 0; i < orderCol.length; i++)
-				{
-					Arrays.fill(orderCol[i], null);
-				}
-
-				orderItemPane.repaint();
-
 				// Display order ID line items if valid
 				try
 				{
 					if (validOrderId(Integer.parseInt(orderIdField.getText())))
 					{
-						ArrayList<OrderLineItem> items = getOrder(Integer.parseInt(orderIdField.getText()))
+						ArrayList<OrderLineItem> items = OrdersPane.getOrder(Integer.parseInt(orderIdField.getText()))
 								.getOrderLineItemList();
+						orderCol = new String[items.size()][100];
 
 						for (int line_item = 0; line_item < items.size(); line_item++)
 						{
 							orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
 						}
 						createButton.setEnabled(true);
+					} else
+					{
+						orderCol = new String[0][100];
+						createButton.setEnabled(false);
+						throw new NumberFormatException("That ID does not exist.");
 					}
-
-				} catch (Exception ex)
+					orderItemTable.setModel(new DefaultTableModel(orderCol, orderColNames));
+					orderItemTableScrollPane.repaint();
+				} catch (NumberFormatException ex)
 				{
 					JOptionPane.showMessageDialog(f, "Invalid Order ID");
 				}
@@ -90,20 +94,21 @@ public class CreatePackagePopup
 			switch (i)
 				{
 				case 1:// Allow JTable of order item list to be scrollale
-					orderList = new JTable(orderCol, orderColNames)
+					orderItemTable = new JTable(orderCol, orderColNames)
 					{
 						public boolean editCellAt(int row, int column, EventObject e)
 						{
 							return false;
 						}
 					};
-					orderList.getSelectionModel().addListSelectionListener(new RowListSelectionListener());
-					orderItemPane = new JScrollPane(orderList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+					orderItemTable.getSelectionModel().addListSelectionListener(new RowListSelectionListener());
+					orderItemTableScrollPane = new JScrollPane(orderItemTable,
+							ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 							ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-					orderItemPane.setAutoscrolls(true);
-					orderItemPane.setMinimumSize(new Dimension(300, 300));
+					orderItemTableScrollPane.setAutoscrolls(true);
+					orderItemTableScrollPane.setMinimumSize(new Dimension(300, 300));
 
-					popup.add(orderItemPane);
+					popup.add(orderItemTableScrollPane);
 					break;
 				case 2:
 					createButton = new JButton("Create Package");
@@ -118,18 +123,46 @@ public class CreatePackagePopup
 								JOptionPane.showMessageDialog(f, "Cannot create package: No items selected.");
 							} else
 							{
-								selectedOrderList = new String[selectedOrderRow.length];
+								selectedOrderItemList = new String[selectedOrderRow.length];
 								if (selectedOrderRow != null)
 								{
 									for (int i = 0; i < selectedOrderRow.length; i++)
 									{
 										if (selectedOrderRow[i] != null)
 										{
-											selectedOrderList[i] = (String) orderList.getValueAt(i, 0);
+											selectedOrderItemList[i] = (String) orderItemTable.getValueAt(i, 0);
 										}
 									}
 								}
 								/* send database object of package */
+								ArrayList<OrderLineItem> selectedOrderLineItems = new ArrayList<OrderLineItem>();
+								for (int entry = 0; entry < orders.size(); entry++)
+								{
+									if (orders.get(entry).getOrderId() == Integer.parseInt(orderIdField.getText()))
+									{
+										for (int line_item = 0; line_item < orders.get(entry).getOrderLineItemList()
+												.size(); line_item++)
+										{
+											for (int selected = 0; selected < getPackageOrderList().length; selected++)
+											{
+												if (orders.get(entry).getOrderLineItemList().get(line_item)
+														.getOrderLineItemId() == Integer
+																.parseInt(getPackageOrderList()[selected]))
+												{
+													selectedOrderLineItems.add(
+															orders.get(entry).getOrderLineItemList().get(line_item));
+												}
+											}
+										}
+									}
+								}
+								int shippingLabelId = (int) ConnectionFactory.createPackageConnection()
+										.getLatestPackageId().get(0).get("packageId") + 1;
+								if (PackageController.createPackage(shippingLabelId, selectedOrderLineItems))
+								{
+									System.out.println("New package created!");
+								}
+								;
 								f.dispose();
 							}
 						}
@@ -150,7 +183,6 @@ public class CreatePackagePopup
 		f.setSize(300, 300);
 		f.setVisible(true);
 		SpringUtilities.makeCompactGrid(popup, numPairs, 2, 6, 6, 6, 6);
-
 	}
 
 	// A class listener that will save selected into a string array
@@ -160,49 +192,32 @@ public class CreatePackagePopup
 		{
 			int[] rows;
 			String[] selected;
-			if (orderList.getRowSelectionAllowed() && !orderList.getColumnSelectionAllowed())
+			if (orderItemTable.getRowSelectionAllowed() && !orderItemTable.getColumnSelectionAllowed())
 			{
-				rows = orderList.getSelectedRows();
-				selected = new String[rows.length + 1];
+				rows = orderItemTable.getSelectedRows();
+				selected = new String[rows.length];
 				for (int i = 0; i < rows.length; i++)
 				{
 					selected[i] = String.valueOf(rows[i]);
 				}
-				selectedOrderRow = Arrays.copyOf(selected, selected.length + 1);
+				selectedOrderRow = Arrays.copyOf(selected, selected.length);
 			}
 		}
 	}
 
 	private boolean validOrderId(int orderId)
 	{
-		ArrayList<HashMap<String, Object>> order = ConnectionFactory.createOrderConnection()
-				.getCompleteOrderInformation(orderId);
-
-		orders.add(new Order(order));
-
-		for (int id = 0; id < order.size(); id++)
+		for (int id = 0; id < orders.size(); id++)
 		{
 			if (orderId == orders.get(id).getOrderId())
 				return true;
 		}
-
 		return false;
 	}
 
 	// A function that will return selectedOrderList
-	public String[] packageOrderList()
+	public String[] getPackageOrderList()
 	{
-		return selectedOrderList;
+		return selectedOrderItemList;
 	}
-
-	public Order getOrder(int order_id)
-	{
-		for (int entry = 0; entry < orders.size(); entry++)
-		{
-			if (orders.get(entry).getOrderId() == order_id)
-				return orders.get(entry);
-		}
-		return null;
-	}
-
 }

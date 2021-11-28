@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import Utility.ConnectionFactory;
 import connection.ShipmentConnection;
-import shipping.OrderLineItem;
 import shipping.Shipment;
 import shipping.ShippingLabel;
 import shipping.Package;
@@ -16,13 +15,14 @@ public class ShipmentController
 	public static boolean createShipment(Date dateshipped)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		if(connection.createShipment(dateshipped))
+		if (connection.createShipment(dateshipped))
 		{
 			return true;
 		}
 		return false;
 	}
-	public boolean addPackage(int shipmentId, int packageId)
+
+	public static boolean addPackage(int shipmentId, int packageId)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
 		if (connection.addPackageToShipment(shipmentId, packageId))
@@ -31,7 +31,8 @@ public class ShipmentController
 		}
 		return false;
 	}
-	public boolean removePackage(int packageId)
+
+	public static boolean removePackage(int packageId)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
 		if (connection.removePackageFromShipment(packageId))
@@ -39,9 +40,10 @@ public class ShipmentController
 			return true;
 		}
 		return false;
-	
+
 	}
-	public boolean updateShipment(int shipmentId, Date newdate)
+
+	public static boolean updateShipment(int shipmentId, Date newdate)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
 		if(connection.updateShipmentDate(shipmentId, newdate))
@@ -50,20 +52,21 @@ public class ShipmentController
 		}
 		return false;
 	}
-	public Shipment getShipment(int shipmentId)
+
+	public static Shipment getShipment(int shipmentId)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
 		ArrayList<HashMap<String, Object>> shipmentData = connection.getCompleteShipmentList(shipmentId);
-		if(shipmentData == null)
+		if (shipmentData == null)
 			return null;
-		//Making an ArrayList of Packages
-		
-		Date dateShipped = (Date)shipmentData.get(0).get("dateShipped");
-		
+		// Making an ArrayList of Packages
+
+		Date dateShipped = (Date) shipmentData.get(0).get("dateShipped");
+
 		ArrayList<Package> packageList = new ArrayList<Package>();
-		for(int i = 0; i< shipmentData.size(); i++)
+		for (int i = 0; i < shipmentData.size(); i++)
 		{
-			int packageId = (int)shipmentData.get(i).get("shipmentId");
+			int packageId = (int) shipmentData.get(i).get("shipmentId");
 			packageList.add(PackageController.getPackage(packageId));
 		}
 		return new Shipment(shipmentId, packageList, dateShipped);
