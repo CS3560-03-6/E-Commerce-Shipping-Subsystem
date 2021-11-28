@@ -15,6 +15,7 @@ import java.util.Timer;
 @SuppressWarnings("serial")
 public class FullPanel extends JPanel
 {
+	private JSplitPane mainSplitPane;
 	private JSplitPane splitPane;
 	private static OrdersPane orderPane;
 	private static PackagesPane packagePane;
@@ -28,9 +29,20 @@ public class FullPanel extends JPanel
 	{
 		// Setup the overall application layout
 		setLayout(new BorderLayout(10, 10));
+		mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		mainSplitPane.setResizeWeight(0.05);
+		mainSplitPane.setDividerSize(0);
+		mainSplitPane.setMinimumSize(new Dimension(500, 500));
+		add(mainSplitPane, BorderLayout.CENTER);
+
+		// Adding Jpanel to the top of main split pane
+		GradientPanel gradientPanel = new GradientPanel();
+		mainSplitPane.add(gradientPanel, JSplitPane.TOP);
+
+		// Add horizontal split pane to the main split pane
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setResizeWeight(0.2);
-		add(splitPane, BorderLayout.CENTER);
+		splitPane.setResizeWeight(0.05);
+		mainSplitPane.add(splitPane, JSplitPane.BOTTOM);
 
 		// Create extended info panel
 		infoPane = new ExtendedInfo();
