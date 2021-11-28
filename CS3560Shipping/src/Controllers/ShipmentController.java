@@ -44,7 +44,7 @@ public class ShipmentController
 	public boolean updateShipment(int shipmentId, Date newdate)
 	{
 		ShipmentConnection connection = ConnectionFactory.createShipmentConnection();
-		if(connection.updateShipment(shipmentId, newdate))
+		if(connection.updateShipmentDate(shipmentId, newdate))
 		{
 			return true;
 		}
