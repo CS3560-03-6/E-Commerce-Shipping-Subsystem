@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
 
 public class Main
 {

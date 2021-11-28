@@ -15,6 +15,7 @@ import java.util.Timer;
 @SuppressWarnings("serial")
 public class FullPanel extends JPanel
 {
+	private JSplitPane mainSplitPane;
 	private JSplitPane splitPane;
 	private OrdersPane orderPane;
 	private PackagesPane packagePane;
