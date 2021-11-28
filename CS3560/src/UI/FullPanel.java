@@ -146,15 +146,20 @@ public class FullPanel extends JPanel
 			@Override
 			public void run()
 			{
-				refreshOrders(false);
-				refreshPackages(false);
-				refreshShipments(false);
+				refresh();
 				System.out.println("Automatically refreshed data.");
 			}
 		};
 		timer.scheduleAtFixedRate(refresh, 0L, 1800000L);
 	}
-
+	
+	public static void refresh()
+	{
+		refreshOrders(false);
+		refreshPackages(false);
+		refreshShipments(false);
+	}
+	
 	public static void refreshOrders(boolean showNotification)
 	{
 		orderPane.updateTable();

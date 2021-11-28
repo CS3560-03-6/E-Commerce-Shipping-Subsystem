@@ -177,8 +177,7 @@ public class CreatePackagePopup
 								if (PackageController.createPackage(shippingLabelId, selectedOrderLineItems))
 								{
 									JOptionPane.showMessageDialog(f, "New package created!");
-									FullPanel.refreshOrders(false);
-									FullPanel.refreshPackages(false);
+									FullPanel.refresh();
 								} else
 								{
 									JOptionPane.showMessageDialog(f, "Failed to create package.");

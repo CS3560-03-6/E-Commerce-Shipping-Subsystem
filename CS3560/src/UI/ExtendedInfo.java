@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import Controllers.OrderController;
+import Controllers.PackageController;
 import Utility.ConnectionFactory;
 import shipping.Order;
 import shipping.OrderLineItem;
@@ -30,7 +31,7 @@ public class ExtendedInfo extends JPanel
 	private JTable orderList;
 	private JScrollPane orderItemPane;
 
-	private JLabel[] packageInfoLabels = new JLabel[10];
+	private JLabel[] packageInfoLabels = new JLabel[11];
 	private JTextArea[] packageTexts = new JTextArea[8];
 	private JTable packageList;
 	private JScrollPane packageItemPane;
@@ -175,6 +176,9 @@ public class ExtendedInfo extends JPanel
 			case 1:
 				orderTexts[8].setText("Processing");
 				break;
+			case 2:
+				orderTexts[8].setText("Fully packaged");
+				break;
 			default:
 				orderTexts[8].setText("ERROR: Status unknown");
 				break;
@@ -271,6 +275,7 @@ public class ExtendedInfo extends JPanel
 		packageInfoLabels[7].setText("Order Item List: ");
 		packageInfoLabels[8].setText("Status: ");
 		packageInfoLabels[9].setText("Shipping Label: ");
+		packageInfoLabels[10].setText("Remove: ");
 
 		// Get information about order
 		packageTexts[0].setText("" + pkg.getPackageID());
@@ -291,10 +296,16 @@ public class ExtendedInfo extends JPanel
 		switch ((int) pkg.getStatus())
 			{
 			case 0:
-				packageTexts[7].setText("Unshipped");
+				packageTexts[7].setText("In house");
 				break;
 			case 1:
-				packageTexts[7].setText("Shipping");
+				packageTexts[7].setText("Shipped to carrier");
+				break;
+			case 2:
+				packageTexts[7].setText("Delivered to customer");
+				break;
+			case 3:
+				packageTexts[7].setText("Delayed");
 				break;
 			default:
 				packageTexts[7].setText("ERROR: Status unknown");
@@ -321,11 +332,29 @@ public class ExtendedInfo extends JPanel
 		extInfoPanel.add(packageItemPane, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 9;
-		extInfoPanel.add(packageInfoLabels[8], gbc);
+		gbc.gridy = 10;
+		extInfoPanel.add(packageInfoLabels[9], gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 10;
 		extInfoPanel.add(new JLabel("<Shipping Label Here>"), gbc); // shipping label
+
+		gbc.gridx = 0;
+		gbc.gridy = 11;
+		extInfoPanel.add(packageInfoLabels[10], gbc);
+		JButton removeButton = new JButton("Remove this Package");
+		removeButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				PackageController.deletePackage(pkg.getPackageID());
+				JOptionPane.showMessageDialog(null, String.format("Package %d has been deleted. The order items have been freed.", pkg.getPackageID()));
+				FullPanel.refresh();
+				deselect();
+			}
+		});
+		gbc.gridx = 1;
+		gbc.gridy = 11;
+		extInfoPanel.add(removeButton, gbc);
 
 		for (int i = 9; i < 10; i++)
 		{
