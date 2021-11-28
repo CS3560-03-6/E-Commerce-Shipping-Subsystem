@@ -21,7 +21,12 @@ public class PackageConnection
 		{
 			String query = String.format("insert into wss.Package(packageId, labelId, status) "
 					+ "values(%d, %d, %d)", packageId, labelId, status);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -92,7 +97,12 @@ public class PackageConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("delete from wss.Package where packageId = %d", packageId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -122,7 +132,12 @@ public class PackageConnection
 		{
 			String query = String.format("update wss.OrderLineItem set packageId = %d where orderLineItemId = %d",
 					packageId, orderLineItemId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -138,7 +153,12 @@ public class PackageConnection
 			String query = String.format("update wss.OrderLineItem set packageId = null "
 					+ "where packageId = %d and orderLineItemId = %d",
 					packageId, orderLineItemId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)

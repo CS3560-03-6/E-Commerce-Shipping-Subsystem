@@ -34,14 +34,15 @@ public class PackageController
 		if (packageConnection.createPackage(packageId, (int) shippingLabelData.get("labelId"), 0))
 		{
 			// Update OrderLineItems to show that they are in a package
-			for (int i = 0; i <= orderLineItemList.size(); i++)
+			for (int i = 0; i < orderLineItemList.size(); i++)
 			{
 				packageConnection.connectPackageToOrderLineItem(packageId,
 						orderLineItemList.get(i).getOrderLineItemId());
 			}
 
 			return true;
-		} else
+		} 
+		else
 		{
 			return false;
 		}

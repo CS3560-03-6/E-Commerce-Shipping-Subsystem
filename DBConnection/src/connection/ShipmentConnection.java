@@ -31,7 +31,12 @@ public class ShipmentConnection
 			int shipmentId = (int)getLatestShipmentId().get(0).get("ShipmentId");
 			String query = String.format("insert into wss.Shipment(shipmentId, dateShipped) "
 					+ "values(%d, %s)", shipmentId, dateShipped.toString());
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -51,7 +56,12 @@ public class ShipmentConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.Shipment set dateShipped = "+date.toString()+" where shipmentId = %d", shipmentId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -81,7 +91,12 @@ public class ShipmentConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.Package set shipmentId = 'null' where packageId = %d", packageId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)
@@ -96,7 +111,12 @@ public class ShipmentConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("update wss.Package set shipmentId = %d where packageId = %d", shipmentId, packageId);
-			ResultSet rs = stmt.executeQuery(query);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
 			return true;
 		}
 		catch(SQLException e)

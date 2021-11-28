@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class OrderLineItemConnection
 {
+	//todo get order line item based on order, make it so taht order line times are ones without packakages
 	private Connection _connection;
 
 	public OrderLineItemConnection(SqlConnection connection)
