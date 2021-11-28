@@ -63,8 +63,9 @@ public class OrderLineItemConnection
 		{
 			String query = "Select * ";
 			query += String.format(
-					"from wss.OrderLineItem l " + "join wss.\"Order\" o on l.orderId = o.orderId "
-							+ "where o.orderId = %d and l.packageId = null;",
+					"from wss.OrderLineItem l " 
+							+ "join wss.\"Order\" o on l.orderId = o.orderId "
+							+ "where o.orderId = %d and l.packageId is null;", 
 					orderId);
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);

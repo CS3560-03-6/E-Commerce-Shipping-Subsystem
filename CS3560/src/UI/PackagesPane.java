@@ -84,7 +84,6 @@ public class PackagesPane extends JPanel
 
 		for (int entry = 0; entry < packages.size(); entry++)
 		{
-			System.out.println(packages.get(entry).getOrderLineItemList().get(0).getOrderId());
 			packageCol[entry][0] = ""
 					+ OrderController.getOrder(packages.get(entry).getOrderLineItemList().get(0).getOrderId())
 							.getCustomerInfo().getAddress();

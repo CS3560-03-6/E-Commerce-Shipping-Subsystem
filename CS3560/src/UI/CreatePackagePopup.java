@@ -6,8 +6,10 @@ import java.awt.event.*;
 import java.security.cert.CertificateRevokedException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import Controllers.OrderController;
 import Controllers.PackageController;
 
 import java.util.*;
@@ -60,17 +62,39 @@ public class CreatePackagePopup
 				// Display order ID line items if valid
 				try
 				{
-					if (validOrderId(Integer.parseInt(orderIdField.getText())))
+					int orderId = Integer.parseInt(orderIdField.getText());
+					if (validOrderId(orderId))
 					{
-						ArrayList<OrderLineItem> items = OrdersPane.getOrder(Integer.parseInt(orderIdField.getText()))
-								.getOrderLineItemList();
+						ArrayList<OrderLineItem> items = new ArrayList<OrderLineItem>();
+						ArrayList<HashMap<String, Object>> result = ConnectionFactory.createOrderLineItemConnection()
+								.getOrderLineItemListWithoutPackageBasedOnOrder(orderId);
+						System.out.println(result.size());
+						for (int entry = 0; entry < result.size(); entry++)
+						{
+							ArrayList<OrderLineItem> all_order_items = OrderController.getOrder(orderId)
+									.getOrderLineItemList();
+							for (int item = 0; item < all_order_items.size(); item++)
+							{
+								if (all_order_items.get(item)
+										.getOrderLineItemId() == (int) result.get(entry).get("orderLineItemId"))
+								{
+									items.add(all_order_items.get(item));
+								}
+							}
+						}
 						orderCol = new String[items.size()][100];
-
 						for (int line_item = 0; line_item < items.size(); line_item++)
 						{
 							orderCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
 						}
-						createButton.setEnabled(true);
+						if (items.size() == 0)
+						{
+							JOptionPane.showMessageDialog(f, "All items in the order are packaged!");
+
+						} else
+						{
+							createButton.setEnabled(true);
+						}
 					} else
 					{
 						orderCol = new String[0][100];
@@ -101,6 +125,7 @@ public class CreatePackagePopup
 							return false;
 						}
 					};
+
 					orderItemTable.getSelectionModel().addListSelectionListener(new RowListSelectionListener());
 					orderItemTableScrollPane = new JScrollPane(orderItemTable,
 							ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -118,39 +143,32 @@ public class CreatePackagePopup
 						public void actionPerformed(ActionEvent e)
 						{
 							// Get selected order item into a list when package is created
+							int orderId = Integer.parseInt(orderIdField.getText());
 							if (selectedOrderRow == null)
 							{
 								JOptionPane.showMessageDialog(f, "Cannot create package: No items selected.");
-							} else
+							} else if (validOrderId(orderId))
 							{
 								/* Get orderLineItem IDs from selected rows */
 								selectedOrderItemList = new String[selectedOrderRow.length];
 								for (int i = 0; i < selectedOrderRow.length; i++)
 								{
-									if (selectedOrderRow[i].equals((String) orderItemTable.getValueAt(i, 0)))
-									{
-										selectedOrderItemList[i] = (String) orderItemTable.getValueAt(i, 0);
-									}
+									selectedOrderItemList[i] = (String) orderItemTable
+											.getValueAt(Integer.parseInt(selectedOrderRow[i]), 0);
 								}
 								/* send database object of package */
 								ArrayList<OrderLineItem> selectedOrderLineItems = new ArrayList<OrderLineItem>();
-								for (int entry = 0; entry < orders.size(); entry++)
+								for (int line_item_id = 0; line_item_id < selectedOrderItemList.length; line_item_id++)
 								{
-									if (orders.get(entry).getOrderId() == Integer.parseInt(orderIdField.getText()))
+									ArrayList<OrderLineItem> items = OrderController.getOrder(orderId)
+											.getOrderLineItemList();
+									for (int order_item = 0; order_item < items.size(); order_item++)
 									{
-										for (int line_item = 0; line_item < orders.get(entry).getOrderLineItemList()
-												.size(); line_item++)
+										if (Integer.parseInt(selectedOrderItemList[line_item_id]) == items
+												.get(order_item).getOrderLineItemId())
 										{
-											for (int selected = 0; selected < selectedOrderItemList.length; selected++)
-											{
-												if (orders.get(entry).getOrderLineItemList().get(line_item)
-														.getOrderLineItemId() == Integer
-																.parseInt(selectedOrderItemList[selected]))
-												{
-													selectedOrderLineItems.add(
-															orders.get(entry).getOrderLineItemList().get(line_item));
-												}
-											}
+											selectedOrderLineItems.add(OrderController.getOrder(orderId)
+													.getOrderLineItemList().get(order_item));
 										}
 									}
 								}
