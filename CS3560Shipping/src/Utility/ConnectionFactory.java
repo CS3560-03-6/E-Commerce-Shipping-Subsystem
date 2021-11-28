@@ -21,6 +21,7 @@ public class ConnectionFactory
 					+ "WarehouseShippingSubsystem";
 			String user = "gabe";
 			String pass = "password";
+			
 			connection = new SqlConnection(url,user,pass);
 		}
 	}

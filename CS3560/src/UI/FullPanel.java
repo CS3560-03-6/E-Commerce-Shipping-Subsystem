@@ -5,13 +5,14 @@ import javax.swing.event.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
+import java.util.Timer;
 
 /**
  * @author Gabriel Fok
  */
 
+@SuppressWarnings("serial")
 public class FullPanel extends JPanel
 {
 	private JSplitPane splitPane;
@@ -21,6 +22,7 @@ public class FullPanel extends JPanel
 	private ExtendedInfo infoPane;
 	private String id;
 	private int row;
+	private Timer timer;
 
 	public FullPanel()
 	{
@@ -70,11 +72,11 @@ public class FullPanel extends JPanel
 				{
 					JTable target = (JTable) e.getSource();
 					row = target.getSelectedRow();
-					id = orderPane.getID(row); // this should always be 1 since it's the ID only right?
+					id = orderPane.getID(row);
 					System.out.println("Showing order: " + id);
 					try
 					{
-						infoPane.showOrderExtInfo(orderPane.getOrder(Integer.parseInt(id)));
+						infoPane.showOrderExtInfo(OrdersPane.getOrder(Integer.parseInt(id)));
 					} catch (NumberFormatException ex)
 					{
 						System.out.println("ERROR: That order does not exist!");
@@ -83,12 +85,82 @@ public class FullPanel extends JPanel
 			}
 		});
 
+		packagePane.getTable().addMouseListener(new MouseInputAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+				{
+					JTable target = (JTable) e.getSource();
+					row = target.getSelectedRow();
+					id = packagePane.getID(row);
+					System.out.println("Showing package: " + id);
+					try
+					{
+						infoPane.showPackageExtInfo(PackagesPane.getPackage(Integer.parseInt(id)));
+					} catch (NumberFormatException ex)
+					{
+						System.out.println("ERROR: That package does not exist!");
+					}
+				}
+			}
+		});
+		shipmentsPane.getTable().addMouseListener(new MouseInputAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+				{
+					JTable target = (JTable) e.getSource();
+					row = target.getSelectedRow();
+					id = shipmentsPane.getID(row);
+					System.out.println("Showing shipment: " + id);
+					try
+					{
+						ShipmentsPane.getShipment(Integer.parseInt(id));
+					} catch (NumberFormatException ex)
+					{
+						System.out.println("ERROR: That shipment does not exist!");
+					}
+				}
+			}
+		});
+
 		splitPane.add(menuPanes, JSplitPane.LEFT, 1);
 
+		timer = new Timer();
+		TimerTask refresh = new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				refreshOrders(false);
+				refreshPackages(false);
+				refreshShipments(false);
+				System.out.println("Automatically refreshed data.");
+			}
+		};
+		timer.scheduleAtFixedRate(refresh, 0L, 1800000L);
 	}
 
-	public void refreshOrders()
+	public void refreshOrders(boolean showNotification)
 	{
-		orderPane.getOrders();
+		orderPane.updateTable();
+		if (showNotification)
+			JOptionPane.showMessageDialog(this, "Refreshed orders.");
+	}
+
+	public void refreshPackages(boolean showNotification)
+	{
+		packagePane.updateTable();
+		if (showNotification)
+			JOptionPane.showMessageDialog(this, "Refreshed packages.");
+	}
+
+	public void refreshShipments(boolean showNotification)
+	{
+		shipmentsPane.updateTable();
+		if (showNotification)
+			JOptionPane.showMessageDialog(this, "Refreshed shipments.");
 	}
 }

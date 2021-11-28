@@ -3,6 +3,9 @@
 	<name>E-Commerce-Shipping-Subsystem</name>
 	<comment></comment>
 	<projects>
+		<project>CS3560</project>
+		<project>CS3560Shipping</project>
+		<project>DBConnection</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>

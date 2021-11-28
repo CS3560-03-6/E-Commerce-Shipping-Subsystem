@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.security.cert.CertificateRevokedException;
 import java.util.*;
+import shipping.Package;
+import shipping.Shipment;
 
 /**
  * @author Gabriel Fok
@@ -18,12 +20,23 @@ import java.util.*;
 public class ExtendedInfo extends JPanel
 {
 	private JLabel backtext;
-	private JLabel[] orderInfoLabels = new JLabel[10];
-	private JTextArea[] texts = new JTextArea[9];
-	private JTable orderList;
-	private JScrollPane orderItemPane;
 	private JPanel extInfoPanel;
 	private JScrollPane extInfoScrollable;
+
+	private JLabel[] orderInfoLabels = new JLabel[10];
+	private JTextArea[] orderTexts = new JTextArea[9];
+	private JTable orderList;
+	private JScrollPane orderItemPane;
+
+	private JLabel[] packageInfoLabels = new JLabel[10];
+	private JTextArea[] packageTexts = new JTextArea[8];
+	private JTable packageList;
+	private JScrollPane packageItemPane;
+
+	private JLabel[] shipmentInfoLabels = new JLabel[2];
+	private JTextArea[] shipmentTexts = new JTextArea[1];
+	private JTable shipmentList;
+	private JScrollPane shipmentItemPane;
 
 	/**
 	 * contructor for a display
@@ -67,9 +80,9 @@ public class ExtendedInfo extends JPanel
 	public void showOrderExtInfo(Order order)
 	{
 		clear();
-		String[] orderColNames = { "Order Line Item ID", "Product Name" };
-		String[][] orderCol = new String[100][100];
 		ArrayList<OrderLineItem> items = order.getOrderLineItemList();
+		String[] orderColNames = { "Order Line Item ID", "Product Name" };
+		String[][] orderCol = new String[items.size()][100];
 
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
@@ -95,14 +108,14 @@ public class ExtendedInfo extends JPanel
 		orderItemPane.setMinimumSize(new Dimension(300, 300));
 
 		// Initializing the labels and textfields to display info
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < orderInfoLabels.length; i++)
 		{
 			orderInfoLabels[i] = new JLabel();
 			orderInfoLabels[i].setForeground(Color.BLACK);
-			if (i != 9)
+			if (i != orderInfoLabels.length - 1)
 			{
-				texts[i] = new JTextArea();
-				texts[i].setEditable(false);
+				orderTexts[i] = new JTextArea();
+				orderTexts[i].setEditable(false);
 			}
 		}
 
@@ -119,25 +132,25 @@ public class ExtendedInfo extends JPanel
 		orderInfoLabels[9].setText("Status: ");
 
 		// Get information about order
-		texts[0].setText("" + order.getOrderId());
-		texts[1].setText("" + order.getCustomerInfo().getCustomerID());
-		texts[2].setText("" + order.getCustomerInfo().getCustomerName()[0] + " " + ""
+		orderTexts[0].setText("" + order.getOrderId());
+		orderTexts[1].setText("" + order.getCustomerInfo().getCustomerID());
+		orderTexts[2].setText("" + order.getCustomerInfo().getCustomerName()[0] + " " + ""
 				+ order.getCustomerInfo().getCustomerName()[1]);
-		texts[3].setText("" + order.getCustomerInfo().getAddress());
-		texts[4].setText("" + order.getCustomerInfo().getPhoneNumber());
-		texts[5].setText("" + order.getCustomerInfo().getEmail());
-		texts[6].setText("$" + String.format("%.2f", order.calculateTotalShipping()));
-		texts[7].setText("$" + String.format("%.2f", order.calculateTotalTax()));
+		orderTexts[3].setText("" + order.getCustomerInfo().getAddress());
+		orderTexts[4].setText("" + order.getCustomerInfo().getPhoneNumber());
+		orderTexts[5].setText("" + order.getCustomerInfo().getEmail());
+		orderTexts[6].setText("$" + String.format("%.2f", order.calculateTotalShipping()));
+		orderTexts[7].setText("$" + String.format("%.2f", order.calculateTotalTax()));
 		switch ((int) order.getStatus())
 			{
 			case 0:
-				texts[8].setText("Unprocessed");
+				orderTexts[8].setText("Unprocessed");
 				break;
 			case 1:
-				texts[8].setText("Processing");
+				orderTexts[8].setText("Processing");
 				break;
 			default:
-				texts[8].setText("ERROR: Status unknown");
+				orderTexts[8].setText("ERROR: Status unknown");
 				break;
 			}
 
@@ -150,14 +163,14 @@ public class ExtendedInfo extends JPanel
 			gbc = createGbc(0, i);
 			extInfoPanel.add(orderInfoLabels[i], gbc);
 			gbc = createGbc(1, i);
-			extInfoPanel.add(texts[i], gbc);
+			extInfoPanel.add(orderTexts[i], gbc);
 		}
 
 		gbc.gridx = 0;
 		gbc.gridy = 6;
 		extInfoPanel.add(orderInfoLabels[6], gbc);
 		gbc.gridx = 1;
-		gbc.gridy = 7;
+		gbc.gridy = 6;
 		extInfoPanel.add(orderItemPane, gbc);
 
 		for (int i = 8; i < 11; i++)
@@ -165,7 +178,233 @@ public class ExtendedInfo extends JPanel
 			gbc = createGbc(0, i);
 			extInfoPanel.add(orderInfoLabels[i - 1], gbc);
 			gbc = createGbc(1, i);
-			extInfoPanel.add(texts[i - 2], gbc);
+			extInfoPanel.add(orderTexts[i - 2], gbc);
+		}
+
+		// Adding the extInfoPanel into JScrollPane
+		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		extInfoScrollable.setAutoscrolls(true);
+
+		repaint();
+		add(extInfoScrollable, BorderLayout.CENTER); // This stop the labels and textfield from becoming too small when
+													 // resize
+		validate();
+	}
+
+	public void showPackageExtInfo(Package pkg)
+	{
+		clear();
+		ArrayList<OrderLineItem> items = pkg.getOrderLineItemList();
+		String[] packageColNames = { "Order Line Item ID", "Product Name" };
+		String[][] packageCol = new String[items.size()][100];
+
+		for (int line_item = 0; line_item < items.size(); line_item++)
+		{
+			packageCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
+			ArrayList<HashMap<String, Object>> products = ConnectionFactory.createProductConnection()
+					.getProduct(items.get(line_item).getProduct().getProductId());
+			packageCol[line_item][1] = "" + products.get(0).get("productName");
+		}
+
+		// Create new Jtable for the order item list
+		packageList = new JTable(packageCol, packageColNames)
+		{
+			public boolean editCellAt(int row, int column, EventObject e)
+			{
+				return false;
+			}
+		};
+		packageList.setRowHeight(30);
+		// Allow JTable of order item list to be scrollale
+		packageItemPane = new JScrollPane(packageList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		packageItemPane.setAutoscrolls(true);
+		packageItemPane.setMinimumSize(new Dimension(300, 300));
+
+		// Initializing the labels and textfields to display info
+		for (int i = 0; i < packageInfoLabels.length; i++)
+		{
+			packageInfoLabels[i] = new JLabel();
+			packageInfoLabels[i].setForeground(Color.BLACK);
+			if (i < 8)
+			{
+				packageTexts[i] = new JTextArea();
+				packageTexts[i].setEditable(false);
+			}
+		}
+
+		// Naming labels to display info
+		packageInfoLabels[0].setText("Package ID: ");
+		packageInfoLabels[1].setText("Order ID: ");
+		packageInfoLabels[2].setText("Customer ID: ");
+		packageInfoLabels[3].setText("Customer Name: ");
+		packageInfoLabels[4].setText("Customer Address: ");
+		packageInfoLabels[5].setText("Customer Phone Number: ");
+		packageInfoLabels[6].setText("Customer Email: ");
+		packageInfoLabels[7].setText("Order Item List: ");
+		packageInfoLabels[8].setText("Status: ");
+		packageInfoLabels[9].setText("Shipping Label: ");
+
+		// Get information about order
+		packageTexts[0].setText("" + pkg.getPackageID());
+		packageTexts[1].setText("" + pkg.getOrderLineItemList().get(0).getOrderId());
+		packageTexts[2].setText("" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
+				.getCustomerInfo().getCustomerID());
+		packageTexts[3].setText(""
+				+ OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
+						.getCustomerName()[0]
+				+ " " + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo()
+						.getCustomerName()[1]);
+		packageTexts[4].setText(""
+				+ OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getAddress());
+		packageTexts[5].setText("" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId())
+				.getCustomerInfo().getPhoneNumber());
+		packageTexts[6].setText(
+				"" + OrdersPane.getOrder(pkg.getOrderLineItemList().get(0).getOrderId()).getCustomerInfo().getEmail());
+		switch ((int) pkg.getStatus())
+			{
+			case 0:
+				packageTexts[7].setText("Unshipped");
+				break;
+			case 1:
+				packageTexts[7].setText("Shipping");
+				break;
+			default:
+				packageTexts[7].setText("ERROR: Status unknown");
+				break;
+			}
+
+		// contraints for gridbaglayout
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		// adding the labels and textfield into the panel
+		for (int i = 0; i < packageTexts.length; i++)
+		{
+			gbc = createGbc(0, i);
+			extInfoPanel.add(packageInfoLabels[i], gbc);
+			gbc = createGbc(1, i);
+			extInfoPanel.add(packageTexts[i], gbc);
+		}
+
+		gbc.gridx = 0;
+		gbc.gridy = 8;
+		extInfoPanel.add(packageInfoLabels[7], gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 8;
+		extInfoPanel.add(packageItemPane, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 9;
+		extInfoPanel.add(packageInfoLabels[8], gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 10;
+		extInfoPanel.add(new JLabel("<Shipping Label Here>"), gbc); // shipping label
+
+		for (int i = 9; i < 10; i++)
+		{
+			gbc = createGbc(0, i);
+			extInfoPanel.add(packageInfoLabels[i - 1], gbc);
+			gbc = createGbc(1, i);
+			extInfoPanel.add(packageTexts[i - 2], gbc);
+		}
+
+		// Adding the extInfoPanel into JScrollPane
+		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		extInfoScrollable.setAutoscrolls(true);
+
+		repaint();
+		add(extInfoScrollable, BorderLayout.CENTER); // This stop the labels and textfield from becoming too small when
+													 // resize
+		validate();
+	}
+
+	public void showShipmentsExtInfo(Shipment shipment)
+	{
+		clear();
+		ArrayList<Package> items = shipment.getPackageList();
+		String[] shipmentColNames = { "Package ID", "Product Name" };
+		String[][] shipmentCol = new String[items.size()][100];
+
+		for (int line_item = 0; line_item < items.size(); line_item++)
+		{
+			shipmentCol[line_item][0] = "" + items.get(line_item).getPackageID();
+			shipmentCol[line_item][1] = "";
+		}
+
+		// Create new Jtable for the order item list
+		shipmentList = new JTable(shipmentCol, shipmentColNames)
+		{
+			public boolean editCellAt(int row, int column, EventObject e)
+			{
+				return false;
+			}
+		};
+		shipmentList.setRowHeight(30);
+		// Allow JTable of order item list to be scrollale
+		shipmentItemPane = new JScrollPane(shipmentList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		shipmentItemPane.setAutoscrolls(true);
+		shipmentItemPane.setMinimumSize(new Dimension(300, 300));
+
+		// Initializing the labels and textfields to display info
+		for (int i = 0; i < 10; i++)
+		{
+			shipmentInfoLabels[i] = new JLabel();
+			shipmentInfoLabels[i].setForeground(Color.BLACK);
+			if (i != 9)
+			{
+				shipmentTexts[i] = new JTextArea();
+				shipmentTexts[i].setEditable(false);
+			}
+		}
+
+		// Naming labels to display info
+		shipmentInfoLabels[0].setText("Shipment ID: ");
+		shipmentInfoLabels[1].setText("Status: ");
+
+		// Get information about order
+		shipmentTexts[0].setText("" + shipment.getShipmentID());
+		shipmentTexts[1].setText("" + shipment.getDateShipped().toString());
+//		switch ((int) shipment.getStatus())
+//			{
+//			case 0:
+//				shipmentTexts[8].setText("Unprocessed");
+//				break;
+//			case 1:
+//				shipmentTexts[8].setText("Processing");
+//				break;
+//			default:
+//				shipmentTexts[8].setText("ERROR: Status unknown");
+//				break;
+//			}
+
+		// contraints for gridbaglayout
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		// adding the labels and textfield into the panel
+		for (int i = 0; i < 6; i++)
+		{
+			gbc = createGbc(0, i);
+			extInfoPanel.add(shipmentInfoLabels[i], gbc);
+			gbc = createGbc(1, i);
+			extInfoPanel.add(shipmentTexts[i], gbc);
+		}
+
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		extInfoPanel.add(shipmentInfoLabels[6], gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 7;
+		extInfoPanel.add(shipmentItemPane, gbc);
+
+		for (int i = 8; i < 11; i++)
+		{
+			gbc = createGbc(0, i);
+			extInfoPanel.add(shipmentInfoLabels[i - 1], gbc);
+			gbc = createGbc(1, i);
+			extInfoPanel.add(shipmentTexts[i - 2], gbc);
 		}
 
 		// Adding the extInfoPanel into JScrollPane

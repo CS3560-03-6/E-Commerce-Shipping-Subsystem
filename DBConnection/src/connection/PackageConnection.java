@@ -58,10 +58,11 @@ public class PackageConnection
 		try(Statement stmt = _connection.createStatement();)
 		{
 			String query = String.format("select * "
-					+ "from wss.Package p"
+					+ "from wss.Package p "
 					+ "join wss.OrderLineItem l on p.packageId = l.packageId "
 					+ "where p.packageId = %d;", packageId);
 			ResultSet rs = stmt.executeQuery(query);
+			
 			return DataHelper.turnRsIntoArrayList(rs);
 		}
 		catch(SQLException e)
@@ -106,7 +107,7 @@ public class PackageConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = "select top(1) packageId from wss.Package order by desc";
+			String query = "select top(1) packageId from wss.Package order by packageId desc";
 			ResultSet rs = stmt.executeQuery(query);
 			return DataHelper.turnRsIntoArrayList(rs);
 		}

@@ -24,7 +24,7 @@ public class PackageController
 		// get latest packageId via sql
 		PackageConnection packageConnection = ConnectionFactory.createPackageConnection();
 		ArrayList<HashMap<String, Object>> resultSet = packageConnection.getLatestPackageId();
-		int packageId = (Integer) resultSet.get(0).get("packageId");
+		int packageId = (Integer) resultSet.get(0).get("packageId") + 1;
 
 		// actually create the package
 		ShippingLabelConnection shippingLabelConnection = ConnectionFactory.createShippingLabelConnection();
@@ -49,9 +49,9 @@ public class PackageController
 	public static Package getPackage(int packageId)
 	{
 		ArrayList<HashMap<String, Object>> packageData = connection.getCompletePackage(packageId);
+
 		if (packageData == null)
 			return null;
-
 		// create a shippingLabel
 		int labelId = (int) packageData.get(0).get("labelId");
 		ShippingLabelConnection labelConnection = ConnectionFactory.createShippingLabelConnection();
@@ -62,7 +62,9 @@ public class PackageController
 
 		ShippingLabel label = new ShippingLabel(labelId, trackingNum, labelPic);
 		int status = (int) packageData.get(0).get("status");
-		return new Package(packageId, label, status, getOrderLineItemList(packageData));
+		int shipmentId = packageData.get(0).get("shipmentId") == null ? -1 : (int) packageData.get(0).get("shipmentId");
+
+		return new Package(packageId, label, status, getOrderLineItemList(packageData), shipmentId);
 	}
 
 	private static ArrayList<OrderLineItem> getOrderLineItemList(ArrayList<HashMap<String, Object>> packageData)
