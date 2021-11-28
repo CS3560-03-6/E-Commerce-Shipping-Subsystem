@@ -52,6 +52,29 @@ public class OrderLineItemConnection
 		return null;
 	}
 
+	/**
+	 * Will return an ArrayList containing OrderLineItem data that all have package as null.
+	 * @param orderId
+	 * @return
+	 */
+	public ArrayList<HashMap<String, Object>> getOrderLineItemListWithoutPackageBasedOnOrder(int orderId)
+	{
+		try (Statement stmt = _connection.createStatement();)
+		{
+			String query = "Select * ";
+			query += String.format(
+					"from wss.OrderLineItem l " + "join wss.\"Order\" o on l.orderId = o.orderId "
+							+ "where o.orderId = %d and l.packageId = null;",
+					orderId);
+			ResultSet rs = stmt.executeQuery(query);
+			return DataHelper.turnRsIntoArrayList(rs);
+		} catch (SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 	// Get all the orderLineItems associated with an packageId
 	public ArrayList<HashMap<String, Object>> getOrderLineItemListBasedOnPackage(int packageId)
 	{
@@ -69,4 +92,5 @@ public class OrderLineItemConnection
 		}
 		return null;
 	}
+	
 }
