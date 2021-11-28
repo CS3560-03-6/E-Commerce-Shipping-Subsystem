@@ -239,6 +239,9 @@ public class ExtendedInfo extends JPanel
 		String[] packageColNames = { "Order Line Item ID", "Product Name" };
 		String[][] packageCol = new String[items.size()][100];
 
+		ImageIcon image = new ImageIcon(new ImageIcon(pkg.getLabel().getLabel()).getImage()
+		.getScaledInstance(300, 300, Image.SCALE_SMOOTH));
+
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
 			packageCol[line_item][0] = "" + items.get(line_item).getOrderLineItemId();
@@ -349,7 +352,7 @@ public class ExtendedInfo extends JPanel
 		extInfoPanel.add(packageInfoLabels[9], gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 10;
-		extInfoPanel.add(new JLabel("<Shipping Label Here>"), gbc); // shipping label
+		extInfoPanel.add(new JLabel(image), gbc); // shipping label
 
 		gbc.gridx = 0;
 		gbc.gridy = 11;
