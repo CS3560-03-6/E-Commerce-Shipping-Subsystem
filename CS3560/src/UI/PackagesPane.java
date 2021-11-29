@@ -7,6 +7,7 @@ package UI;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Controllers.OrderController;
 import Controllers.PackageController;
 import Utility.ConnectionFactory;
 import shipping.Package;
@@ -59,7 +60,8 @@ public class PackagesPane extends JPanel
 	{
 		ConnectionFactory.createConnection();
 		packages.clear();
-		ArrayList<HashMap<String, Object>> packages_sql = ConnectionFactory.createPackageConnection().getPackageList();
+		ArrayList<HashMap<String, Object>> packages_sql = ConnectionFactory.createPackageConnection()
+				.getAllPackageList();
 		if (packages_sql != null)
 		{
 			for (int entry = 0; entry < packages_sql.size(); entry++)
@@ -79,11 +81,11 @@ public class PackagesPane extends JPanel
 	{
 		getPackages();
 		packageCol = new String[packages.size()][100];
+
 		for (int entry = 0; entry < packages.size(); entry++)
 		{
-
 			packageCol[entry][0] = ""
-					+ OrdersPane.getOrder(packages.get(entry).getOrderLineItemList().get(0).getOrderId())
+					+ OrderController.getOrder(packages.get(entry).getOrderLineItemList().get(0).getOrderId())
 							.getCustomerInfo().getAddress();
 			packageCol[entry][1] = "" + packages.get(entry).getPackageID();
 			packageCol[entry][2] = "" + packages.get(entry).getOrderLineItemList().size();

@@ -1,6 +1,7 @@
 package Controllers;
 
 import java.math.BigDecimal;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,12 +26,10 @@ public class PackageController
 		// get latest packageId via sql
 		PackageConnection packageConnection = ConnectionFactory.createPackageConnection();
 		ArrayList<HashMap<String, Object>> resultSet = packageConnection.getLatestPackageId();
-		int packageId = (Integer) resultSet.get(0).get("packageId") + 1;
-
+		int packageId = shippingLabelId;
 		// actually create the package
 		ShippingLabelConnection shippingLabelConnection = ConnectionFactory.createShippingLabelConnection();
 		HashMap<String, Object> shippingLabelData = shippingLabelConnection.getShippingLabel(shippingLabelId).get(0);
-
 		if (packageConnection.createPackage(packageId, (int) shippingLabelData.get("labelId"), 0))
 		{
 			// Update OrderLineItems to show that they are in a package
@@ -136,11 +135,13 @@ public class PackageController
 			BigDecimal tax = (BigDecimal) orderLineItemData.get("tax");
 			int qty = (int) orderLineItemData.get("qty");
 			int orderId = (int) orderLineItemData.get("orderId");
+			int packageId = (int) orderLineItemData.get("packageId");
 
 			orderLineItemList.add(new OrderLineItem(orderLineItemId,
 					new Product(productId, sku, productName, cost, length, width, height), deliverByDate, shippingCost,
-					tax, qty, orderId));
+					tax, qty, orderId, packageId));
 		}
 		return orderLineItemList;
 	}
+
 }

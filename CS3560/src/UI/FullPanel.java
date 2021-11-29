@@ -15,11 +15,12 @@ import java.util.Timer;
 @SuppressWarnings("serial")
 public class FullPanel extends JPanel
 {
+	private JSplitPane mainSplitPane;
 	private JSplitPane splitPane;
-	private OrdersPane orderPane;
-	private PackagesPane packagePane;
-	private ShipmentsPane shipmentsPane;
-	private ExtendedInfo infoPane;
+	private static OrdersPane orderPane;
+	private static PackagesPane packagePane;
+	private static ShipmentsPane shipmentsPane;
+	private static ExtendedInfo infoPane;
 	private String id;
 	private int row;
 	private Timer timer;
@@ -28,9 +29,20 @@ public class FullPanel extends JPanel
 	{
 		// Setup the overall application layout
 		setLayout(new BorderLayout(10, 10));
+		mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		mainSplitPane.setResizeWeight(0.05);
+		mainSplitPane.setDividerSize(0);
+		mainSplitPane.setMinimumSize(new Dimension(500, 500));
+		add(mainSplitPane, BorderLayout.CENTER);
+
+		// Adding Jpanel to the top of main split pane
+		GradientPanel gradientPanel = new GradientPanel();
+		mainSplitPane.add(gradientPanel, JSplitPane.TOP);
+
+		// Add horizontal split pane to the main split pane
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setResizeWeight(0.2);
-		add(splitPane, BorderLayout.CENTER);
+		splitPane.setResizeWeight(0.05);
+		mainSplitPane.add(splitPane, JSplitPane.BOTTOM);
 
 		// Create extended info panel
 		infoPane = new ExtendedInfo();
@@ -117,7 +129,7 @@ public class FullPanel extends JPanel
 					System.out.println("Showing shipment: " + id);
 					try
 					{
-						ShipmentsPane.getShipment(Integer.parseInt(id));
+						infoPane.showShipmentsExtInfo(ShipmentsPane.getShipment(Integer.parseInt(id)));;
 					} catch (NumberFormatException ex)
 					{
 						System.out.println("ERROR: That shipment does not exist!");
@@ -134,33 +146,41 @@ public class FullPanel extends JPanel
 			@Override
 			public void run()
 			{
-				refreshOrders(false);
-				refreshPackages(false);
-				refreshShipments(false);
+				refresh();
 				System.out.println("Automatically refreshed data.");
 			}
 		};
 		timer.scheduleAtFixedRate(refresh, 0L, 1800000L);
 	}
-
-	public void refreshOrders(boolean showNotification)
+	
+	public static void refresh()
+	{
+		refreshOrders(false);
+		refreshPackages(false);
+		refreshShipments(false);
+	}
+	
+	public static void refreshOrders(boolean showNotification)
 	{
 		orderPane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed orders.");
+			JOptionPane.showMessageDialog(null, "Refreshed orders.");
+		infoPane.deselect();
 	}
 
-	public void refreshPackages(boolean showNotification)
+	public static void refreshPackages(boolean showNotification)
 	{
 		packagePane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed packages.");
+			JOptionPane.showMessageDialog(null, "Refreshed packages.");
+		infoPane.deselect();
 	}
 
-	public void refreshShipments(boolean showNotification)
+	public static void refreshShipments(boolean showNotification)
 	{
 		shipmentsPane.updateTable();
 		if (showNotification)
-			JOptionPane.showMessageDialog(this, "Refreshed shipments.");
+			JOptionPane.showMessageDialog(null, "Refreshed shipments.");
+		infoPane.deselect();
 	}
 }

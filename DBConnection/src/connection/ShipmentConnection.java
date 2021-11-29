@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 
 public class ShipmentConnection 
@@ -28,9 +28,9 @@ public class ShipmentConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			int shipmentId = (int)getLatestShipmentId().get(0).get("ShipmentId");
+			int shipmentId = getLatestShipmentId().size() == 0 ? 1 : (int)getLatestShipmentId().get(0).get("shipmentId") + 1;
 			String query = String.format("insert into wss.Shipment(shipmentId, dateShipped) "
-					+ "values(%d, %s)", shipmentId, dateShipped.toString());
+					+ "values(%d, '%s')", shipmentId, dateShipped.toString());
 			int rs = stmt.executeUpdate(query);
 			if(rs == 0)
 			{
@@ -55,7 +55,7 @@ public class ShipmentConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			String query = String.format("update wss.Shipment set dateShipped = "+date.toString()+" where shipmentId = %d", shipmentId);
+			String query = String.format("update wss.Shipment set dateShipped = '"+date.toString()+"' where shipmentId = %d", shipmentId);
 			int rs = stmt.executeUpdate(query);
 			if(rs == 0)
 			{
@@ -66,11 +66,11 @@ public class ShipmentConnection
 		}
 		catch(SQLException e)
 		{
-			System.out.println(e.getMessage());
+			System.out.println("b: "+e.getMessage());
 		}
 		return false;
 	}
-	private ArrayList<HashMap<String, Object>> getLatestShipmentId()
+	public ArrayList<HashMap<String, Object>> getLatestShipmentId()
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{

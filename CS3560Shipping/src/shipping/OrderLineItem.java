@@ -15,9 +15,10 @@ public class OrderLineItem
 	private BigDecimal tax;
 	private Integer quantity;
 	private int orderId;
+	private int packageId;
 	
 	public OrderLineItem(int orderLineItemId, Product product,
-				  Date deliverByDate, BigDecimal shippingCost, BigDecimal tax, Integer quantity, int orderId){
+				  Date deliverByDate, BigDecimal shippingCost, BigDecimal tax, Integer quantity, int orderId, int packageId){
 		this.orderLineItemId = orderLineItemId;
 		this.product = product;
 		this.deliverByDate = deliverByDate;
@@ -25,6 +26,7 @@ public class OrderLineItem
 		this.tax = tax;
 		this.quantity = quantity;
 		this.orderId = orderId;
+		this.packageId = packageId;
 	}
 
 	public OrderLineItem(HashMap<String, Object> item)
@@ -32,7 +34,7 @@ public class OrderLineItem
 		this((int) item.get("orderLineItemId"),
 				createProduct((int)item.get("productId")),
 				(Date) item.get("deliverByDate"), (BigDecimal) item.get("shippingCost"),
-				(BigDecimal) item.get("tax"), (int) item.get("qty"), (int) item.get("orderId"));
+				(BigDecimal) item.get("tax"), (int) item.get("qty"), (int) item.get("orderId"), (int) item.get("packageId"));
 	}
 	
 	public OrderLineItem(int orderLineItemId)
@@ -78,5 +80,10 @@ public class OrderLineItem
 	}
 	public int getOrderId() {
 		return orderId;
+	}
+
+	public int getPackageId()
+	{
+		return packageId;
 	}
 }

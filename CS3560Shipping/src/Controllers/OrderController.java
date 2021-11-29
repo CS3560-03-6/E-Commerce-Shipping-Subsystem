@@ -63,10 +63,11 @@ public class OrderController
 			BigDecimal tax  = (BigDecimal)orderLineItemData.get("tax");
 			int qty = (int)orderLineItemData.get("qty");
 			int orderId = (int) orderLineItemData.get("orderId");
+			int packageId = orderLineItemData.get("packageId") == null ? -1 : (int) orderLineItemData.get("packageId");
 			
 			orderLineItemList.add(new OrderLineItem(orderLineItemId, 
 					new Product(productId, sku, productName, cost, length, width, height),
-					deliverByDate, shippingCost, tax, qty, orderId));
+					deliverByDate, shippingCost, tax, qty, orderId, packageId));
 		}
 		return orderLineItemList;
 	}

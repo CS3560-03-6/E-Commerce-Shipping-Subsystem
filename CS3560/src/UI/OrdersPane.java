@@ -77,7 +77,7 @@ public class OrdersPane extends JPanel
 	{
 		ConnectionFactory.createConnection();
 		orders.clear();
-		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getOrderList();
+		ArrayList<HashMap<String, Object>> orders_sql = ConnectionFactory.createOrderConnection().getAllOrderList();
 		if(orders_sql != null)
 		{
 			for (int entry = 0; entry < orders_sql.size(); entry++)
@@ -85,6 +85,19 @@ public class OrdersPane extends JPanel
 				// Create each Order
 				int order_id = (int) orders_sql.get(entry).get("orderId");
 				orders.add(OrderController.getOrder(order_id));
+				if(ConnectionFactory.createOrderLineItemConnection().getOrderLineItemListWithoutPackageBasedOnOrder(order_id).size() == 0)
+				{
+					// Fully packaged
+					ConnectionFactory.createOrderConnection().updateOrderStatus(order_id, 2);
+				} else if (ConnectionFactory.createOrderLineItemConnection().getOrderLineItemListWithoutPackageBasedOnOrder(order_id).size() == orders.get(entry).getOrderLineItemList().size())
+				{
+					// None packaged
+					ConnectionFactory.createOrderConnection().updateOrderStatus(order_id, 0);
+				} else
+				{
+					// Partially packaged
+					ConnectionFactory.createOrderConnection().updateOrderStatus(order_id, 1);
+				}
 			}
 			return orders;
 		}

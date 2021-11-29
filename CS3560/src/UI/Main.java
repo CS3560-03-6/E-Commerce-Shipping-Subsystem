@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
 
 public class Main
 {
@@ -14,7 +15,7 @@ public class Main
 	{
 		// jframe setup
 		JFrame frame = new JFrame("CS3560 Group 6 Project");
-		frame.setSize(1000, 800);
+		frame.setMinimumSize(new Dimension(1250, 800)); //Set minimum size for JFrame
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setLocation(200, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,10 +67,11 @@ public class Main
 			}
 		});
 
-		fileMenu.add(exitItem);
+		
 		fileMenu.add(refreshOrderItem);
 		fileMenu.add(refreshPackageItem);
 		fileMenu.add(refreshShipmentItem);
+		fileMenu.add(exitItem);
 
 		JMenuItem createPackageItem = new JMenuItem("Create Package");
 		JMenuItem createShipmentItem = new JMenuItem("Create Shipment");
@@ -84,7 +86,7 @@ public class Main
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.exit(0);
+				CreateShipmentPopup ShipmentPopup = new CreateShipmentPopup();
 			}
 		});
 
