@@ -225,7 +225,7 @@ public class ExtendedInfo extends JPanel
 		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		extInfoScrollable.setAutoscrolls(true);
-
+		extInfoScrollable.getVerticalScrollBar().setUnitIncrement(64);
 		repaint();
 		add(extInfoScrollable, BorderLayout.CENTER); // This stop the labels and textfield from becoming too small when
 													 // resize

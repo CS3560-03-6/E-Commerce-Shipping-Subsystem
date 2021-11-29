@@ -81,7 +81,6 @@ public class PackagesPane extends JPanel
 	{
 		getPackages();
 		packageCol = new String[packages.size()][100];
-
 		for (int entry = 0; entry < packages.size(); entry++)
 		{
 			packageCol[entry][0] = ""

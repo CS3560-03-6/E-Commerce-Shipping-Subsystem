@@ -125,7 +125,7 @@ public class ShipmentConnection
 		}
 		return false;
 	}
-	public ArrayList<HashMap<String, Object>> getCompleteShipmentList(int shipmentId)
+	public ArrayList<HashMap<String, Object>> getCompleteShipment(int shipmentId)
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
