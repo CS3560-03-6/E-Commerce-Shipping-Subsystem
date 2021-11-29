@@ -46,7 +46,7 @@ public class ExtendedInfo extends JPanel
 	private final String[] packageStatuses = { "In house", "Shipped to carrier", "Delivered to customer", "Delayed" };
 	private JComboBox<String> packageStatusComboBox;
 
-	private JLabel[] shipmentInfoLabels = new JLabel[3];
+	private JLabel[] shipmentInfoLabels = new JLabel[4];
 	private JTextArea[] shipmentTexts = new JTextArea[2];
 	private JTable shipmentList;
 	private JScrollPane shipmentItemPane;
@@ -329,24 +329,27 @@ public class ExtendedInfo extends JPanel
 		gbc.gridx = 0;
 		gbc.gridy = 9;
 		extInfoPanel.add(packageInfoLabels[8], gbc);
-		packageStatusComboBox = new JComboBox<String>(packageStatuses);
-		packageStatusComboBox.setSelectedIndex(pkg.getStatus());
-		packageStatusComboBox.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				JComboBox<String> cb = (JComboBox<String>) e.getSource();
-				int status = cb.getSelectedIndex();
-				ConnectionFactory.createPackageConnection().updatePackageStatus(pkg.getPackageID(), status);
-				JOptionPane.showMessageDialog(null,
-						String.format("The status for Package %d has been updated.", pkg.getPackageID()));
-				FullPanel.refreshPackages(false);
-			}
-		});
+//		packageStatusComboBox = new JComboBox<String>(packageStatuses);
+//		packageStatusComboBox.setSelectedIndex(pkg.getStatus());
+//		packageStatusComboBox.addActionListener(new ActionListener()
+//		{
+//			public void actionPerformed(ActionEvent e)
+//			{
+//				JComboBox<String> cb = (JComboBox<String>) e.getSource();
+//				int status = cb.getSelectedIndex();
+//				ConnectionFactory.createPackageConnection().updatePackageStatus(pkg.getPackageID(), status);
+//				JOptionPane.showMessageDialog(null,
+//						String.format("The status for Package %d has been updated.", pkg.getPackageID()));
+//				FullPanel.refreshPackages(false);
+//			}
+//		});
 		gbc.gridx = 1;
 		gbc.gridy = 9;
-		extInfoPanel.add(packageStatusComboBox, gbc);
-
+//		extInfoPanel.add(packageStatusComboBox, gbc);
+		JTextArea status = new JTextArea(packageStatuses[pkg.getStatus()]);
+		status.setEditable(false);
+		extInfoPanel.add(status, gbc);
+		
 		gbc.gridx = 0;
 		gbc.gridy = 10;
 		extInfoPanel.add(packageInfoLabels[9], gbc);
@@ -416,7 +419,7 @@ public class ExtendedInfo extends JPanel
 		shipmentItemPane.setMinimumSize(new Dimension(300, 300));
 
 		// Initializing the labels and textfields to display info
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < shipmentInfoLabels.length; i++)
 		{
 			shipmentInfoLabels[i] = new JLabel();
 			shipmentInfoLabels[i].setForeground(Color.BLACK);
@@ -431,6 +434,7 @@ public class ExtendedInfo extends JPanel
 		shipmentInfoLabels[0].setText("Shipment ID: ");
 		shipmentInfoLabels[1].setText("Date: ");
 		shipmentInfoLabels[2].setText("Packages: ");
+		shipmentInfoLabels[3].setText("Status of packages: ");
 
 		// Get information about order
 		shipmentTexts[0].setText("" + shipment.getShipmentID());
@@ -511,6 +515,30 @@ public class ExtendedInfo extends JPanel
 		gbc.gridx = 1;
 		gbc.gridy = 3;
 		extInfoPanel.add(shipmentItemPane, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		extInfoPanel.add(shipmentInfoLabels[3], gbc);
+		packageStatusComboBox = new JComboBox<String>(packageStatuses);
+		packageStatusComboBox.setSelectedIndex(shipment.getPackageList().get(0).getStatus());
+		packageStatusComboBox.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JComboBox<String> cb = (JComboBox<String>) e.getSource();
+				int status = cb.getSelectedIndex();
+				for (int entry = 0; entry < shipment.getPackageList().size(); entry++)
+				{
+					ConnectionFactory.createPackageConnection().updatePackageStatus(shipment.getPackageList().get(entry).getPackageID(), status);
+				}
+				JOptionPane.showMessageDialog(null,
+						String.format("The statuses for Shipment %d has been updated.", shipment.getShipmentID()));
+				FullPanel.refresh();
+			}
+		});
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		extInfoPanel.add(packageStatusComboBox, gbc);
 
 		// Adding the extInfoPanel into JScrollPane
 		extInfoScrollable = new JScrollPane(extInfoPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
