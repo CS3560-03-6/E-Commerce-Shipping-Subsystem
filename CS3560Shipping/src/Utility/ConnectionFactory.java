@@ -17,9 +17,9 @@ public class ConnectionFactory
 	{
 		if(connection == null)
 		{
-			String url = "jdbc:sqlserver://DESKTOP-JT0PRT3\\SQLEXPRESS:1433;databaseName="
+			String url = "jdbc:sqlserver://DESKTOP-S0HM9HP\\SQLEXPRESS:64784;databaseName="
 					+ "WarehouseShippingSubsystem";
-			String user = "gabe";
+			String user = "conan";
 			String pass = "password";
 			
 			connection = new SqlConnection(url,user,pass);

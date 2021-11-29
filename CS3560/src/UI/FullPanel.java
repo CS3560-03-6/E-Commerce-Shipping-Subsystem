@@ -3,6 +3,8 @@ package UI;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import Controllers.ShipmentController;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -129,7 +131,8 @@ public class FullPanel extends JPanel
 					System.out.println("Showing shipment: " + id);
 					try
 					{
-						infoPane.showShipmentsExtInfo(ShipmentsPane.getShipment(Integer.parseInt(id)));;
+						
+						infoPane.showShipmentsExtInfo(ShipmentController.getShipment(Integer.parseInt(id)));;
 					} catch (NumberFormatException ex)
 					{
 						System.out.println("ERROR: That shipment does not exist!");

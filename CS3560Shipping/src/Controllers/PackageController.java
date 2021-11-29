@@ -51,7 +51,7 @@ public class PackageController
 	{
 		ArrayList<HashMap<String, Object>> packageData = connection.getCompletePackage(packageId);
 
-		if (packageData == null)
+		if (packageData.size() == 0)
 			return null;
 		// create a shippingLabel
 		int labelId = (int) packageData.get(0).get("labelId");

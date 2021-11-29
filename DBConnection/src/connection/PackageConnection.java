@@ -205,25 +205,4 @@ public class PackageConnection
 		}
 		return false;
 	}
-	public boolean updatePackageStatus(int packageId, int status)
-	{
-		try(Statement stmt = _connection.createStatement();)
-		{
-			String query = String.format("update wss.Package set status = %d "
-					+ "where packageId = %d ",
-					status, packageId);
-			int rs = stmt.executeUpdate(query);
-			if(rs == 0)
-			{
-				System.out.print(rs+" rows changed");
-				return false;
-			}
-			return true;
-		}
-		catch(SQLException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		return false;
-	}
 }

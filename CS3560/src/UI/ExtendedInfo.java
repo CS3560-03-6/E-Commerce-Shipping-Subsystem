@@ -392,6 +392,7 @@ public class ExtendedInfo extends JPanel
 	{
 		clear();
 		ArrayList<Package> items = shipment.getPackageList();
+		System.out.println(Arrays.toString(items.toArray()));
 		String[] shipmentColNames = { "Package ID", "Address" };
 		String[][] shipmentCol = new String[items.size()][100];
 
