@@ -239,8 +239,8 @@ public class ExtendedInfo extends JPanel
 		String[] packageColNames = { "Order Line Item ID", "Product Name" };
 		String[][] packageCol = new String[items.size()][100];
 
-		ImageIcon image = new ImageIcon(new ImageIcon(pkg.getLabel().getLabel()).getImage()
-		.getScaledInstance(300, 300, Image.SCALE_SMOOTH));
+		ImageIcon image = new ImageIcon(
+				new ImageIcon(pkg.getLabel().getLabel()).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
 
 		for (int line_item = 0; line_item < items.size(); line_item++)
 		{
@@ -362,6 +362,7 @@ public class ExtendedInfo extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				ShipmentController.removePackage(pkg.getPackageID());
 				PackageController.deletePackage(pkg.getPackageID());
 				JOptionPane.showMessageDialog(null, String
 						.format("Package %d has been deleted. The order items have been freed.", pkg.getPackageID()));
@@ -449,7 +450,8 @@ public class ExtendedInfo extends JPanel
 		gbc.gridx = 2;
 		gbc.gridy = 1;
 		UtilDateModel model = new UtilDateModel();
-		model.setDate(shipment.getDateShipped().getYear()+1900, shipment.getDateShipped().getMonth(), shipment.getDateShipped().getDay());
+		model.setDate(shipment.getDateShipped().getYear() + 1900, shipment.getDateShipped().getMonth(),
+				shipment.getDateShipped().getDate());
 		model.setSelected(true);
 		Properties p = new Properties();
 		p.put("text.today", "Today");
@@ -457,19 +459,44 @@ public class ExtendedInfo extends JPanel
 		p.put("text.year", "Year");
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+
 		extInfoPanel.add(datePicker, gbc);
-		
+
 		JButton updateButton = new JButton("Update");
 		updateButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				Calendar selectedValue = Calendar.getInstance();
-				selectedValue.setTime((Date)datePicker.getModel().getValue());
+				try
+				{
+					selectedValue.setTime((Date) datePicker.getModel().getValue());
+				} catch (NullPointerException ex)
+				{
+					JOptionPane.showMessageDialog(null, "Date cannot be empty!");
+					return;
+				}
 				Date selectedDate = selectedValue.getTime();
-				ShipmentController.updateShipment(shipment.getShipmentID(), selectedDate);
-				JOptionPane.showMessageDialog(null, String
-						.format("Shipment %d has new shipment date.", shipment.getShipmentID()));
+				java.sql.Date date = new java.sql.Date(selectedDate.getTime());
+				if (date.getYear() + 1900 > Calendar.getInstance().get(Calendar.YEAR) || (date.getYear()
+						+ 1900 == Calendar.getInstance().get(Calendar.YEAR)
+						&& (date.getMonth() > Calendar.getInstance().get(Calendar.MONTH)
+								|| (date.getMonth() == Calendar.getInstance().get(Calendar.MONTH)
+										&& date.getDate() > Calendar.getInstance().get(Calendar.DAY_OF_MONTH)))))
+				{
+					update(date);
+				} else
+				{
+					JOptionPane.showMessageDialog(null, "Date cannot be in the past!");
+				}
+
+			}
+
+			private void update(java.sql.Date date)
+			{
+				ShipmentController.updateShipment(shipment.getShipmentID(), date);
+				JOptionPane.showMessageDialog(null, String.format("Shipment %d has new shipment date:\n %s.",
+						shipment.getShipmentID(), date.toString()));
 				FullPanel.refresh();
 				deselect();
 			}
@@ -477,7 +504,7 @@ public class ExtendedInfo extends JPanel
 		gbc.gridx = 2;
 		gbc.gridy = 2;
 		extInfoPanel.add(updateButton, gbc);
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		extInfoPanel.add(shipmentInfoLabels[2], gbc);
@@ -506,25 +533,30 @@ public class ExtendedInfo extends JPanel
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		return gbc;
 	}
-	public class DateLabelFormatter extends AbstractFormatter {
 
-	    private String datePattern = "yyyy-MM-dd";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	public class DateLabelFormatter extends AbstractFormatter
+	{
 
-	    @Override
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
+		private String datePattern = "yyyy-MM-dd";
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
-	    @Override
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
+		@Override
+		public Object stringToValue(String text) throws ParseException
+		{
+			return dateFormatter.parseObject(text);
+		}
 
-	        return "";
-	    }
+		@Override
+		public String valueToString(Object value) throws ParseException
+		{
+			if (value != null)
+			{
+				Calendar cal = (Calendar) value;
+				return dateFormatter.format(cal.getTime());
+			}
+
+			return "";
+		}
 
 	}
 }

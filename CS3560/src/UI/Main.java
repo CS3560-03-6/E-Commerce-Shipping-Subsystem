@@ -86,7 +86,7 @@ public class Main
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.exit(0);
+				CreateShipmentPopup ShipmentPopup = new CreateShipmentPopup();
 			}
 		});
 
