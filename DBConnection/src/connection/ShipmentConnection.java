@@ -28,7 +28,7 @@ public class ShipmentConnection
 	{
 		try(Statement stmt = _connection.createStatement();)
 		{
-			int shipmentId = (int)getLatestShipmentId().get(0).get("shipmentId") + 1;
+			int shipmentId = getLatestShipmentId().size() == 0 ? 1 : (int)getLatestShipmentId().get(0).get("shipmentId") + 1;
 			String query = String.format("insert into wss.Shipment(shipmentId, dateShipped) "
 					+ "values(%d, '%s')", shipmentId, dateShipped.toString());
 			int rs = stmt.executeUpdate(query);
