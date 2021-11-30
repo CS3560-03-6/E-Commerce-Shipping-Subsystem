@@ -1,25 +1,28 @@
 package shipping;
 
 public class ShippingLabel {
-	public int labelID;
+	public int labelId;
 	public String trackingNum;
-	public String barcode;
-	public String address;
-	public void printShippingLabel() 
+	public byte[] label;
+
+	public ShippingLabel(int labelId, String trackingNum, byte[] label)
 	{
-		
+		this.labelId = labelId;
+		this.trackingNum = trackingNum;
+		this.label = label;
 	}
-	public int getLabelID() {
-		return labelID;
+	public int getLabelId() 
+	{
+		return labelId;
 	}
-	public String getTrackingNum() {
+	public String getTrackingNum() 
+	{
 		return trackingNum;
 	}
-	public String getBarcode() {
-		return barcode;
+	public byte[] getLabel() 
+	{
+		return label;
 	}
-	public String getAddress() {
-		return address;
-	}
+
 
 }

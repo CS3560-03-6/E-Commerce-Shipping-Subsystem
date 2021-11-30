@@ -1,6 +1,12 @@
 package shipping;
 
-public class CustomerInfo {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import Utility.ConnectionFactory;
+
+public class CustomerInfo
+{
 	private int customerInformationId;
 	private String firstName;
 	private String lastName;
@@ -8,39 +14,54 @@ public class CustomerInfo {
 	private String phoneNumber;
 	private String email;
 	
-	/* CustomerInfo(int customer_information_id, String first_name,
-				 String last_name, String[] address, String phone_number,
+	public CustomerInfo(int customerInformationId, String firstName,
+				 String lastName, String address, String phoneNumber,
 				 String email){
-		this.customer_information_id = customer_information_id;
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.customerInformationId = customerInformationId;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.address = address;
-		this.phone_number = phone_number;
+		this.phoneNumber = phoneNumber;
 		this.email = email;
-	}*/
-	
-	public String[] getCustomerName() {
+	}
+
+	public CustomerInfo(int customerInformationId)
+	{
+		ArrayList<HashMap<String, Object>> cust_info = ConnectionFactory.createCustomerInfoConnection().GetCustomerInfo(customerInformationId);
+		this.customerInformationId = customerInformationId;
+		this.firstName = (String) cust_info.get(0).get("firstName");
+		this.lastName = (String) cust_info.get(0).get("lastName");
+		this.address = (String) cust_info.get(0).get("address");
+		this.phoneNumber = (String) cust_info.get(0).get("phoneNum");
+		this.email = (String) cust_info.get(0).get("email");
+	}
+
+	public String[] getCustomerName()
+	{
 		String[] full_name = new String[2];
 		full_name[0] = firstName;
 		full_name[1] = lastName;
-		
+
 		return full_name;
 	}
-	
-	public int getCustomerID() {
+
+	public int getCustomerID()
+	{
 		return customerInformationId;
 	}
-	
-	public String getAddress() {
+
+	public String getAddress()
+	{
 		return address;
 	}
-	
-	public String getPhoneNumber() {
+
+	public String getPhoneNumber()
+	{
 		return phoneNumber;
 	}
-	
-	public String getEmail() {
+
+	public String getEmail()
+	{
 		return email;
 	}
 }
-	

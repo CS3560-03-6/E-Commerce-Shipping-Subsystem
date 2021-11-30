@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>E-Commerce-Shipping-Subsystem</name>
+	<comment></comment>
+	<projects>
+		<project>CS3560</project>
+		<project>CS3560Shipping</project>
+		<project>DBConnection</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>

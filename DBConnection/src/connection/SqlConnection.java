@@ -2,38 +2,50 @@ package connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement; 
 
-public class SqlConnection 
+public class SqlConnection
 {
 	private Connection connection;
+
 	public SqlConnection(String url, String user, String pass)
 	{
-		try 
+		System.out.println("Attempting to connect to database...");
+		try
 		{
 			connection = DriverManager.getConnection(url, user, pass);
-		} 
-		catch (SQLException e) 
+			System.out.println("Connected.");
+		} catch (SQLException e)
 		{
 			System.out.println(e.getMessage());
+			System.out.println("ERROR: Connection to database failed.");
+			System.exit(0);
 		}
 	}
-	public void GetCustomer()
+
+	public Connection getConnection()
 	{
-		try(Statement stmt = connection.createStatement();)
-		{
-			String query = "Select * from Customer;";
-			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next())
-			{
-				System.out.println(rs.getString("customerId")+"FirstName: "+rs.getString("firstName"));
-			}
-		}
-		catch(SQLException e)
-		{
-			System.out.println(e.getMessage());
-		}
+		return connection;
 	}
+
+	public void close() throws SQLException
+	{
+		connection.close();
+	}
+//	public void GetCustomer()
+//	{
+//		try(Statement stmt = connection.createStatement();)
+//		{
+//			String query = "Select * from Customer;";
+//			ResultSet rs = stmt.executeQuery(query);
+//			while(rs.next())
+//			{
+//				System.out.println(rs.getString("customerId")+"FirstName: "+rs.getString("firstName"));
+//			}
+//		}
+//		catch(SQLException e)
+//		{
+//			System.out.println(e.getMessage());
+//		}
+//	}
 }
