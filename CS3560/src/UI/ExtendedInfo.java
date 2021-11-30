@@ -392,7 +392,6 @@ public class ExtendedInfo extends JPanel
 	{
 		clear();
 		ArrayList<Package> items = shipment.getPackageList();
-		System.out.println(Arrays.toString(items.toArray()));
 		String[] shipmentColNames = { "Package ID", "Address" };
 		String[][] shipmentCol = new String[items.size()][100];
 
@@ -487,7 +486,7 @@ public class ExtendedInfo extends JPanel
 						+ 1900 == Calendar.getInstance().get(Calendar.YEAR)
 						&& (date.getMonth() > Calendar.getInstance().get(Calendar.MONTH)
 								|| (date.getMonth() == Calendar.getInstance().get(Calendar.MONTH)
-										&& date.getDate() > Calendar.getInstance().get(Calendar.DAY_OF_MONTH)))))
+										&& date.getDate() >= Calendar.getInstance().get(Calendar.DAY_OF_MONTH)))))
 				{
 					update(date);
 				} else

@@ -206,7 +206,7 @@ public class CreateShipmentPopup
 				|| (date.getYear() + 1900 == Calendar.getInstance().get(Calendar.YEAR)
 						&& (date.getMonth() > Calendar.getInstance().get(Calendar.MONTH)
 								|| (date.getMonth() == Calendar.getInstance().get(Calendar.MONTH)
-										&& date.getDate() > Calendar.getInstance().get(Calendar.DAY_OF_MONTH)))))
+										&& date.getDate() >= Calendar.getInstance().get(Calendar.DAY_OF_MONTH)))))
 		{
 			return true;
 		} else

@@ -79,7 +79,13 @@ public class ShipmentsPane extends JPanel
 			{
 				// Create each Shipment
 				int shipmentId = (int) shipments_sql.get(entry).get("shipmentId");
-				shipments.add(ShipmentController.getShipment(shipmentId));
+				if (ShipmentController.getShipment(shipmentId) == null)
+				{
+					ConnectionFactory.createShipmentConnection().deleteShipment(shipmentId);
+				} else
+				{
+					shipments.add(ShipmentController.getShipment(shipmentId));
+				}
 			}
 			return shipments;
 		}

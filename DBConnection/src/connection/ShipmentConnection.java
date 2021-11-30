@@ -45,6 +45,27 @@ public class ShipmentConnection
 		}
 		return false;
 	}
+	
+	public boolean deleteShipment(int shipmentId)
+	{
+		try(Statement stmt = _connection.createStatement();)
+		{
+			String query = String.format("delete from wss.Shipment "
+					+ "where shipmentId = %d", shipmentId);
+			int rs = stmt.executeUpdate(query);
+			if(rs == 0)
+			{
+				System.out.print(rs+" rows changed");
+				return false;
+			}
+			return true;
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
 	/**
 	 * Will tell you if shipment has been updated or not via boolean
 	 * @param shipmentId
